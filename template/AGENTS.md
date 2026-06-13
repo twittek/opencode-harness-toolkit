@@ -110,3 +110,17 @@ performance-engineer
 observability-engineer
 product-manager
 ```
+
+
+## Interactive question tool policy
+
+For any harness interview question with predefined options, use OpenCode's question tool first.
+
+Plain A/B/C text is fallback mode only.
+
+```text
+Using plain A/B/C text is a fallback mode, not the primary mode.
+Do not use fallback mode unless tool usage is unavailable.
+```
+
+Always ask exactly one question at a time and include `Other / custom`.

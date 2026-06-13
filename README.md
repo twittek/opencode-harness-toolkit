@@ -437,6 +437,21 @@ The rule is:
 One question. One answer. Update the model. Ask the next best question.
 ```
 
+### Interactive question UI
+
+The adaptive interview is designed to use OpenCode's interactive question UI.
+
+For predefined-choice interview steps, the agent should use the OpenCode question tool first.
+
+Plain A/B/C text is only a fallback:
+
+```text
+Using plain A/B/C text is a fallback mode, not the primary mode.
+Do not use fallback mode unless tool usage is unavailable.
+```
+
+This is important because the toolkit is intended to feel like a guided diagnostic system, not a static text questionnaire.
+
 ### Step-by-step principle
 
 The interview must follow the Akinator principle:
@@ -1272,35 +1287,74 @@ These defaults are intentionally conservative. The harness can later be tuned th
 
 Recommended model strength:
 
+| Command | Recommended strength | Reason |
+|---|---|---|
+| `/harness-init` | very strong model recommended | Requires adaptive interviewing, scenario inference, tool/question usage, project-specific synthesis and coherent harness generation. |
+| `/harness-check` | medium to strong model | Requires consistency checks, drift detection and policy reasoning. |
+| `/harness-update` | strong model recommended | Edits governance files and must avoid contradictions across the harness. |
+| `/harness-retro` | medium model for interview, strong model for consolidation | The interview itself is simpler; converting feedback into clean findings benefits from stronger reasoning. |
+| `/harness-mcp` | strong model recommended | Requires risk classification, approval-first planning and safe OpenCode config handling. |
+
+### Initial benchmark observation
+
+Two initial harness generations were compared using the same input:
+
+| Variant | Model | Result quality | Strengths | Weaknesses | Recommendation |
+|---|---|---:|---|---|---|
+| Model A | Qwen 3.6 27B | 5.5 / 10 | Compact, readable, usable as a minimal scaffold, good for local iteration and lower-cost experiments. | Less project-specific, weaker specialist role usage, shallower lifecycle handling, weaker drift/update readiness. | Useful for lightweight or iterative local work, but should be reviewed or upgraded for important harness initialization. |
+| Model B | Opus 4.7 | 8.4 / 10 | Strong project understanding, better risk modeling, better role activation, stronger lifecycle behavior, more practical agent guidance. | More verbose and potentially heavier in context usage. | Preferred for `/harness-init` and important harness design work. |
+
+Conclusion:
+
 ```text
-/harness-init
-→ strong model recommended
-→ Qwen 27B Dense, Claude Sonnet, or stronger
+For initial harness generation, use the strongest available model.
+```
 
-/harness-check
-→ medium to strong model
-→ needs consistency and drift detection
+The observed quality difference was significant. Opus 4.7 produced the more complete and operationally useful harness. Qwen 3.6 27B remains valuable for local iteration, implementation support and follow-up refinement, but the initial bootstrap benefits strongly from higher reasoning quality.
 
-/harness-update
-→ strong model recommended
-→ edits governance files and must avoid contradictions
+### Practical recommendation
 
-/harness-retro
-→ medium model is often enough for interview
-→ strong model better for converting feedback into clean findings
+Use a strong cloud model for the first harness bootstrap when possible:
+
+```text
+Opus 4.7 or comparable
+→ preferred for /harness-init
+→ preferred for major harness design changes
+→ preferred for evaluating generated harness quality
+```
+
+Use local models for fast iteration and controlled follow-up work:
+
+```text
+Qwen 3.6 27B Dense
+→ good for local implementation support
+→ useful for lightweight harness updates
+→ good when privacy, cost or local execution is more important than maximum initial synthesis quality
+
+Qwen 3.6 35B A3B MoE
+→ useful for fast analysis, summaries, retro interviews and lightweight checks
+```
+
+Optional validation pattern:
+
+```text
+1. Generate initial harness with a strong model.
+2. Let a local model run /harness-check.
+3. Let a strong model review important findings.
+4. Apply approved updates with /harness-update.
 ```
 
 For local setups:
 
 ```text
 qwen36-27b-mtp-128k
-→ architecture, implementation, harness-init, harness-update
+→ implementation, local iteration, lightweight harness updates
 
 qwen36-35b-a3b-mtp-128k
 → fast analysis, summaries, retro interview, lightweight checks
 
-Sonnet/Opus
-→ optional validation for important harness changes
+Opus 4.7 / Sonnet-class or stronger
+→ initial harness generation, major harness changes, benchmark judging and critical reviews
 ```
 
 ---

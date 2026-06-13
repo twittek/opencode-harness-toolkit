@@ -1,3 +1,43 @@
+## Mandatory Question Tool Policy
+
+The adaptive interview is designed for OpenCode's interactive question UI.
+
+For every interview step with predefined answer options:
+
+```text
+Use the OpenCode question tool first.
+```
+
+Plain A/B/C text is a fallback mode, not the primary mode.
+
+```text
+Using plain A/B/C text is a fallback mode, not the primary mode.
+Do not use fallback mode unless tool usage is unavailable.
+```
+
+Required behavior:
+
+```text
+1. Use the OpenCode question tool.
+2. Ask exactly one question.
+3. Provide selectable options.
+4. Include `Other / custom`.
+5. Wait for the user's selection.
+6. Update the scenario model.
+7. Ask the next best question.
+```
+
+Fallback behavior is only allowed when the question tool is unavailable or fails:
+
+```text
+1. State that fallback mode is being used.
+2. Render A/B/C options as plain text.
+3. Include `Other / custom`.
+4. Ask the user to answer with a letter or custom text.
+```
+
+Do not choose fallback mode merely because it is easier to render.
+
 ---
 description: "Initialize the project harness through a guided one-question-at-a-time setup assistant."
 ---
@@ -328,7 +368,7 @@ prefer the smallest useful role set
 - Ask exactly one question at a time.
 - Do not present long grouped question blocks.
 - Wait for the user's answer before asking the next question.
-- Prefer OpenCode's ask/question tool for questions with predefined options.
+- Use OpenCode's question tool for questions with predefined options.
 - If the ask/question tool is available, use selectable options.
 - If the ask/question tool is unavailable or fails, fall back to plain text A/B/C options.
 - Always include an `Other / custom` option when predefined options may not fit.

@@ -2,6 +2,25 @@
 
 The interview uses an information-gain-oriented approach inspired by Akinator-style questioning.
 
+## Mandatory question tool usage
+
+For predefined-choice questions, the agent must use OpenCode's interactive question tool first.
+
+Plain A/B/C text is only a fallback mode.
+
+```text
+Using plain A/B/C text is a fallback mode, not the primary mode.
+Do not use fallback mode unless tool usage is unavailable.
+```
+
+The fallback must not be used just because it is simpler for the model.
+
+The preferred interaction is:
+
+```text
+question tool → selectable options → user selection → scenario update → next best question
+```
+
 ## Objective
 
 Identify the most likely development scenario with as few questions as possible.
