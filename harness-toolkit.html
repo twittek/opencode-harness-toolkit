@@ -1,1103 +1,1123 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Harness Toolkit — Make AI Agents Production-Ready</title>
-  <meta name="description" content="A productized SaaS-style landing page for the Harness Toolkit: initialize, audit, update, and improve AI-agent harnesses with versioning and changelog discipline." />
-  <style>
-    :root {
-      --bg: #051527;
-      --bg-2: #071b33;
-      --panel: rgba(255,255,255,.075);
-      --panel-strong: rgba(255,255,255,.11);
-      --text: #f5f9ff;
-      --muted: #aac0d9;
-      --soft: #d9eaff;
-      --line: rgba(255,255,255,.13);
-      --blue: #58a6ff;
-      --blue-2: #0d73ce;
-      --cyan: #65f1df;
-      --green: #9cff4f;
-      --yellow: #ffd237;
-      --orange: #ffb322;
-      --purple: #9d7cff;
-      --red: #ff6c8f;
-      --radius: 26px;
-      --radius-sm: 18px;
-      --shadow: 0 30px 90px rgba(0,0,0,.34);
-      --max: 1180px;
-      --font: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-      --mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
-    }
-
-    * { box-sizing: border-box; }
-    html { scroll-behavior: smooth; }
-    body {
-      margin: 0;
-      font-family: var(--font);
-      color: var(--text);
-      background:
-        radial-gradient(circle at 50% -10%, rgba(88,166,255,.36), transparent 36%),
-        radial-gradient(circle at 90% 12%, rgba(101,241,223,.18), transparent 27%),
-        radial-gradient(circle at 15% 35%, rgba(157,124,255,.18), transparent 31%),
-        linear-gradient(180deg, #031020 0%, #06182c 42%, #071427 100%);
-      overflow-x: hidden;
-    }
-
-    a { color: inherit; text-decoration: none; }
-    code { font-family: var(--mono); }
-
-    .container {
-      width: min(calc(100% - 34px), var(--max));
-      margin: 0 auto;
-    }
-
-    .bg-grid {
-      position: fixed;
-      inset: 0;
-      pointer-events: none;
-      opacity: .34;
-      background-image:
-        linear-gradient(rgba(255,255,255,.055) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(255,255,255,.055) 1px, transparent 1px);
-      background-size: 52px 52px;
-      mask-image: linear-gradient(180deg, black, transparent 85%);
-      z-index: -3;
-    }
-
-    .noise {
-      position: fixed;
-      inset: 0;
-      pointer-events: none;
-      z-index: -2;
-      opacity: .08;
-      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.8' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='256' height='256' filter='url(%23noise)' opacity='.9'/%3E%3C/svg%3E");
-    }
-
-    header {
-      position: sticky;
-      top: 0;
-      z-index: 30;
-      backdrop-filter: blur(18px);
-      background: rgba(5, 16, 32, .72);
-      border-bottom: 1px solid rgba(255,255,255,.09);
-    }
-
-    .nav {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 22px;
-      padding: 14px 0;
-    }
-
-    .brand {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      font-weight: 800;
-      letter-spacing: -.02em;
-    }
-
-    .logo {
-      width: 42px;
-      height: 42px;
-      border-radius: 15px;
-      display: grid;
-      place-items: center;
-      background:
-        linear-gradient(135deg, rgba(156,255,79,.22), rgba(88,166,255,.22)),
-        rgba(255,255,255,.07);
-      border: 1px solid rgba(255,255,255,.16);
-      box-shadow: inset 0 1px 0 rgba(255,255,255,.22);
-    }
-
-    .nav-links {
-      display: flex;
-      align-items: center;
-      justify-content: flex-end;
-      gap: 8px;
-      flex-wrap: wrap;
-      color: var(--muted);
-      font-size: 14px;
-    }
-
-    .nav-links a {
-      padding: 10px 12px;
-      border-radius: 999px;
-      transition: .2s ease;
-    }
-
-    .nav-links a:hover {
-      color: #fff;
-      background: rgba(255,255,255,.08);
-    }
-
-    .nav-cta {
-      color: #061425 !important;
-      background: linear-gradient(135deg, var(--green), var(--cyan)) !important;
-      font-weight: 800;
-    }
-
-    .hero {
-      position: relative;
-      padding: 78px 0 46px;
-    }
-
-    .hero::before {
-      content: "";
-      position: absolute;
-      width: 650px;
-      height: 650px;
-      left: 50%;
-      top: -210px;
-      transform: translateX(-50%);
-      border-radius: 50%;
-      background: radial-gradient(circle, rgba(88,166,255,.3), transparent 65%);
-      filter: blur(20px);
-      z-index: -1;
-    }
-
-    .hero-grid {
-      display: grid;
-      grid-template-columns: 1.05fr .95fr;
-      gap: 40px;
-      align-items: center;
-    }
-
-    .eyebrow {
-      display: inline-flex;
-      align-items: center;
-      gap: 10px;
-      padding: 9px 13px;
-      border: 1px solid rgba(255,255,255,.14);
-      border-radius: 999px;
-      color: var(--soft);
-      background: rgba(255,255,255,.065);
-      font-size: 14px;
-      margin-bottom: 22px;
-    }
-
-    .eyebrow-dot {
-      width: 9px;
-      height: 9px;
-      border-radius: 99px;
-      background: var(--green);
-      box-shadow: 0 0 18px rgba(156,255,79,.72);
-    }
-
-    h1 {
-      margin: 0;
-      font-size: clamp(46px, 7vw, 88px);
-      line-height: .92;
-      letter-spacing: -.065em;
-      max-width: 10.5ch;
-    }
-
-    .grad {
-      background: linear-gradient(135deg, #fff 10%, #b8dbff 38%, var(--cyan) 88%);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-    }
-
-    .hero-sub {
-      margin: 24px 0 0;
-      color: var(--muted);
-      font-size: clamp(18px, 2vw, 21px);
-      line-height: 1.7;
-      max-width: 66ch;
-    }
-
-    .hero-actions {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 14px;
-      margin-top: 30px;
-    }
-
-    .btn {
-      display: inline-flex;
-      align-items: center;
-      gap: 10px;
-      padding: 14px 18px;
-      border-radius: 16px;
-      border: 1px solid rgba(255,255,255,.14);
-      background: rgba(255,255,255,.07);
-      color: var(--text);
-      font-weight: 800;
-      transition: .2s ease;
-      box-shadow: 0 12px 36px rgba(0,0,0,.22);
-    }
-
-    .btn:hover {
-      transform: translateY(-2px);
-      background: rgba(255,255,255,.1);
-    }
-
-    .btn.primary {
-      background: linear-gradient(135deg, var(--green), var(--cyan));
-      color: #061425;
-      border: 0;
-    }
-
-
-    .v11-card {
-      padding: 24px;
-      display: grid;
-      grid-template-rows: auto 1fr auto;
-      gap: 18px;
-      border-radius: 32px;
-      border: 1px solid rgba(255,255,255,.14);
-      background:
-        linear-gradient(180deg, rgba(255,255,255,.12), rgba(255,255,255,.055)),
-        rgba(5, 18, 34, .78);
-      box-shadow: var(--shadow);
-      overflow: hidden;
-    }
-
-    .v11-terminal {
-      border-radius: 18px;
-      background: rgba(4, 11, 22, 0.92);
-      border: 1px solid rgba(255,255,255,0.08);
-      overflow: hidden;
-      min-height: 100%;
-      display: grid;
-      grid-template-rows: auto 1fr;
-    }
-
-    .v11-terminal-bar {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      padding: 12px 14px;
-      border-bottom: 1px solid rgba(255,255,255,0.08);
-      color: var(--muted);
-      font-size: 13px;
-    }
-
-    .v11-pill {
-      width: 10px;
-      height: 10px;
-      border-radius: 50%;
-    }
-
-    .v11-pill.red { background: #ff6b6b; }
-    .v11-pill.yellow { background: #ffd166; }
-    .v11-pill.green { background: #67e480; }
-
-    .v11-terminal-body {
-      padding: 18px 18px 20px;
-      font-family: var(--mono);
-      font-size: 14px;
-      color: #d9ecff;
-      line-height: 1.65;
-      white-space: pre-wrap;
-    }
-
-    .v11-prompt { color: var(--cyan); }
-    .v11-cmd { color: #f4f8ff; }
-    .v11-muted-code { color: #7a8da9; }
-
-    .v11-chip-row {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 10px;
-    }
-
-    .v11-chip {
-      padding: 8px 12px;
-      border-radius: 999px;
-      background: rgba(255,255,255,0.05);
-      border: 1px solid rgba(255,255,255,0.1);
-      color: #dbe9fb;
-      font-size: 13px;
-    }
-
-
-    .hero-card {
-      position: relative;
-      border: 1px solid rgba(255,255,255,.14);
-      border-radius: 32px;
-      background:
-        linear-gradient(180deg, rgba(255,255,255,.12), rgba(255,255,255,.055)),
-        rgba(5, 18, 34, .78);
-      box-shadow: var(--shadow);
-      overflow: hidden;
-    }
-
-    .product-window {
-      padding: 18px;
-    }
-
-    .window-bar {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      gap: 12px;
-      padding: 14px 14px 18px;
-    }
-
-    .dots { display: flex; gap: 8px; }
-    .dot { width: 10px; height: 10px; border-radius: 99px; }
-    .dot.red { background: #ff6b7e; }
-    .dot.yellow { background: #ffd166; }
-    .dot.green { background: #7df58a; }
-
-    .product-content {
-      display: grid;
-      gap: 14px;
-      padding: 8px;
-    }
-
-    .metric-row {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 12px;
-    }
-
-    .metric,
-    .workflow-card {
-      border-radius: 20px;
-      border: 1px solid rgba(255,255,255,.11);
-      background: rgba(255,255,255,.06);
-      padding: 16px;
-    }
-
-    .metric-label {
-      color: var(--muted);
-      font-size: 12px;
-      margin-bottom: 8px;
-    }
-
-    .metric-value {
-      font-size: 28px;
-      font-weight: 900;
-      letter-spacing: -.05em;
-    }
-
-    .workflow {
-      display: grid;
-      gap: 10px;
-    }
-
-    .workflow-item {
-      display: grid;
-      grid-template-columns: auto 1fr auto;
-      align-items: center;
-      gap: 12px;
-      padding: 12px;
-      border-radius: 16px;
-      background: rgba(0,0,0,.16);
-      border: 1px solid rgba(255,255,255,.08);
-    }
-
-    .status {
-      width: 12px;
-      height: 12px;
-      border-radius: 99px;
-      background: var(--blue);
-      box-shadow: 0 0 15px rgba(88,166,255,.55);
-    }
-
-    .status.blue { background: var(--blue); box-shadow: 0 0 15px rgba(88,166,255,.55); }
-    .status.red { background: var(--red); box-shadow: 0 0 15px rgba(255,108,143,.55); }
-    .status.yellow { background: var(--yellow); box-shadow: 0 0 15px rgba(255,210,55,.48); }
-    .status.green { background: var(--green); box-shadow: 0 0 15px rgba(156,255,79,.48); }
-
-    .command-tag {
-      font-family: var(--mono);
-      color: var(--soft);
-      font-size: 13px;
-    }
-
-    .section {
-      padding: 50px 0;
-    }
-
-    .section-head {
-      display: flex;
-      justify-content: space-between;
-      align-items: end;
-      gap: 24px;
-      margin-bottom: 26px;
-    }
-
-    .section-head h2 {
-      margin: 0;
-      font-size: clamp(32px, 4.6vw, 54px);
-      line-height: 1;
-      letter-spacing: -.05em;
-    }
-
-    .section-head p {
-      margin: 0;
-      color: var(--muted);
-      max-width: 64ch;
-      line-height: 1.7;
-    }
-
-    .banner {
-      padding: 30px;
-      border-radius: 30px;
-      border: 1px solid rgba(255,255,255,.15);
-      background:
-        linear-gradient(135deg, rgba(255,255,255,.12), rgba(255,255,255,.045)),
-        radial-gradient(circle at 100% 0%, rgba(101,241,223,.15), transparent 40%);
-      box-shadow: var(--shadow);
-      overflow: hidden;
-      position: relative;
-    }
-
-    .banner h2 {
-      margin: 0;
-      font-size: clamp(31px, 4.8vw, 64px);
-      line-height: 1.15;
-      letter-spacing: -.055em;
-    }
-
-    .platform-statement {
-      margin-top: 30px;
-      padding-top: 24px;
-      border-top: 1px solid rgba(255,255,255,.12);
-      text-align: center;
-      font-size: clamp(28px, 4vw, 48px);
-      font-weight: 900;
-      letter-spacing: -.045em;
-      color: #fff;
-    }
-
-    .box-section {
-      padding: 30px;
-      border-radius: 30px;
-      border: 1px solid rgba(255,255,255,.15);
-      background:
-        linear-gradient(135deg, rgba(255,255,255,.12), rgba(255,255,255,.045)),
-        radial-gradient(circle at 100% 0%, rgba(101,241,223,.15), transparent 40%);
-      box-shadow: var(--shadow);
-      overflow: hidden;
-      position: relative;
-    }
-
-    .box-section + .box-section {
-      margin-top: 22px;
-    }
-
-
-    .muted-line {
-      color: rgba(245,249,255,.44);
-    }
-
-    .blue-line {
-      color: #75baff;
-    }
-
-    .principles {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 18px;
-      margin-top: 22px;
-    }
-
-    .principle {
-      padding: 20px 20px 20px 24px;
-      border-radius: 22px;
-      background: rgba(255,255,255,.055);
-      border: 1px solid rgba(255,255,255,.12);
-      position: relative;
-    }
-
-    .principle::before {
-      content: "";
-      position: absolute;
-      top: 18px;
-      left: 0;
-      width: 5px;
-      height: 76px;
-      border-radius: 99px;
-      background: var(--green);
-    }
-
-    .principle:nth-child(2)::before { background: var(--yellow); }
-    .principle:nth-child(3)::before { background: var(--orange); }
-
-    .principle h3 {
-      margin: 0 0 12px;
-      font-size: 24px;
-      letter-spacing: -.03em;
-    }
-
-    .principle p {
-      color: var(--soft);
-      opacity: .9;
-      line-height: 1.65;
-      margin: 0;
-    }
-
-    .cards {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 18px;
-    }
-
-    .card {
-      border-radius: 24px;
-      border: 1px solid rgba(255,255,255,.12);
-      background: linear-gradient(180deg, rgba(255,255,255,.075), rgba(255,255,255,.04));
-      padding: 22px;
-      box-shadow: 0 18px 54px rgba(0,0,0,.22);
-    }
-
-    .icon {
-      width: 50px;
-      height: 50px;
-      display: grid;
-      place-items: center;
-      border-radius: 16px;
-      margin-bottom: 16px;
-      background: linear-gradient(135deg, rgba(88,166,255,.23), rgba(101,241,223,.16));
-      border: 1px solid rgba(255,255,255,.14);
-      font-size: 23px;
-    }
-
-    .card h3 {
-      margin: 0 0 10px;
-      font-size: 22px;
-      letter-spacing: -.03em;
-    }
-
-    .card p,
-    .card li {
-      color: var(--muted);
-      line-height: 1.7;
-    }
-
-    .card ul {
-      margin: 12px 0 0;
-      padding-left: 18px;
-    }
-
-    .command-grid {
-      display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      gap: 16px;
-    }
-
-    .command {
-      min-height: 260px;
-      display: flex;
-      flex-direction: column;
-      justify-content: space-between;
-    }
-
-    .command-name {
-      font-family: var(--mono);
-      color: var(--cyan);
-      font-size: 17px;
-      margin-bottom: 8px;
-    }
-
-    .command-number {
-      font-weight: 900;
-      font-size: 58px;
-      line-height: .9;
-      letter-spacing: -.06em;
-      opacity: .23;
-      margin-bottom: 14px;
-    }
-
-    .flow {
-      display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      gap: 14px;
-      align-items: stretch;
-    }
-
-    .flow-step {
-      padding: 20px;
-      border-radius: 24px;
-      border: 1px solid rgba(255,255,255,.13);
-      background: rgba(255,255,255,.06);
-      position: relative;
-      overflow: hidden;
-    }
-
-    .flow-step::after {
-      content: "";
-      position: absolute;
-      left: 20px;
-      right: 20px;
-      bottom: 0;
-      height: 4px;
-      border-radius: 99px 99px 0 0;
-      background: linear-gradient(90deg, var(--green), var(--cyan));
-    }
-
-    .codebox {
-      padding: 18px;
-      border-radius: 20px;
-      background: rgba(0,0,0,.32);
-      border: 1px solid rgba(255,255,255,.1);
-      overflow: auto;
-    }
-
-    .codebox pre {
-      margin: 0;
-      color: #d9ecff;
-      font-family: var(--mono);
-      line-height: 1.65;
-      font-size: 14px;
-      white-space: pre-wrap;
-    }
-
-    .split {
-      display: grid;
-      grid-template-columns: .9fr 1.1fr;
-      gap: 22px;
-      align-items: start;
-    }
-
-    .usecase-list {
-      display: grid;
-      gap: 12px;
-    }
-
-    .usecase {
-      display: grid;
-      grid-template-columns: auto 1fr;
-      gap: 14px;
-      align-items: start;
-      padding: 16px;
-      border-radius: 18px;
-      border: 1px solid rgba(255,255,255,.11);
-      background: rgba(255,255,255,.05);
-    }
-
-    .check {
-      width: 28px;
-      height: 28px;
-      border-radius: 99px;
-      display: grid;
-      place-items: center;
-      background: linear-gradient(135deg, var(--green), var(--cyan));
-      color: #061425;
-      font-weight: 900;
-    }
-
-    .table-wrap {
-      overflow: auto;
-      border-radius: 24px;
-      border: 1px solid rgba(255,255,255,.12);
-      background: rgba(255,255,255,.045);
-    }
-
-    table {
-      width: 100%;
-      border-collapse: collapse;
-      min-width: 760px;
-    }
-
-    th, td {
-      padding: 17px 18px;
-      text-align: left;
-      border-bottom: 1px solid rgba(255,255,255,.09);
-      vertical-align: top;
-    }
-
-    th { color: #fff; font-size: 14px; }
-    td { color: var(--muted); line-height: 1.6; }
-
-    .cta {
-      border-radius: 34px;
-      padding: 34px;
-      background:
-        radial-gradient(circle at 100% 0%, rgba(156,255,79,.22), transparent 38%),
-        linear-gradient(135deg, rgba(88,166,255,.2), rgba(101,241,223,.12));
-      border: 1px solid rgba(255,255,255,.16);
-      box-shadow: var(--shadow);
-    }
-
-    .cta h2 {
-      margin: 0 0 18px;
-      font-size: clamp(34px, 5vw, 64px);
-      line-height: 1;
-      letter-spacing: -.055em;
-    }
-
-    footer {
-      padding: 42px 0 58px;
-      color: var(--muted);
-    }
-
-    .footer {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      gap: 20px;
-      flex-wrap: wrap;
-    }
-
-    @media (max-width: 1100px) {
-      .hero-grid,
-      .split,
-      .principles,
-      .cards,
-      .command-grid,
-      .flow {
-        grid-template-columns: 1fr 1fr;
-      }
-      h1 { max-width: none; }
-    }
-
-    @media (max-width: 760px) {
-      .nav {
-        align-items: flex-start;
-        flex-direction: column;
-      }
-      .nav-links {
-        justify-content: flex-start;
-      }
-      .hero {
-        padding-top: 46px;
-      }
-      .hero-grid,
-      .split,
-      .principles,
-      .cards,
-      .command-grid,
-      .flow {
-        grid-template-columns: 1fr;
-      }
-      .section-head {
-        display: block;
-      }
-      .section-head h2 {
-        margin-bottom: 14px;
-      }
-    }
-  </style>
+ <meta charset="UTF-8" />
+ <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+ <title>Harness Toolkit — Make AI Agents Production-Ready</title>
+ <meta name="description" content="A productized SaaS-style landing page for the Harness Toolkit: initialize, audit, update, and improve AI-agent harnesses with versioning and changelog discipline." />
+ <style>
+  :root {
+   --bg: #051527;
+   --bg-2: #071b33;
+   --panel: rgba(255,255,255,.075);
+   --panel-strong: rgba(255,255,255,.11);
+   --text: #f5f9ff;
+   --muted: #aac0d9;
+   --soft: #d9eaff;
+   --line: rgba(255,255,255,.13);
+   --blue: #58a6ff;
+   --blue-2: #0d73ce;
+   --cyan: #65f1df;
+   --green: #9cff4f;
+   --yellow: #ffd237;
+   --orange: #ffb322;
+   --purple: #9d7cff;
+   --red: #ff6c8f;
+   --radius: 26px;
+   --radius-sm: 18px;
+   --shadow: 0 30px 90px rgba(0,0,0,.34);
+   --max: 1180px;
+   --font: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+   --mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  }
+
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+   margin: 0;
+   font-family: var(--font);
+   color: var(--text);
+   background:
+    radial-gradient(circle at 50% -10%, rgba(88,166,255,.36), transparent 36%),
+    radial-gradient(circle at 90% 12%, rgba(101,241,223,.18), transparent 27%),
+    radial-gradient(circle at 15% 35%, rgba(157,124,255,.18), transparent 31%),
+    linear-gradient(180deg, #031020 0%, #06182c 42%, #071427 100%);
+   overflow-x: hidden;
+  }
+
+  a { color: inherit; text-decoration: none; }
+  code { font-family: var(--mono); }
+
+  .container {
+   width: min(calc(100% - 34px), var(--max));
+   margin: 0 auto;
+  }
+
+  .bg-grid {
+   position: fixed;
+   inset: 0;
+   pointer-events: none;
+   opacity: .34;
+   background-image:
+    linear-gradient(rgba(255,255,255,.055) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,.055) 1px, transparent 1px);
+   background-size: 52px 52px;
+   mask-image: linear-gradient(180deg, black, transparent 85%);
+   z-index: -3;
+  }
+
+  .noise {
+   position: fixed;
+   inset: 0;
+   pointer-events: none;
+   z-index: -2;
+   opacity: .08;
+   background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.8' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='256' height='256' filter='url(%23noise)' opacity='.9'/%3E%3C/svg%3E");
+  }
+
+  header {
+   position: sticky;
+   top: 0;
+   z-index: 30;
+   backdrop-filter: blur(18px);
+   background: rgba(5, 16, 32, .72);
+   border-bottom: 1px solid rgba(255,255,255,.09);
+  }
+
+  .nav {
+   display: flex;
+   align-items: center;
+   justify-content: space-between;
+   gap: 22px;
+   padding: 14px 0;
+  }
+
+  .brand {
+   display: flex;
+   align-items: center;
+   gap: 12px;
+   font-weight: 800;
+   letter-spacing: -.02em;
+  }
+
+  .logo {
+   width: 42px;
+   height: 42px;
+   border-radius: 15px;
+   display: grid;
+   place-items: center;
+   background:
+    linear-gradient(135deg, rgba(156,255,79,.22), rgba(88,166,255,.22)),
+    rgba(255,255,255,.07);
+   border: 1px solid rgba(255,255,255,.16);
+   box-shadow: inset 0 1px 0 rgba(255,255,255,.22);
+  }
+
+  .nav-links {
+   display: flex;
+   align-items: center;
+   justify-content: flex-end;
+   gap: 8px;
+   flex-wrap: wrap;
+   color: var(--muted);
+   font-size: 14px;
+  }
+
+  .nav-links a {
+   padding: 10px 12px;
+   border-radius: 999px;
+   transition: .2s ease;
+  }
+
+  .nav-links a:hover {
+   color: #fff;
+   background: rgba(255,255,255,.08);
+  }
+
+  .nav-cta {
+   color: #061425 !important;
+   background: linear-gradient(135deg, var(--green), var(--cyan)) !important;
+   font-weight: 800;
+  }
+
+  .hero {
+   position: relative;
+   padding: 78px 0 46px;
+  }
+
+  .hero::before {
+   content: "";
+   position: absolute;
+   width: 650px;
+   height: 650px;
+   left: 50%;
+   top: -210px;
+   transform: translateX(-50%);
+   border-radius: 50%;
+   background: radial-gradient(circle, rgba(88,166,255,.3), transparent 65%);
+   filter: blur(20px);
+   z-index: -1;
+  }
+
+  .hero-grid {
+   display: grid;
+   grid-template-columns: 1.05fr .95fr;
+   gap: 40px;
+   align-items: center;
+  }
+
+  .eyebrow {
+   display: inline-flex;
+   align-items: center;
+   gap: 10px;
+   padding: 9px 13px;
+   border: 1px solid rgba(255,255,255,.14);
+   border-radius: 999px;
+   color: var(--soft);
+   background: rgba(255,255,255,.065);
+   font-size: 14px;
+   margin-bottom: 22px;
+  }
+
+  .eyebrow-dot {
+   width: 9px;
+   height: 9px;
+   border-radius: 99px;
+   background: var(--green);
+   box-shadow: 0 0 18px rgba(156,255,79,.72);
+  }
+
+  h1 {
+   margin: 0;
+   font-size: clamp(46px, 7vw, 88px);
+   line-height: .92;
+   letter-spacing: -.065em;
+   max-width: 10.5ch;
+  }
+
+  .grad {
+   background: linear-gradient(135deg, #fff 10%, #b8dbff 38%, var(--cyan) 88%);
+   -webkit-background-clip: text;
+   -webkit-text-fill-color: transparent;
+  }
+
+  .hero-sub {
+   margin: 24px 0 0;
+   color: var(--muted);
+   font-size: clamp(18px, 2vw, 21px);
+   line-height: 1.7;
+   max-width: 66ch;
+  }
+
+  .hero-actions {
+   display: flex;
+   flex-wrap: wrap;
+   gap: 14px;
+   margin-top: 30px;
+  }
+
+  .btn {
+   display: inline-flex;
+   align-items: center;
+   gap: 10px;
+   padding: 14px 18px;
+   border-radius: 16px;
+   border: 1px solid rgba(255,255,255,.14);
+   background: rgba(255,255,255,.07);
+   color: var(--text);
+   font-weight: 800;
+   transition: .2s ease;
+   box-shadow: 0 12px 36px rgba(0,0,0,.22);
+  }
+
+  .btn:hover {
+   transform: translateY(-2px);
+   background: rgba(255,255,255,.1);
+  }
+
+  .btn.primary {
+   background: linear-gradient(135deg, var(--green), var(--cyan));
+   color: #061425;
+   border: 0;
+  }
+
+  .-card {
+   padding: 24px;
+   display: grid;
+   grid-template-rows: auto 1fr auto;
+   gap: 18px;
+   border-radius: 32px;
+   border: 1px solid rgba(255,255,255,.14);
+   background:
+    linear-gradient(180deg, rgba(255,255,255,.12), rgba(255,255,255,.055)),
+    rgba(5, 18, 34, .78);
+   box-shadow: var(--shadow);
+   overflow: hidden;
+  }
+
+  .-terminal {
+   border-radius: 18px;
+   background: rgba(4, 11, 22, 0.92);
+   border: 1px solid rgba(255,255,255,0.08);
+   overflow: hidden;
+   min-height: 100%;
+   display: grid;
+   grid-template-rows: auto 1fr;
+  }
+
+  .-terminal-bar {
+   display: flex;
+   align-items: center;
+   gap: 8px;
+   padding: 12px 14px;
+   border-bottom: 1px solid rgba(255,255,255,0.08);
+   color: var(--muted);
+   font-size: 13px;
+  }
+
+  .-pill {
+   width: 10px;
+   height: 10px;
+   border-radius: 50%;
+  }
+
+  .-pill.red { background: #ff6b6b; }
+  .-pill.yellow { background: #ffd166; }
+  .-pill.green { background: #67e480; }
+
+  .-terminal-body {
+   padding: 18px 18px 20px;
+   font-family: var(--mono);
+   font-size: 14px;
+   color: #d9ecff;
+   line-height: 1.65;
+   white-space: pre-wrap;
+  }
+
+  .-prompt { color: var(--cyan); }
+  .-cmd { color: #f4f8ff; }
+  .-muted-code { color: #7a8da9; }
+
+  .-chip-row {
+   display: flex;
+   flex-wrap: wrap;
+   gap: 10px;
+  }
+
+  .-chip {
+   padding: 8px 12px;
+   border-radius: 999px;
+   background: rgba(255,255,255,0.05);
+   border: 1px solid rgba(255,255,255,0.1);
+   color: #dbe9fb;
+   font-size: 13px;
+  }
+
+  .hero-card {
+   position: relative;
+   border: 1px solid rgba(255,255,255,.14);
+   border-radius: 32px;
+   background:
+    linear-gradient(180deg, rgba(255,255,255,.12), rgba(255,255,255,.055)),
+    rgba(5, 18, 34, .78);
+   box-shadow: var(--shadow);
+   overflow: hidden;
+  }
+
+  .product-window {
+   padding: 18px;
+  }
+
+  .window-bar {
+   display: flex;
+   justify-content: space-between;
+   align-items: center;
+   gap: 12px;
+   padding: 14px 14px 18px;
+  }
+
+  .dots { display: flex; gap: 8px; }
+  .dot { width: 10px; height: 10px; border-radius: 99px; }
+  .dot.red { background: #ff6b7e; }
+  .dot.yellow { background: #ffd166; }
+  .dot.green { background: #7df58a; }
+
+  .product-content {
+   display: grid;
+   gap: 14px;
+   padding: 8px;
+  }
+
+  .metric-row {
+   display: grid;
+   grid-template-columns: 1fr 1fr;
+   gap: 12px;
+  }
+
+  .metric,
+  .workflow-card {
+   border-radius: 20px;
+   border: 1px solid rgba(255,255,255,.11);
+   background: rgba(255,255,255,.06);
+   padding: 16px;
+  }
+
+  .metric-label {
+   color: var(--muted);
+   font-size: 12px;
+   margin-bottom: 8px;
+  }
+
+  .metric-value {
+   font-size: 28px;
+   font-weight: 900;
+   letter-spacing: -.05em;
+  }
+
+  .workflow {
+   display: grid;
+   gap: 10px;
+  }
+
+  .workflow-item {
+   display: grid;
+   grid-template-columns: auto 1fr auto;
+   align-items: center;
+   gap: 12px;
+   padding: 12px;
+   border-radius: 16px;
+   background: rgba(0,0,0,.16);
+   border: 1px solid rgba(255,255,255,.08);
+  }
+
+  .status {
+   width: 12px;
+   height: 12px;
+   border-radius: 99px;
+   background: var(--blue);
+   box-shadow: 0 0 15px rgba(88,166,255,.55);
+  }
+
+  .status.blue { background: var(--blue); box-shadow: 0 0 15px rgba(88,166,255,.55); }
+  .status.red { background: var(--red); box-shadow: 0 0 15px rgba(255,108,143,.55); }
+  .status.yellow { background: var(--yellow); box-shadow: 0 0 15px rgba(255,210,55,.48); }
+  .status.green { background: var(--green); box-shadow: 0 0 15px rgba(156,255,79,.48); }
+
+  .command-tag {
+   font-family: var(--mono);
+   color: var(--soft);
+   font-size: 13px;
+  }
+
+  .section {
+   padding: 50px 0;
+  }
+
+  .section-head {
+   display: flex;
+   justify-content: space-between;
+   align-items: end;
+   gap: 24px;
+   margin-bottom: 26px;
+  }
+
+  .section-head h2 {
+   margin: 0;
+   font-size: clamp(32px, 4.6vw, 54px);
+   line-height: 1;
+   letter-spacing: -.05em;
+  }
+
+  .section-head p {
+   margin: 0;
+   color: var(--muted);
+   max-width: 64ch;
+   line-height: 1.7;
+  }
+
+  .banner {
+   padding: 30px;
+   border-radius: 30px;
+   border: 1px solid rgba(255,255,255,.15);
+   background:
+    linear-gradient(135deg, rgba(255,255,255,.12), rgba(255,255,255,.045)),
+    radial-gradient(circle at 100% 0%, rgba(101,241,223,.15), transparent 40%);
+   box-shadow: var(--shadow);
+   overflow: hidden;
+   position: relative;
+  }
+
+  .banner h2 {
+   margin: 0;
+   font-size: clamp(31px, 4.8vw, 64px);
+   line-height: 1.15;
+   letter-spacing: -.055em;
+  }
+
+  .platform-statement {
+   margin-top: 30px;
+   padding-top: 24px;
+   border-top: 1px solid rgba(255,255,255,.12);
+   text-align: center;
+   font-size: clamp(28px, 4vw, 48px);
+   font-weight: 900;
+   letter-spacing: -.045em;
+   color: #fff;
+  }
+
+  .box-section {
+   padding: 30px;
+   border-radius: 30px;
+   border: 1px solid rgba(255,255,255,.15);
+   background:
+    linear-gradient(135deg, rgba(255,255,255,.12), rgba(255,255,255,.045)),
+    radial-gradient(circle at 100% 0%, rgba(101,241,223,.15), transparent 40%);
+   box-shadow: var(--shadow);
+   overflow: hidden;
+   position: relative;
+  }
+
+  .box-section + .box-section {
+   margin-top: 22px;
+  }
+
+  .muted-line {
+   color: rgba(245,249,255,.44);
+  }
+
+  .blue-line {
+   color: #75baff;
+  }
+
+  .principles {
+   display: grid;
+   grid-template-columns: repeat(3, 1fr);
+   gap: 18px;
+   margin-top: 22px;
+  }
+
+  .principle {
+   padding: 20px 20px 20px 24px;
+   border-radius: 22px;
+   background: rgba(255,255,255,.055);
+   border: 1px solid rgba(255,255,255,.12);
+   position: relative;
+  }
+
+  .principle::before {
+   content: "";
+   position: absolute;
+   top: 18px;
+   left: 0;
+   width: 5px;
+   height: 76px;
+   border-radius: 99px;
+   background: var(--green);
+  }
+
+  .principle:nth-child(2)::before { background: var(--yellow); }
+  .principle:nth-child(3)::before { background: var(--orange); }
+
+  .principle h3 {
+   margin: 0 0 12px;
+   font-size: 24px;
+   letter-spacing: -.03em;
+  }
+
+  .principle p {
+   color: var(--soft);
+   opacity: .9;
+   line-height: 1.65;
+   margin: 0;
+  }
+
+  .cards {
+   display: grid;
+   grid-template-columns: repeat(3, 1fr);
+   gap: 18px;
+  }
+
+  .card {
+   border-radius: 24px;
+   border: 1px solid rgba(255,255,255,.12);
+   background: linear-gradient(180deg, rgba(255,255,255,.075), rgba(255,255,255,.04));
+   padding: 22px;
+   box-shadow: 0 18px 54px rgba(0,0,0,.22);
+  }
+
+  .icon {
+   width: 50px;
+   height: 50px;
+   display: grid;
+   place-items: center;
+   border-radius: 16px;
+   margin-bottom: 16px;
+   background: linear-gradient(135deg, rgba(88,166,255,.23), rgba(101,241,223,.16));
+   border: 1px solid rgba(255,255,255,.14);
+   font-size: 23px;
+  }
+
+  .card h3 {
+   margin: 0 0 10px;
+   font-size: 22px;
+   letter-spacing: -.03em;
+  }
+
+  .card p,
+  .card li {
+   color: var(--muted);
+   line-height: 1.7;
+  }
+
+  .card ul {
+   margin: 12px 0 0;
+   padding-left: 18px;
+  }
+
+  .command-grid {
+   display: grid;
+   grid-template-columns: repeat(4, 1fr);
+   gap: 16px;
+  }
+
+  .command {
+   min-height: 260px;
+   display: flex;
+   flex-direction: column;
+   justify-content: space-between;
+  }
+
+  .command-name {
+   font-family: var(--mono);
+   color: var(--cyan);
+   font-size: 17px;
+   margin-bottom: 8px;
+  }
+
+  .command-number {
+   font-weight: 900;
+   font-size: 58px;
+   line-height: .9;
+   letter-spacing: -.06em;
+   opacity: .23;
+   margin-bottom: 14px;
+  }
+
+  .flow {
+   display: grid;
+   grid-template-columns: repeat(4, 1fr);
+   gap: 14px;
+   align-items: stretch;
+  }
+
+  .flow-step {
+   padding: 20px;
+   border-radius: 24px;
+   border: 1px solid rgba(255,255,255,.13);
+   background: rgba(255,255,255,.06);
+   position: relative;
+   overflow: hidden;
+  }
+
+  .flow-step::after {
+   content: "";
+   position: absolute;
+   left: 20px;
+   right: 20px;
+   bottom: 0;
+   height: 4px;
+   border-radius: 99px 99px 0 0;
+   background: linear-gradient(90deg, var(--green), var(--cyan));
+  }
+
+  .codebox {
+   padding: 18px;
+   border-radius: 20px;
+   background: rgba(0,0,0,.32);
+   border: 1px solid rgba(255,255,255,.1);
+   overflow: auto;
+  }
+
+  .codebox pre {
+   margin: 0;
+   color: #d9ecff;
+   font-family: var(--mono);
+   line-height: 1.65;
+   font-size: 14px;
+   white-space: pre-wrap;
+  }
+
+  .split {
+   display: grid;
+   grid-template-columns: .9fr 1.1fr;
+   gap: 22px;
+   align-items: start;
+  }
+
+  .usecase-list {
+   display: grid;
+   gap: 12px;
+  }
+
+  .usecase {
+   display: grid;
+   grid-template-columns: auto 1fr;
+   gap: 14px;
+   align-items: start;
+   padding: 16px;
+   border-radius: 18px;
+   border: 1px solid rgba(255,255,255,.11);
+   background: rgba(255,255,255,.05);
+  }
+
+  .check {
+   width: 28px;
+   height: 28px;
+   border-radius: 99px;
+   display: grid;
+   place-items: center;
+   background: linear-gradient(135deg, var(--green), var(--cyan));
+   color: #061425;
+   font-weight: 900;
+  }
+
+  .table-wrap {
+   overflow: auto;
+   border-radius: 24px;
+   border: 1px solid rgba(255,255,255,.12);
+   background: rgba(255,255,255,.045);
+  }
+
+  table {
+   width: 100%;
+   border-collapse: collapse;
+   min-width: 760px;
+  }
+
+  th, td {
+   padding: 17px 18px;
+   text-align: left;
+   border-bottom: 1px solid rgba(255,255,255,.09);
+   vertical-align: top;
+  }
+
+  th { color: #fff; font-size: 14px; }
+  td { color: var(--muted); line-height: 1.6; }
+
+  .cta {
+   border-radius: 34px;
+   padding: 34px;
+   background:
+    radial-gradient(circle at 100% 0%, rgba(156,255,79,.22), transparent 38%),
+    linear-gradient(135deg, rgba(88,166,255,.2), rgba(101,241,223,.12));
+   border: 1px solid rgba(255,255,255,.16);
+   box-shadow: var(--shadow);
+  }
+
+  .cta h2 {
+   margin: 0 0 18px;
+   font-size: clamp(34px, 5vw, 64px);
+   line-height: 1;
+   letter-spacing: -.055em;
+  }
+
+  footer {
+   padding: 42px 0 58px;
+   color: var(--muted);
+  }
+
+  .footer {
+   display: flex;
+   justify-content: space-between;
+   align-items: center;
+   gap: 20px;
+   flex-wrap: wrap;
+  }
+
+  @media (max-width: 1100px) {
+   .hero-grid,
+   .split,
+   .principles,
+   .cards,
+   .command-grid,
+   .flow {
+    grid-template-columns: 1fr 1fr;
+   }
+   h1 { max-width: none; }
+  }
+
+  @media (max-width: 760px) {
+   .nav {
+    align-items: flex-start;
+    flex-direction: column;
+   }
+   .nav-links {
+    justify-content: flex-start;
+   }
+   .hero {
+    padding-top: 46px;
+   }
+   .hero-grid,
+   .split,
+   .principles,
+   .cards,
+   .command-grid,
+   .flow {
+    grid-template-columns: 1fr;
+   }
+   .section-head {
+    display: block;
+   }
+   .section-head h2 {
+    margin-bottom: 14px;
+   }
+  }
+ </style>
 </head>
 <body>
-  <div class="bg-grid"></div>
-  <div class="noise"></div>
+ <div class="bg-grid"></div>
+ <div class="noise"></div>
 
-  <header>
-    <div class="container nav">
-      <a href="#top" class="brand">
-        <div class="logo">🧰</div>
-        <div>
-          <div>Harness Toolkit</div>
-          <div style="font-size:12px;color:var(--muted);font-weight:700;">AI-agent systems that hold under load</div>
-        </div>
-      </a>
-      <nav class="nav-links">
-        <a href="#why">Why</a>
-        <a href="#platform">Platform</a>
-        <a href="#commands">Commands</a>
-        <a href="#usecases">Use cases</a>
-        <a href="#governance">Governance</a>
-        <a href="#start" class="nav-cta">Get started</a>
-      </nav>
+ <header>
+  <div class="container nav">
+   <a href="#top" class="brand">
+    <div class="logo">🧰</div>
+    <div>
+     <div>Harness Toolkit</div>
+     <div style="font-size:12px;color:var(--muted);font-weight:700;">AI-agent systems that hold under load</div>
     </div>
-  </header>
+   </a>
+   <nav class="nav-links">
+    <a href="#install">Install</a>
+    <a href="#why">Why</a>
+    <a href="#platform">Platform</a>
+    <a href="#commands">Commands</a>
+    <a href="#usecases">Use cases</a>
+    <a href="#governance">Governance</a>
+    <a href="#start" class="nav-cta">Get started</a>
+   </nav>
+  </div>
+ </header>
 
-  <main id="top">
-    <section class="hero">
-      <div class="container hero-grid">
-        <div>
-          <div class="eyebrow"><span class="eyebrow-dot"></span> From prompt craft to agent platform engineering</div>
-          <h1>Make AI agents <span class="grad">reliable by design.</span></h1>
-          <p class="hero-sub">
-            Prompt engineering makes agents useful. Harness engineering makes agents dependable.
-            Harness Toolkit turns context, tools, rules, feedback loops, and versioned governance into a repeatable operating system for agentic software development.
-          </p>
-          <div class="hero-actions">
-            <a href="#commands" class="btn primary">Explore the toolkit →</a>
-            <a href="#why" class="btn">Why harness engineering matters</a>
-          </div>
-        </div>
+ <main id="top">
+  <section class="hero">
+   <div class="container hero-grid">
+    <div>
+     <div class="eyebrow"><span class="eyebrow-dot"></span> From prompt craft to agent platform engineering</div>
+     <h1>Make AI agents <span class="grad">reliable by design.</span></h1>
+     <p class="hero-sub">
+      Prompt engineering makes agents useful. Harness engineering makes agents dependable.
+      Harness Toolkit turns context, tools, rules, feedback loops, and versioned governance into a repeatable operating system for agentic software development.
+     </p>
+     <div class="hero-actions">
+      <a href="#commands" class="btn primary">Explore the toolkit →</a>
+      <a href="#why" class="btn">Why harness engineering matters</a>
+     </div>
+    </div>
 
-        <aside class="v11-card">
-          <div style="display:flex;justify-content:space-between;align-items:center;gap:16px;">
-            <div>
-              <div style="font-weight:700;font-size:20px;">Toolkit lifecycle</div>
-              <div style="color:var(--muted);margin-top:6px;">From first setup to ongoing refinement.</div>
-            </div>
-          </div>
-
-          <div class="v11-terminal">
-            <div class="v11-terminal-bar">
-              <span class="v11-pill red"></span>
-              <span class="v11-pill yellow"></span>
-              <span class="v11-pill green"></span>
-              <span style="margin-left:8px;">opencode</span>
-            </div>
-            <div class="v11-terminal-body"><span class="v11-prompt">$</span> <span class="v11-cmd">/harness-init</span>
-<span class="v11-muted-code">→ create initial harness</span>
-
-<span class="v11-prompt">$</span> <span class="v11-cmd">/harness-check</span>
-<span class="v11-muted-code">→ audit current harness version</span>
-
-<span class="v11-prompt">$</span> <span class="v11-cmd">/harness-update</span>
-<span class="v11-muted-code">→ apply findings + bump version</span>
-
-<span class="v11-prompt">$</span> <span class="v11-cmd">/harness-retro</span>
-<span class="v11-muted-code">→ collect practical feedback</span></div>
-          </div>
-
-          <div class="v11-chip-row">
-            <span class="v11-chip">Versioned findings</span>
-            <span class="v11-chip">Changelog discipline</span>
-            <span class="v11-chip">128K-friendly structure</span>
-          </div>
-        </aside>
-      </div>
-    </section>
-
-    <section id="why" class="section">
-      <div class="container">
-        <div class="banner">
-          <h2><span class="muted-line">Prompt Engineering makes agents useful.</span><br><span class="blue-line">Harness Engineering makes agents dependable.</span></h2>
-          <div class="principles">
-            <div class="principle">
-              <h3>System design</h3>
-              <p>The engineering work moves from isolated code generation into the scaffold around it: context, tooling, rules, and reviewable workflows.</p>
-            </div>
-            <div class="principle">
-              <h3>Agent capability</h3>
-              <p>Systems must be readable and mechanically verifiable by agents before they can be trusted with more autonomy.</p>
-            </div>
-            <div class="principle">
-              <h3>Scaling</h3>
-              <p>Human judgment scales through closed feedback loops: check, retro, update, changelog, repeat.</p>
-            </div>
-          </div>
-
-          <div class="platform-statement">
-            Agentic software development is platform engineering.
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <section id="platform" class="section">
-      <div class="container">
-        <div class="box-section">
-          <div class="section-head">
-            <h2>From prompt to system</h2>
-            <p>Harness Toolkit describes the evolution from manual prompting to a governed agent platform. Each level increases repeatability, safety, and scalability.</p>
-          </div>
-
-          <div class="flow">
-          <div class="flow-step">
-            <div style="font-size:48px;font-weight:900;opacity:.28;">01</div>
-            <h3>Prompt Engineering</h3>
-            <p style="color:var(--muted);line-height:1.7;">Good tasks and context are written manually. Useful, but fragile.</p>
-          </div>
-          <div class="flow-step">
-            <div style="font-size:48px;font-weight:900;opacity:.28;">02</div>
-            <h3>Intention Engineering</h3>
-            <p style="color:var(--muted);line-height:1.7;">Goals, roles, boundaries, and expected outcomes are made explicit.</p>
-          </div>
-          <div class="flow-step">
-            <div style="font-size:48px;font-weight:900;opacity:.28;">03</div>
-            <h3>Skills & Playbooks</h3>
-            <p style="color:var(--muted);line-height:1.7;">Capabilities and workflows are encapsulated for repeatability.</p>
-          </div>
-          <div class="flow-step">
-            <div style="font-size:48px;font-weight:900;opacity:.28;">04</div>
-            <h3>Harness Engineering</h3>
-            <p style="color:var(--muted);line-height:1.7;">Context, tools, rules, findings, versions, and feedback loops hold the system together.</p>
-          </div>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <section id="commands" class="section">
-      <div class="container">
-        <div class="box-section">
-          <div class="section-head">
-            <h2>Everything you need to operate the harness</h2>
-            <p>A small lifecycle command set keeps responsibilities clean: initialize, inspect, update, and improve from experience.</p>
-          </div>
-
-          <div class="command-grid">
-          <div class="card command">
-            <div>
-              <div class="command-number">01</div>
-              <div class="command-name">/harness-init</div>
-              <h3>Generate the project harness</h3>
-              <p>Adaptive German interview, English harness files, roles, playbooks, scripts, safety defaults, versioning, and changelog.</p>
-            </div>
-          </div>
-
-          <div class="card command">
-            <div>
-              <div class="command-number">02</div>
-              <div class="command-name">/harness-check</div>
-              <h3>Audit the current version</h3>
-              <p>Finds drift, contradictions, missing files, duplicate rules, unsafe shell patterns, and context bloat. Writes active findings.</p>
-            </div>
-          </div>
-
-          <div class="card command">
-            <div>
-              <div class="command-number">03</div>
-              <div class="command-name">/harness-update</div>
-              <h3>Apply approved findings</h3>
-              <p>Processes active findings for the current version, requests approval, applies changes, updates changelog, and increments version.</p>
-            </div>
-          </div>
-
-          <div class="card command">
-            <div>
-              <div class="command-number">04</div>
-              <div class="command-name">/harness-retro</div>
-              <h3>Improve from real usage</h3>
-              <p>Captures satisfaction, pain points, start/stop/change feedback, and turns real experience into structured findings.</p>
-            </div>
-          </div>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <section id="usecases" class="section">
-      <div class="container split">
-        <div>
-          <div class="eyebrow"><span class="eyebrow-dot"></span> Use cases</div>
-          <h2 style="font-size:clamp(34px,5vw,58px);line-height:1;letter-spacing:-.055em;margin:0 0 20px;">Built for the messy reality of AI-assisted development.</h2>
-          <p style="color:var(--muted);line-height:1.75;">
-            The toolkit shines when a coding agent should work like a controlled contributor instead of a one-off prompt response.
-          </p>
-        </div>
-
-        <div class="usecase-list">
-          <div class="usecase"><div class="check">✓</div><div><strong>New project kickoff</strong><br><span style="color:var(--muted);">Create an agent-readable project operating model from day one.</span></div></div>
-          <div class="usecase"><div class="check">✓</div><div><strong>Existing project cleanup</strong><br><span style="color:var(--muted);">Make rules, playbooks, and workflows explicit and reviewable.</span></div></div>
-          <div class="usecase"><div class="check">✓</div><div><strong>GitLab workflow hardening</strong><br><span style="color:var(--muted);">Prevent broken <code>glab</code> usage with skills and wrapper scripts.</span></div></div>
-          <div class="usecase"><div class="check">✓</div><div><strong>Harness drift control</strong><br><span style="color:var(--muted);">Detect duplicated rules, stale assumptions, and lifecycle inconsistencies.</span></div></div>
-          <div class="usecase"><div class="check">✓</div><div><strong>Developer satisfaction tuning</strong><br><span style="color:var(--muted);">Adjust autonomy, verbosity, checkpoints, and quality gates from real experience.</span></div></div>
-        </div>
-      </div>
-    </section>
-
-    <section id="governance" class="section">
-      <div class="container">
-        <div class="box-section">
-          <div class="section-head">
-            <h2>Governance that does not get in the way</h2>
-            <p>The toolkit is intentionally lightweight: Markdown files, shell scripts, versioned findings, and explicit changelogs. No heavy platform required.</p>
-          </div>
-
-          <div class="cards">
-          <div class="card">
-            <div class="icon">🔐</div>
-            <h3>Safety defaults</h3>
-            <ul>
-              <li>No merge or deployment by default</li>
-              <li>No dependency changes without approval</li>
-              <li>No file deletion without approval</li>
-              <li>No test weakening</li>
-            </ul>
-          </div>
-          <div class="card">
-            <div class="icon">📋</div>
-            <h3>Versioned findings</h3>
-            <p>Check and retro findings are scoped to the current harness version, so stale recommendations do not silently mutate newer governance.</p>
-          </div>
-          <div class="card">
-            <div class="icon">🧾</div>
-            <h3>Changelog discipline</h3>
-            <p>Every harness change is recorded with source, applied findings, changed files, safety implications, and follow-up items.</p>
-          </div>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <section class="section">
-      <div class="container">
-        <div class="section-head">
-          <h2>Command decision matrix</h2>
-          <p>Short, practical rules for choosing the next action.</p>
-        </div>
-
-        <div class="table-wrap">
-          <table>
-            <thead>
-              <tr><th>Situation</th><th>Command</th><th>Outcome</th></tr>
-            </thead>
-            <tbody>
-              <tr><td>No harness exists</td><td><code>/harness-init</code></td><td>Creates project-specific structure and rules.</td></tr>
-              <tr><td>Harness might be inconsistent</td><td><code>/harness-check</code></td><td>Writes audit reports and active findings.</td></tr>
-              <tr><td>Findings exist for current version</td><td><code>/harness-update</code></td><td>Applies approved findings and bumps version.</td></tr>
-              <tr><td>Agent behavior is frustrating</td><td><code>/harness-retro</code></td><td>Turns practical feedback into retro findings.</td></tr>
-              <tr><td>Manual harness edits were made</td><td><code>/harness-check</code></td><td>Detects drift and contradictions.</td></tr>
-              <tr><td>GitLab commands are unreliable</td><td><code>/harness-check</code> → <code>/harness-update</code></td><td>Improves skills and scripts safely.</td></tr>
-            </tbody>
-          </table>
-        </div>
-      </div>
-    </section>
-
-    <section id="start" class="section">
-      <div class="container">
-        <div class="cta">
-          <h2>Install the toolbox. Then let the harness evolve like a product.</h2>
-          <p style="color:var(--soft);line-height:1.7;max-width:74ch;">
-            Start with a small bootstrap, generate the project harness, audit it, apply findings, and use retrospectives to close the feedback loop.
-          </p>
-          <div class="codebox">
-            <pre><code>chmod +x opencode-harness-bootstrap.sh
-./opencode-harness-bootstrap.sh
-opencode
-
-/harness-init
-/harness-check
-/harness-update
-/harness-retro</code></pre>
-          </div>
-        </div>
-      </div>
-    </section>
-  </main>
-
-  <footer>
-    <div class="container footer">
+    <aside class="-card">
+     <div style="display:flex;justify-content:space-between;align-items:center;gap:16px;">
       <div>
-        <strong style="color:#fff;">Harness Toolkit</strong><br>
-        <span>Prompt usefulness is not enough. Build agent systems that hold.</span>
+       <div style="font-weight:700;font-size:20px;">Toolkit lifecycle</div>
+       <div style="color:var(--muted);margin-top:6px;">From first setup to ongoing refinement.</div>
       </div>
-      <a class="btn" href="#top">Back to top ↑</a>
+      <div class="-chip"></div>
+     </div>
+
+     <div class="-terminal">
+      <div class="-terminal-bar">
+       <span class="-pill red"></span>
+       <span class="-pill yellow"></span>
+       <span class="-pill green"></span>
+       <span style="margin-left:8px;">opencode</span>
+      </div>
+      <div class="-terminal-body"><span class="-prompt">$</span> <span class="-cmd">/harness-init</span>
+<span class="-muted-code">→ create initial harness</span>
+
+<span class="-prompt">$</span> <span class="-cmd">/harness-check</span>
+<span class="-muted-code">→ audit current harness version</span>
+
+<span class="-prompt">$</span> <span class="-cmd">/harness-update</span>
+<span class="-muted-code">→ apply findings + bump version</span>
+
+<span class="-prompt">$</span> <span class="-cmd">/harness-retro</span>
+<span class="-muted-code">→ collect practical feedback</span></div>
+     </div>
+
+     <div class="-chip-row">
+      <span class="-chip">Versioned findings</span>
+      <span class="-chip">Generate valid OpenCode config</span>
+      <span class="-chip">Changelog discipline</span>
+      <span class="-chip">128K-friendly structure</span>
+     </div>
+    </aside>
+   </div>
+  </section>
+
+
+  <section id="install" class="section">
+   <div class="container">
+    <div class="box-section">
+     <div class="section-head">
+      <h2>First steps</h2>
+      <p>Copy the toolkit ZIP into your project folder, unzip it there, and run the install script. The executable flag is already set on the install script, so no <code>chmod +x</code> should be required.</p>
+     </div>
+     <div class="codebox">
+      <pre><code>cd /path/to/your/project
+cp /path/to/opencode-harness-toolkit.zip .
+unzip opencode-harness-toolkit.zip
+./opencode-harness-toolkit/opencode-harness-toolkit-install.sh
+
+opencode
+/harness-init</code></pre>
+     </div>
     </div>
-  </footer>
+   </div>
+  </section>
 
-  <script>
-    const links = [...document.querySelectorAll('a[href^="#"]')];
-    links.forEach(link => {
-      link.addEventListener('click', e => {
-        const target = document.querySelector(link.getAttribute('href'));
-        if (!target) return;
-        e.preventDefault();
-        target.scrollIntoView({ behavior: 'smooth', block: 'start' });
-      });
-    });
+  <section id="why" class="section">
+   <div class="container">
+    <div class="banner">
+     <h2><span class="muted-line">Prompt Engineering makes agents useful.</span><br><span class="blue-line">Harness Engineering makes agents dependable.</span></h2>
+     <div class="principles">
+      <div class="principle">
+       <h3>System design</h3>
+       <p>The engineering work moves from isolated code generation into the scaffold around it: context, tooling, rules, and reviewable workflows.</p>
+      </div>
+      <div class="principle">
+       <h3>Agent capability</h3>
+       <p>Systems must be readable and mechanically verifiable by agents before they can be trusted with more autonomy.</p>
+      </div>
+      <div class="principle">
+       <h3>Scaling</h3>
+       <p>Human judgment scales through closed feedback loops: check, retro, update, changelog, repeat.</p>
+      </div>
+     </div>
 
-    const cards = document.querySelectorAll('.card, .flow-step, .principle, .usecase');
-    const observer = new IntersectionObserver(entries => {
-      entries.forEach(entry => {
-        if (!entry.isIntersecting) return;
-        entry.target.animate([
-          { opacity: 0, transform: 'translateY(14px)' },
-          { opacity: 1, transform: 'translateY(0)' }
-        ], { duration: 420, easing: 'ease-out', fill: 'both' });
-        observer.unobserve(entry.target);
-      });
-    }, { threshold: .12 });
+     <div class="platform-statement">
+      Agentic software development is platform engineering.
+     </div>
+    </div>
+   </div>
+  </section>
 
-    cards.forEach(card => observer.observe(card));
-  </script>
+  <section id="platform" class="section">
+   <div class="container">
+    <div class="box-section">
+     <div class="section-head">
+      <h2>From prompt to system</h2>
+      <p>Harness Toolkit describes the evolution from manual prompting to a governed agent platform. Each level increases repeatability, safety, and scalability.</p>
+     </div>
+
+     <div class="flow">
+     <div class="flow-step">
+      <div style="font-size:48px;font-weight:900;opacity:.28;">01</div>
+      <h3>Prompt Engineering</h3>
+      <p style="color:var(--muted);line-height:1.7;">Good tasks and context are written manually. Useful, but fragile.</p>
+     </div>
+     <div class="flow-step">
+      <div style="font-size:48px;font-weight:900;opacity:.28;">02</div>
+      <h3>Intention Engineering</h3>
+      <p style="color:var(--muted);line-height:1.7;">Goals, roles, boundaries, and expected outcomes are made explicit.</p>
+     </div>
+     <div class="flow-step">
+      <div style="font-size:48px;font-weight:900;opacity:.28;">03</div>
+      <h3>Skills & Playbooks</h3>
+      <p style="color:var(--muted);line-height:1.7;">Capabilities and workflows are encapsulated for repeatability.</p>
+     </div>
+     <div class="flow-step">
+      <div style="font-size:48px;font-weight:900;opacity:.28;">04</div>
+      <h3>Harness Engineering</h3>
+      <p style="color:var(--muted);line-height:1.7;">Context, tools, rules, findings, versions, and feedback loops hold the system together.</p>
+     </div>
+     </div>
+    </div>
+   </div>
+  </section>
+
+  <section id="commands" class="section">
+   <div class="container">
+    <div class="box-section">
+     <div class="section-head">
+      <h2>Everything you need to operate the harness</h2>
+      <p>A small lifecycle command set keeps responsibilities clean: initialize, inspect, update, and improve from experience.</p>
+     </div>
+
+     <div class="command-grid">
+     <div class="card command">
+      <div>
+       <div class="command-number">01</div>
+       <div class="command-name">/harness-init</div>
+       <h3>Generate the project harness</h3>
+       <p>Selectable guided setup, one question at a time. German interview, English harness files, roles, playbooks, scripts, safety defaults, versioning, and changelog.</p>
+      </div>
+     </div>
+
+     <div class="card command">
+      <div>
+       <div class="command-number">02</div>
+       <div class="command-name">/harness-check</div>
+       <h3>Audit the current version</h3>
+       <p>Finds drift, contradictions, missing files, duplicate rules, unsafe shell patterns, and context bloat. Writes active findings.</p>
+      </div>
+     </div>
+
+     <div class="card command">
+      <div>
+       <div class="command-number">03</div>
+       <div class="command-name">/harness-update</div>
+       <h3>Apply approved findings</h3>
+       <p>Processes active findings for the current version, requests approval, applies changes, updates changelog, and increments version.</p>
+      </div>
+     </div>
+
+     <div class="card command">
+      <div>
+       <div class="command-number">04</div>
+       <div class="command-name">/harness-retro</div>
+       <h3>Improve from real usage</h3>
+       <p>Captures satisfaction, pain points, start/stop/change feedback, and turns real experience into structured findings.</p>
+      </div>
+     </div>
+     </div>
+    </div>
+   </div>
+  </section>
+
+  <section id="usecases" class="section">
+   <div class="container split">
+    <div>
+     <div class="eyebrow"><span class="eyebrow-dot"></span> Use cases</div>
+     <h2 style="font-size:clamp(34px,5vw,58px);line-height:1;letter-spacing:-.055em;margin:0 0 20px;">Built for the messy reality of AI-assisted development.</h2>
+     <p style="color:var(--muted);line-height:1.75;">
+      The toolkit shines when a coding agent should work like a controlled contributor instead of a one-off prompt response.
+     </p>
+    </div>
+
+    <div class="usecase-list">
+     <div class="usecase"><div class="check">✓</div><div><strong>New project kickoff</strong><br><span style="color:var(--muted);">Create an agent-readable project operating model from day one.</span></div></div>
+     <div class="usecase"><div class="check">✓</div><div><strong>Existing project cleanup</strong><br><span style="color:var(--muted);">Make rules, playbooks, and workflows explicit and reviewable.</span></div></div>
+     <div class="usecase"><div class="check">✓</div><div><strong>GitLab workflow hardening</strong><br><span style="color:var(--muted);">Prevent broken <code>glab</code> usage with skills and wrapper scripts.</span></div></div>
+     <div class="usecase"><div class="check">✓</div><div><strong>Harness drift control</strong><br><span style="color:var(--muted);">Detect duplicated rules, stale assumptions, and lifecycle inconsistencies.</span></div></div>
+     <div class="usecase"><div class="check">✓</div><div><strong>Developer satisfaction tuning</strong><br><span style="color:var(--muted);">Adjust autonomy, verbosity, checkpoints, and quality gates from real experience.</span></div></div>
+    </div>
+   </div>
+  </section>
+
+  <section id="governance" class="section">
+   <div class="container">
+    <div class="box-section">
+     <div class="section-head">
+      <h2>Governance that does not get in the way</h2>
+      <p>The toolkit is intentionally lightweight: Markdown files, shell scripts, versioned findings, and explicit changelogs. No heavy platform required.</p>
+     </div>
+
+     <div class="cards">
+     <div class="card">
+      <div class="icon">🔐</div>
+      <h3>Safety defaults</h3>
+      <ul>
+       <li>No merge or deployment by default</li>
+       <li>No dependency changes without approval</li>
+       <li>No file deletion without approval</li>
+       <li>No test weakening</li>
+      </ul>
+     </div>
+     <div class="card">
+      <div class="icon">📋</div>
+      <h3>Versioned findings</h3>
+      <p>Check and retro findings are scoped to the current harness version, so stale recommendations do not silently mutate newer governance.</p>
+     </div>
+     <div class="card">
+      <div class="icon">🧾</div>
+      <h3>Changelog discipline</h3>
+      <p>Every harness change is recorded with source, applied findings, changed files, safety implications, and follow-up items.</p>
+     </div>
+     </div>
+    </div>
+   </div>
+  </section>
+
+  <section class="section">
+   <div class="container">
+    <div class="section-head">
+     <h2>Command decision matrix</h2>
+     <p>Short, practical rules for choosing the next action.</p>
+    </div>
+
+    <div class="table-wrap">
+     <table>
+      <thead>
+       <tr><th>Situation</th><th>Command</th><th>Outcome</th></tr>
+      </thead>
+      <tbody>
+       <tr><td>No harness exists</td><td><code>/harness-init</code></td><td>Creates project-specific structure and rules.</td></tr>
+       <tr><td>Harness might be inconsistent</td><td><code>/harness-check</code></td><td>Writes audit reports and active findings.</td></tr>
+       <tr><td>Findings exist for current version</td><td><code>/harness-update</code></td><td>Applies approved findings and bumps version.</td></tr>
+       <tr><td>Agent behavior is frustrating</td><td><code>/harness-retro</code></td><td>Turns practical feedback into retro findings.</td></tr>
+       <tr><td>Manual harness edits were made</td><td><code>/harness-check</code></td><td>Detects drift and contradictions.</td></tr>
+       <tr><td>GitLab commands are unreliable</td><td><code>/harness-check</code> → <code>/harness-update</code></td><td>Improves skills and scripts safely.</td></tr>
+      </tbody>
+     </table>
+    </div>
+   </div>
+  </section>
+
+  <section id="start" class="section">
+   <div class="container">
+    <div class="cta">
+     <h2>Install the toolbox. Then let the harness evolve like a product.</h2>
+     <p style="color:var(--soft);line-height:1.7;max-width:74ch;">
+      Start with a small bootstrap, generate the project harness, audit it, apply findings, and use retrospectives to close the feedback loop.
+     </p>
+     <div class="codebox">
+      <pre><code>cd /path/to/your/project
+cp /path/to/opencode-harness-toolkit.zip .
+unzip opencode-harness-toolkit.zip
+./opencode-harness-toolkit/opencode-harness-toolkit-install.sh
+
+opencode
+/harness-init</code></pre>
+     </div>
+    </div>
+   </div>
+  </section>
+ </main>
+
+ <footer>
+  <div class="container footer">
+   <div>
+    <strong style="color:#fff;">Harness Toolkit</strong><br>
+    <span>Prompt usefulness is not enough. Build agent systems that hold.</span>
+   </div>
+   <a class="btn" href="#top">Back to top ↑</a>
+  </div>
+ </footer>
+
+ <script>
+  const links = [...document.querySelectorAll('a[href^="#"]')];
+  links.forEach(link => {
+   link.addEventListener('click', e => {
+    const target = document.querySelector(link.getAttribute('href'));
+    if (!target) return;
+    e.preventDefault();
+    target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+   });
+  });
+
+  const cards = document.querySelectorAll('.card, .flow-step, .principle, .usecase');
+  const observer = new IntersectionObserver(entries => {
+   entries.forEach(entry => {
+    if (!entry.isIntersecting) return;
+    entry.target.animate([
+     { opacity: 0, transform: 'translateY(14px)' },
+     { opacity: 1, transform: 'translateY(0)' }
+    ], { duration: 420, easing: 'ease-out', fill: 'both' });
+    observer.unobserve(entry.target);
+   });
+  }, { threshold: .12 });
+
+  cards.forEach(card => observer.observe(card));
+ </script>
 </body>
 </html>

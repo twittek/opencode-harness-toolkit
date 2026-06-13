@@ -1,6 +1,6 @@
-# OpenCode Harness Bootstrap v15
+# OpenCode Harness Toolkit 
 
-This bootstrap kit creates a small **OpenCode harness toolbox** for project-specific AI-agent workflows.
+This toolkit creates a small **OpenCode harness toolbox** for project-specific AI-agent workflows.
 
 It is designed for teams or individual developers who want to make an AI coding agent:
 
@@ -16,7 +16,7 @@ The harness is not just a prompt collection. It is a lightweight operating model
 
 ## What this package gives you
 
-After running the bootstrap script, your project gets an OpenCode command set:
+After running the toolkit script, your project gets an OpenCode command set:
 
 ```text
 /harness-init    → create the initial project harness
@@ -42,25 +42,34 @@ Think of it like this:
 
 ---
 
+## HTML Landing Page
 
-## HTML Landing Pages
-
-This package includes two standalone HTML pages:
+This package includes one standalone HTML landing page:
 
 ```text
-harness-toolkit.html       = modern product overview
-harness-toolkit-saas.html  = more productized SaaS-style marketing page
+harness-toolkit.html
 ```
 
-Open either file directly in a browser. No build step is required.
+Open it directly in a browser. No build step is required.
 
 ## Quick start
 
-Copy the bootstrap script into the root of your project:
+Copy the ZIP file into the root directory of your project, unzip it there, and run the install script.
+
+Example:
 
 ```bash
-chmod +x opencode-harness-bootstrap.sh
-./opencode-harness-bootstrap.sh
+cd /path/to/your/project
+cp /path/to/opencode-harness-toolkit.zip .
+unzip opencode-harness-toolkit.zip
+./opencode-harness-toolkit/opencode-harness-toolkit-install.sh
+```
+
+The install script already has the executable flag in the ZIP, so `chmod +x` should not be necessary.
+
+After installation, start OpenCode from the project root:
+
+```bash
 opencode
 ```
 
@@ -70,15 +79,110 @@ Then run:
 /harness-init
 ```
 
-Later, use:
+The install script copies the toolkit files from:
 
 ```text
-/harness-check
-/harness-update
-/harness-retro
+opencode-harness-toolkit/template/
 ```
 
----
+into your project root. Existing files are backed up before being overwritten.
+
+If your unzip tool does not preserve executable flags, run this fallback once:
+
+```bash
+chmod +x opencode-harness-toolkit/opencode-harness-toolkit-install.sh
+./opencode-harness-toolkit/opencode-harness-toolkit-install.sh
+```
+
+## Package structure
+
+```text
+opencode-harness-toolkit/
+├── README.md
+├── harness-toolkit.html
+├── opencode-harness-toolkit-install.sh
+└── template/
+    ├── AGENTS.md
+    ├── opencode.jsonc
+    ├── README.md
+    ├── .opencode/
+    │   └── command/
+    │       ├── harness-init.md
+    │       ├── harness-check.md
+    │       ├── harness-update.md
+    │       ├── harness-retro.md
+    └── .agent/
+        ├── context/
+        ├── playbooks/
+        ├── roles/
+        ├── scripts/
+        ├── skills/
+        ├── templates/
+        └── runs/
+```
+
+## OpenCode Config Safety
+
+`/harness-init` is instructed to generate a valid OpenCode configuration from the start.
+
+Required rules:
+
+```text
+- instructions must be an array: ["AGENTS.md"]
+- use command, not commands
+- use permission, not permissions
+- do not create agents or agent mappings
+- do not reference .opencode/agent/*.md
+- store role descriptions under .agent/roles/
+- command entries should contain only description and template
+```
+
+## Template-based toolkit
+
+The package stores the harness scaffold as real files under `template/`.
+
+Benefits:
+
+```text
+- easier to maintain
+- easier to review
+- easier for AI agents to edit safely
+- no huge Markdown blocks inside Bash
+- toolkit script stays small and stable
+- template files can be customized directly
+```
+
+The script only performs these actions:
+
+```text
+- locate the template directory
+- copy template files into the target project
+- back up existing files before overwriting
+- make helper shell scripts executable
+- print next steps
+```
+
+## Customizing the bootstrap
+
+To customize what gets installed, edit files directly under:
+
+```text
+template/
+```
+
+For example:
+
+```text
+template/.opencode/command/harness-init.md
+template/AGENTS.md
+template/opencode.jsonc
+```
+
+Then run:
+
+```bash
+./opencode-harness-toolkit-install.sh /path/to/your/project
+```
 
 ## Generated files
 
@@ -187,6 +291,34 @@ GitLab project with issues and MRs
 → choose GitLab
 → provide host, project path, project ID if known
 → GitLab/glab skill and scripts are generated
+```
+
+### Guided `/harness-init` Interview
+
+`/harness-init` works as a step-by-step setup assistant:
+
+```text
+- one question at a time
+- selectable OpenCode ask/question options when available
+- A/B/C fallback when selectable options are unavailable
+- adaptive skip logic
+- no file generation during the interview
+- final summary before generation
+- explicit approval required before files are written
+```
+
+Typical first question:
+
+```text
+Welche Art von Projekt ist das?
+
+A) Frontend-only Anwendung
+B) Backend/API-Service
+C) Fullstack-Anwendung
+D) CLI-/Tooling-Projekt
+E) Library/Package
+F) Monorepo
+G) Sonstiges / eigene Beschreibung
 ```
 
 ---
@@ -616,7 +748,7 @@ Sonnet/Opus
 ### New project
 
 ```text
-1. Run bootstrap script
+1. Run toolkit script
 2. Start OpenCode
 3. Run /harness-init
 4. Review generated files
@@ -627,7 +759,7 @@ Sonnet/Opus
 ### Existing project without harness
 
 ```text
-1. Run bootstrap script in project root
+1. Run toolkit script in project root
 2. Run /harness-init
 3. Provide project structure, stack, Git workflow and quality gates
 4. Run /harness-check
@@ -719,41 +851,3 @@ every few weeks or after pain points:
 - The harness should stay small and modular.
 - Use playbooks for details, not huge global instructions.
 - Treat the harness like code: version it, check it, update it, and document changes.
-
-
-## v13 SaaS Page Update
-
-The SaaS-style landing page includes the slide-inspired Harness Engineering motivation:
-
-- Prompt Engineering makes agents useful.
-- Harness Engineering makes agents dependable.
-- Agentic software development is platform engineering.
-
-The dashboard mockup and boxed section design were refined for presentation use.
-
-
-## v14 SaaS Page Update
-
-The SaaS-style landing page now uses the V11-style lifecycle terminal card in the hero area and the public product name is `Harness Toolkit` without `Pro`.
-
-
-## v15 Script Rename and Directory Fix
-
-The bootstrap script is now named:
-
-```text
-opencode-harness-bootstrap.sh
-```
-
-The script also creates all required harness directories before writing files, including:
-
-```text
-.agent/playbooks
-.agent/templates
-.agent/scripts
-.agent/skills
-.agent/config
-.opencode/agent
-```
-
-This fixes the missing `.agent/playbooks/harness-update.md` directory issue.
