@@ -53,7 +53,6 @@ When generating or editing `opencode.jsonc`:
 - command entries should contain only `description` and `template`
 - generate the OpenCode config correctly from the start
 
-
 ## MCP discovery command
 
 Use `/harness-mcp` for controlled MCP discovery, recommendations, risk review and installation planning.
@@ -68,6 +67,23 @@ Rules:
 - write run artifacts under .agent/runs/harness-mcp/
 ```
 
+## Context Loading Policy
+
+Use `.agent/context/context-loading-policy.md` to decide which harness files to load.
+
+Default behavior:
+
+```text
+- load Tier 1 baseline files
+- load Tier 2 files only when relevant
+- load Tier 3 run artifacts only when explicitly needed
+- never load Tier 4 paths automatically
+```
+
+The harness is a structured knowledge space, not one giant prompt.
+
+For 128K context windows, do not load everything just because it fits.
+Use the smallest useful context set.
 
 ## Role model
 
@@ -110,7 +126,6 @@ performance-engineer
 observability-engineer
 product-manager
 ```
-
 
 ## Interactive question tool policy
 

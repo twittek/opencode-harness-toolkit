@@ -62,7 +62,6 @@ Do not ask the user why a harness is needed. Ask what the project needs so the h
 - Write generated harness files in English.
 - Report results in German.
 
-
 ## Integration & Tooling Discovery
 
 The adaptive interview must discover external systems early, because they strongly influence the generated harness.
@@ -271,6 +270,45 @@ Do not install MCP servers during `/harness-init`. Use `/harness-mcp` for contro
 
 Only create recommendations or installation plans unless the user explicitly requests an installation step.
 
+## Context Loading Policy Discovery
+
+The generated harness must include a context loading strategy.
+
+A strong harness is not meant to be loaded fully for every task.
+
+```text
+How should the harness manage context loading?
+```
+
+Options:
+
+```text
+A) Compact: load only baseline files and explicit task files
+B) Balanced: baseline plus relevant roles, integrations and policies
+C) Rich: use more harness context when the model has a large context window
+D) 128K optimized: modular loading with strong context hygiene
+E) Other / custom
+```
+
+Default recommendation:
+
+```text
+128K optimized: modular loading with strong context hygiene
+```
+
+Generate or update:
+
+```text
+.agent/context/context-loading-policy.md
+```
+
+Important rule:
+
+```text
+The harness is a structured knowledge space, not one giant prompt.
+Do not load everything just because it fits.
+Use the smallest useful context set.
+```
 
 ## Role Model Discovery
 

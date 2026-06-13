@@ -1283,6 +1283,50 @@ These defaults are intentionally conservative. The harness can later be tuned th
 
 ---
 
+## Context Loading Policy
+
+Harness Toolkit now includes a context loading policy for large-context models.
+
+This is especially useful for 128K context windows.
+
+A large context window does not mean the whole harness should be loaded for every task.
+
+Principle:
+
+```text
+The harness is a structured knowledge space, not one giant prompt.
+Use the smallest useful context set.
+```
+
+Generated policy file:
+
+```text
+.agent/context/context-loading-policy.md
+```
+
+### Loading tiers
+
+| Tier | When to load | Examples |
+|---|---|---|
+| Tier 1 | Always load | `AGENTS.md`, project profile, autonomy policy, definition of done, risk profile, context loading policy |
+| Tier 2 | Load when relevant | role activation policy, specialist roles, integration policies, MCP policy, playbooks |
+| Tier 3 | Load only on explicit need | run artifacts, previous findings, historical reports |
+| Tier 4 | Never load automatically | `node_modules`, `dist`, `build`, `coverage`, `template`, `.DS_Store`, `*.bak.*`, logs |
+
+### 128K recommendation
+
+```text
+1. Start with Tier 1.
+2. Determine the task type.
+3. Add only relevant Tier 2 files.
+4. Add Tier 3 only when reviewing lifecycle history or findings.
+5. Never load Tier 4 automatically.
+```
+
+### Drift detection
+
+`/harness-check` should detect context drift, such as generated folders being included or AGENTS.md encouraging loading everything.
+
 ## Model recommendations
 
 Recommended model strength:

@@ -48,7 +48,6 @@ Welcher konkrete MCP-Server?
 Welcher konkrete GitLab-Befehl?
 ```
 
-
 ## Integration discovery questions
 
 High-value early question:
@@ -89,7 +88,6 @@ Which quality, security or monitoring tools are relevant?
 
 Avoid asking for CLI commands before the system itself is known.
 
-
 ## MCP discovery questions
 
 Use these questions in `/harness-mcp`.
@@ -126,7 +124,6 @@ G) Database / analytics
 H) Other / custom
 ```
 
-
 ## Role model discovery questions
 
 High-value early question:
@@ -156,4 +153,20 @@ Does the project handle authentication, authorization, secrets or sensitive data
 Does the project include user-facing interfaces?
 Does the project require deployment or operational support?
 Does the project require domain-specific business knowledge?
+```
+
+## Context loading questions
+
+```text
+How should the harness manage context loading?
+```
+
+Options:
+
+```text
+A) Compact: load only baseline files and explicit task files
+B) Balanced: baseline plus relevant roles, integrations and policies
+C) Rich: use more harness context when the model has a large context window
+D) 128K optimized: modular loading with strong context hygiene
+E) Other / custom
 ```

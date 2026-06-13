@@ -58,3 +58,10 @@ Role files live under:
 .agent/roles/
 .agent/context/role-activation-policy.md
 ```
+
+
+Context loading policy:
+
+```text
+.agent/context/context-loading-policy.md
+```

@@ -794,6 +794,7 @@
         <a href="#platform">Platform</a>
     <a href="#integrations">Integrations</a>
         <a href="#roles">Roles</a>
+        <a href="#context-loading">Context Loading</a>
         <a href="#mcp">MCP</a>
         <a href="#commands">Commands</a>
     <a href="#usecases">Use cases</a>
@@ -1122,6 +1123,28 @@ Ask the next best question.</code></pre>
     </div>
   </section>
 
+
+  <section id="context-loading" class="section">
+    <div class="container">
+      <div class="box-section">
+        <div class="section-head">
+          <h2>Context Loading Policy</h2>
+          <p>Large context windows are powerful, but the harness should still load only the smallest useful context set.</p>
+        </div>
+        <div class="cards">
+          <div class="card"><div class="icon">🧠</div><h3>128K optimized</h3><p>The policy supports large-context models without encouraging the agent to load the whole harness for every task.</p></div>
+          <div class="card"><div class="icon">📚</div><h3>Structured knowledge space</h3><p>The harness is modular knowledge: baseline files, relevant policies, specialist roles and explicit run history.</p></div>
+          <div class="card"><div class="icon">🧹</div><h3>Context hygiene</h3><p>Generated folders, dependencies, backups, logs and historical run artifacts are not loaded automatically.</p></div>
+        </div>
+        <div class="codebox" style="margin-top:18px;">
+          <pre><code>Tier 1: always load baseline context
+Tier 2: load relevant roles, integrations and policies
+Tier 3: load run artifacts only on explicit need
+Tier 4: never load node_modules, dist, build, coverage, template, backups or logs</code></pre>
+        </div>
+      </div>
+    </div>
+  </section>
   <section id="mcp" class="section">
     <div class="container">
       <div class="box-section">

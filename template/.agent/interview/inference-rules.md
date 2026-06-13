@@ -45,7 +45,6 @@ Prune:
 - production monitoring
 - enterprise governance
 
-
 ## External systems exist
 
 If external systems are present, increase:
@@ -83,7 +82,6 @@ If no external systems are present, prune:
 - MCP discovery
 - external documentation access
 - issue tracker automation
-
 
 ## Role model inference
 
@@ -132,4 +130,29 @@ If business rules or specialized terminology are present, keep:
 domain-expert
 requirements-engineer
 product-manager
+```
+
+## Context loading inference
+
+If the model has a large context window such as 128K, do not infer that the whole harness should always be loaded.
+
+Prefer:
+
+```text
+128K optimized
+modular loading
+strong context hygiene
+smallest useful context set
+```
+
+Prune from automatic context:
+
+```text
+node_modules
+dist
+build
+coverage
+template
+*.bak.*
+.DS_Store
 ```

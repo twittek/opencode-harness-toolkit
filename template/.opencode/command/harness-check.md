@@ -91,3 +91,19 @@ Final response in German:
 - health rating: green/yellow/red
 - number of active findings
 - recommended next step
+
+## Context Loading Policy checks
+
+Check whether the harness uses the smallest useful context set.
+
+Verify:
+
+```text
+- .agent/context/context-loading-policy.md exists
+- Tier 1 baseline files are defined
+- role-aware loading rules exist
+- integration-aware loading rules exist
+- run artifacts are not treated as always-loaded context
+- generated/dependency folders are excluded
+- the policy supports large context windows without encouraging context bloat
+```
