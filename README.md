@@ -437,21 +437,6 @@ The rule is:
 One question. One answer. Update the model. Ask the next best question.
 ```
 
-### Interactive question UI
-
-The adaptive interview is designed to use OpenCode's interactive question UI.
-
-For predefined-choice interview steps, the agent should use the OpenCode question tool first.
-
-Plain A/B/C text is only a fallback:
-
-```text
-Using plain A/B/C text is a fallback mode, not the primary mode.
-Do not use fallback mode unless tool usage is unavailable.
-```
-
-This is important because the toolkit is intended to feel like a guided diagnostic system, not a static text questionnaire.
-
 ### Step-by-step principle
 
 The interview must follow the Akinator principle:
