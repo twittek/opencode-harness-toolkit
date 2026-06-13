@@ -44,3 +44,42 @@ Prune:
 - formal release management
 - production monitoring
 - enterprise governance
+
+
+## External systems exist
+
+If external systems are present, increase:
+
+- integration-policy
+- wrapper-scripts
+- MCP-planning
+- access-boundaries
+- credential-policy
+
+Keep:
+
+- .agent/context/integration-policy.md
+- .agent/integrations/external-systems.md
+- .agent/mcp/mcp-policy.md
+
+If GitLab is selected, keep:
+
+- .agent/integrations/gitlab.md
+- .agent/scripts/gitlab-issue-comment.sh
+
+If GitHub is selected, keep:
+
+- .agent/integrations/github.md
+- .agent/scripts/github-issue-comment.sh
+
+If Jira is selected, keep:
+
+- .agent/integrations/jira.md
+- .agent/scripts/jira-issue-comment.example.sh
+
+If no external systems are present, prune:
+
+- integration-specific wrapper scripts
+- MCP discovery
+- external documentation access
+- issue tracker automation

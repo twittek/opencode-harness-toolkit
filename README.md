@@ -474,6 +474,115 @@ and then generates its own productive project harness.
 
 The generated harness is not just a generic template. It is the first productive version of the project's agent operating system.
 
+## Integration & Tooling Discovery
+
+Harness Toolkit now treats external systems as first-class context.
+
+The interview discovers which systems the agents should know about and uses the answer to activate or prune integration branches.
+
+High-value early question:
+
+```text
+Are there external systems or tools the agents should know about?
+```
+
+This question has high information gain because it decides whether the harness needs:
+
+```text
+- issue tracking rules
+- code review rules
+- documentation access rules
+- design-system context
+- quality and security tooling
+- monitoring context
+- wrapper scripts
+- MCP planning
+- credential and write-safety policies
+```
+
+Examples of supported system categories:
+
+```text
+Repository and code review
+→ GitLab, GitHub, Azure DevOps, Bitbucket
+
+Work tracking
+→ Jira, GitLab Issues, GitHub Issues, Azure Boards, Linear
+
+Documentation and knowledge
+→ Confluence, Notion, Wiki, Markdown in repository, SharePoint
+
+Design and UX
+→ Figma, Sketch, Adobe XD
+
+Quality, security and monitoring
+→ SonarQube, SonarCloud, Sentry, Grafana, Prometheus, Datadog
+```
+
+### Generated integration artifacts
+
+When external systems are relevant, the harness can generate or update:
+
+```text
+.agent/context/integration-policy.md
+.agent/integrations/external-systems.md
+.agent/integrations/gitlab.md
+.agent/integrations/github.md
+.agent/integrations/jira.md
+.agent/integrations/confluence.md
+.agent/integrations/figma.md
+.agent/integrations/sonarqube.md
+.agent/mcp/mcp-policy.md
+```
+
+It can also provide safe wrapper scripts:
+
+```text
+.agent/scripts/gitlab-issue-comment.sh
+.agent/scripts/github-issue-comment.sh
+.agent/scripts/jira-issue-comment.example.sh
+```
+
+### Wrapper-first rule
+
+If a wrapper script exists, agents should use it instead of inventing ad-hoc CLI commands.
+
+Good:
+
+```text
+.agent/scripts/gitlab-issue-comment.sh 123 .agent/runs/comment.md
+```
+
+Riskier:
+
+```text
+glab issue note 123 -m "large generated text..."
+```
+
+The wrapper-first rule makes integrations repeatable, reviewable and safer.
+
+### Integration safety model
+
+Each external system should be classified by access level:
+
+```text
+read-only
+write-with-approval
+write-enabled
+forbidden
+unknown
+```
+
+Defaults:
+
+```text
+unknown system → no access
+write action → explicit approval required
+secrets → never store in harness files
+```
+
+This keeps the harness useful without giving agents uncontrolled access to external tools.
+
 ## Command overview
 
 ### `/harness-init`

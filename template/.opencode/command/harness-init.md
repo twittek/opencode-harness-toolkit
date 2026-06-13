@@ -22,6 +22,215 @@ Do not ask the user why a harness is needed. Ask what the project needs so the h
 - Write generated harness files in English.
 - Report results in German.
 
+
+## Integration & Tooling Discovery
+
+The adaptive interview must discover external systems early, because they strongly influence the generated harness.
+
+Use information-gain logic:
+
+Good early question:
+
+```text
+Are there external systems or tools the agents should know about?
+```
+
+This can activate or prune large branches:
+
+```text
+- issue tracking
+- code review
+- documentation systems
+- design systems
+- quality analysis
+- monitoring
+- CI/CD
+- cloud/deployment
+- MCP planning
+- wrapper scripts
+```
+
+### One-question-at-a-time flow
+
+Do not ask for all integration details at once.
+
+Recommended sequence:
+
+Question 1:
+
+```text
+Are there external systems or tools the agents should know about?
+```
+
+Options:
+
+```text
+A) No external systems
+B) Repository and code review only
+C) Work tracking / tickets
+D) Documentation / knowledge base
+E) Design / UX tools
+F) Quality / security / monitoring tools
+G) Multiple systems
+H) Other / custom
+```
+
+If the user selects a branch, ask exactly one follow-up question for that branch.
+
+Example:
+
+```text
+Which repository and code review system do you use?
+```
+
+Options:
+
+```text
+A) GitLab
+B) GitHub
+C) Azure DevOps
+D) Bitbucket
+E) Local Git only
+F) Other / custom
+```
+
+Example:
+
+```text
+Which work tracking system do you use?
+```
+
+Options:
+
+```text
+A) Jira
+B) GitLab Issues
+C) GitHub Issues
+D) Azure Boards
+E) Linear
+F) Other / custom
+```
+
+Example:
+
+```text
+Which documentation or knowledge system do you use?
+```
+
+Options:
+
+```text
+A) Confluence
+B) GitHub/GitLab Wiki
+C) Notion
+D) Markdown in repository
+E) SharePoint
+F) Other / custom
+```
+
+Example:
+
+```text
+Which design or UX system do you use?
+```
+
+Options:
+
+```text
+A) Figma
+B) Sketch
+C) Adobe XD
+D) Design files in repository
+E) No dedicated design system
+F) Other / custom
+```
+
+Example:
+
+```text
+Which quality, security or monitoring tools are relevant?
+```
+
+Options:
+
+```text
+A) SonarQube / SonarCloud
+B) Sentry
+C) Grafana / Prometheus
+D) Datadog
+E) OWASP / dependency scanning
+F) Other / custom
+```
+
+### Generated integration artifacts
+
+When external systems are present, generate or update:
+
+```text
+.agent/context/integration-policy.md
+.agent/integrations/external-systems.md
+```
+
+When a known system is selected, also generate or update the matching file:
+
+```text
+.agent/integrations/gitlab.md
+.agent/integrations/github.md
+.agent/integrations/jira.md
+.agent/integrations/confluence.md
+.agent/integrations/figma.md
+.agent/integrations/sonarqube.md
+```
+
+When wrappers are useful, generate or keep scripts under:
+
+```text
+.agent/scripts/
+```
+
+Examples:
+
+```text
+.agent/scripts/gitlab-issue-comment.sh
+.agent/scripts/github-issue-comment.sh
+.agent/scripts/jira-issue-comment.example.sh
+```
+
+### Integration policy rules
+
+The generated harness must document for each external system:
+
+```text
+- purpose
+- access method
+- read permissions
+- write permissions
+- approval requirements
+- forbidden operations
+- wrapper scripts
+- credential expectations without storing secrets
+```
+
+Default:
+
+```text
+unknown system → no access
+write action → explicit approval required
+secret handling → never store secrets in harness files
+```
+
+### MCP planning
+
+If the user mentions MCP servers or asks for tool automation, document MCP candidates in:
+
+```text
+.agent/mcp/mcp-policy.md
+```
+
+Do not install MCP servers during `/harness-init`.
+
+Only create recommendations or installation plans unless the user explicitly requests an installation step.
+
 ## Guided interview mode
 
 `/harness-init` must behave like a guided setup assistant.

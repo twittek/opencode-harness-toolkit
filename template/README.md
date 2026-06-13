@@ -26,3 +26,13 @@ Interview engine files live under:
 ```text
 .agent/interview/
 ```
+
+
+Integration files live under:
+
+```text
+.agent/integrations/
+.agent/context/integration-policy.md
+.agent/mcp/mcp-policy.md
+.agent/scripts/
+```

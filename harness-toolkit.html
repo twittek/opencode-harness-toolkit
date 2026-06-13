@@ -792,7 +792,8 @@
     <a href="#why">Why</a>
     <a href="#adaptive-discovery">Adaptive Discovery</a>
         <a href="#platform">Platform</a>
-    <a href="#commands">Commands</a>
+    <a href="#integrations">Integrations</a>
+        <a href="#commands">Commands</a>
     <a href="#usecases">Use cases</a>
     <a href="#governance">Governance</a>
     <a href="#start" class="nav-cta">Get started</a>
@@ -999,6 +1000,65 @@ Ask the next best question.</code></pre>
      </div>
     </div>
    </div>
+  </section>
+
+
+  <section id="integrations" class="section">
+    <div class="container">
+      <div class="box-section">
+        <div class="section-head">
+          <h2>Integration & Tooling Discovery</h2>
+          <p>The adaptive interview discovers external systems early, because integrations strongly shape what the agent may read, write, automate or avoid.</p>
+        </div>
+
+        <div class="cards">
+          <div class="card">
+            <div class="icon">🔎</div>
+            <h3>High-information question</h3>
+            <p><code>Are there external systems or tools the agents should know about?</code></p>
+            <p>This single question decides whether issue tracking, code review, docs, design, quality, monitoring, wrapper scripts or MCP planning stay active.</p>
+          </div>
+          <div class="card">
+            <div class="icon">🧭</div>
+            <h3>System categories</h3>
+            <p>GitLab, GitHub, Jira, Confluence, Azure DevOps, Linear, Figma, SonarQube, Sentry, Grafana, Prometheus and more.</p>
+          </div>
+          <div class="card">
+            <div class="icon">🛡️</div>
+            <h3>Safety model</h3>
+            <p>Unknown systems have no access. Write actions require approval. Secrets are never stored in harness files.</p>
+          </div>
+        </div>
+
+        <div class="codebox" style="margin-top:18px;">
+          <pre><code>.agent/context/integration-policy.md
+.agent/integrations/external-systems.md
+.agent/integrations/gitlab.md
+.agent/integrations/github.md
+.agent/integrations/jira.md
+.agent/scripts/gitlab-issue-comment.sh
+.agent/scripts/github-issue-comment.sh</code></pre>
+        </div>
+
+        <div class="cards" style="margin-top:18px;">
+          <div class="card">
+            <div class="icon">✅</div>
+            <h3>Wrapper-first</h3>
+            <p>Agents should use approved scripts instead of inventing ad-hoc CLI calls for write operations.</p>
+          </div>
+          <div class="card">
+            <div class="icon">⚙️</div>
+            <h3>MCP-aware</h3>
+            <p>The toolkit can document MCP candidates and policies, but does not install MCP servers during harness initialization.</p>
+          </div>
+          <div class="card">
+            <div class="icon">📌</div>
+            <h3>Policy-driven</h3>
+            <p>Each system gets purpose, access method, read/write boundaries, approval rules and forbidden operations.</p>
+          </div>
+        </div>
+      </div>
+    </div>
   </section>
 
   <section id="commands" class="section">
