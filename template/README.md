@@ -50,3 +50,11 @@ MCP files live under:
 .agent/mcp/
 .agent/runs/harness-mcp/
 ```
+
+
+Role files live under:
+
+```text
+.agent/roles/
+.agent/context/role-activation-policy.md
+```

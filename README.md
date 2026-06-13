@@ -583,6 +583,103 @@ secrets → never store in harness files
 
 This keeps the harness useful without giving agents uncontrolled access to external tools.
 
+## Expanded Role Model
+
+Harness Toolkit can now generate a broader, policy-driven role model.
+
+The goal is not to create noisy subagents for every task. The goal is to give the agent explicit expert lenses and clear activation rules.
+
+Core roles:
+
+```text
+architect
+requirements-engineer
+developer
+tester
+reviewer
+```
+
+Specialist roles:
+
+```text
+security-engineer
+ux-designer
+accessibility-specialist
+devops-engineer
+integration-architect
+data-engineer
+domain-expert
+technical-writer
+performance-engineer
+observability-engineer
+product-manager
+```
+
+### High-information role question
+
+The adaptive interview asks:
+
+```text
+Which specialist perspectives should the harness include?
+```
+
+This question determines whether the harness should include additional policies for:
+
+```text
+- security and secrets
+- UX and accessibility
+- DevOps and operations
+- external integrations
+- data and reporting
+- domain expertise
+- documentation quality
+- performance and observability
+```
+
+### Role activation policy
+
+Generated role guidance lives under:
+
+```text
+.agent/roles/
+```
+
+The activation policy lives under:
+
+```text
+.agent/context/role-activation-policy.md
+```
+
+Examples:
+
+```text
+Authentication, authorization, secrets or MCP permissions
+→ security-engineer
+
+External systems, APIs, GitLab/GitHub/Jira automation
+→ integration-architect, security-engineer
+
+User flows, forms, navigation or UX copy
+→ ux-designer
+
+UI components, keyboard behavior, contrast or WCAG
+→ accessibility-specialist
+
+CI/CD, Docker, Kubernetes or deployment
+→ devops-engineer
+
+Business rules, terminology or domain-specific validation
+→ domain-expert
+```
+
+Default:
+
+```text
+activate only relevant roles
+avoid role noise
+prefer the smallest useful role set
+```
+
 ## MCP Discovery & Planning
 
 Harness Toolkit includes a dedicated MCP command:

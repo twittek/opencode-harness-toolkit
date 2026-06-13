@@ -67,3 +67,46 @@ Rules:
 - classify MCP candidates by risk category
 - write run artifacts under .agent/runs/harness-mcp/
 ```
+
+
+## Role model
+
+The harness uses role files under:
+
+```text
+.agent/roles/
+```
+
+and activation rules under:
+
+```text
+.agent/context/role-activation-policy.md
+```
+
+Roles are not always active. Activate the smallest useful role set for the task.
+
+Core roles:
+
+```text
+architect
+requirements-engineer
+developer
+tester
+reviewer
+```
+
+Specialist roles:
+
+```text
+security-engineer
+ux-designer
+accessibility-specialist
+devops-engineer
+integration-architect
+data-engineer
+domain-expert
+technical-writer
+performance-engineer
+observability-engineer
+product-manager
+```

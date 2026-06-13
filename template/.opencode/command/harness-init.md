@@ -231,6 +231,94 @@ Do not install MCP servers during `/harness-init`. Use `/harness-mcp` for contro
 
 Only create recommendations or installation plans unless the user explicitly requests an installation step.
 
+
+## Role Model Discovery
+
+The adaptive interview must identify which specialist roles the project harness needs.
+
+Use a high-information question:
+
+```text
+Which specialist perspectives should the harness include?
+```
+
+Options:
+
+```text
+A) Keep it minimal: architect, requirements, developer, tester, reviewer
+B) Security and compliance
+C) UX and accessibility
+D) DevOps and operations
+E) Integrations and external systems
+F) Data, analytics or reporting
+G) Domain expertise and business rules
+H) Multiple specialist roles
+I) Other / custom
+```
+
+Ask exactly one follow-up question for the selected branch.
+
+Examples:
+
+```text
+Does the project handle authentication, authorization, secrets or sensitive data?
+```
+
+```text
+Does the project include user-facing interfaces?
+```
+
+```text
+Does the project require deployment or operational support?
+```
+
+```text
+Does the project require domain-specific business knowledge?
+```
+
+### Generated role artifacts
+
+When roles are relevant, generate or update:
+
+```text
+.agent/context/role-activation-policy.md
+.agent/roles/
+```
+
+Core roles:
+
+```text
+.agent/roles/architect.md
+.agent/roles/requirements-engineer.md
+.agent/roles/developer.md
+.agent/roles/tester.md
+.agent/roles/reviewer.md
+```
+
+Specialist roles:
+
+```text
+.agent/roles/security-engineer.md
+.agent/roles/ux-designer.md
+.agent/roles/accessibility-specialist.md
+.agent/roles/devops-engineer.md
+.agent/roles/integration-architect.md
+.agent/roles/data-engineer.md
+.agent/roles/domain-expert.md
+.agent/roles/technical-writer.md
+.agent/roles/performance-engineer.md
+.agent/roles/observability-engineer.md
+.agent/roles/product-manager.md
+```
+
+Default:
+
+```text
+activate only relevant roles
+avoid role noise
+prefer the smallest useful role set
+```
+
 ## Guided interview mode
 
 `/harness-init` must behave like a guided setup assistant.

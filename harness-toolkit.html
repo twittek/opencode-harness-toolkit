@@ -793,6 +793,7 @@
     <a href="#adaptive-discovery">Adaptive Discovery</a>
         <a href="#platform">Platform</a>
     <a href="#integrations">Integrations</a>
+        <a href="#roles">Roles</a>
         <a href="#mcp">MCP</a>
         <a href="#commands">Commands</a>
     <a href="#usecases">Use cases</a>
@@ -1062,6 +1063,46 @@ Ask the next best question.</code></pre>
     </div>
   </section>
 
+
+
+  <section id="roles" class="section">
+    <div class="container">
+      <div class="box-section">
+        <div class="section-head">
+          <h2>Expanded Role Model</h2>
+          <p>The harness can generate specialist role guidance and activation rules so the agent applies the right expert perspective at the right time.</p>
+        </div>
+
+        <div class="cards">
+          <div class="card">
+            <div class="icon">🧠</div>
+            <h3>Expert lenses</h3>
+            <p>Security, UX, accessibility, DevOps, integrations, data, domain knowledge, technical writing, performance and observability.</p>
+          </div>
+          <div class="card">
+            <div class="icon">🎯</div>
+            <h3>Activation policy</h3>
+            <p>Roles are activated only when relevant. The harness avoids role noise and uses the smallest useful role set.</p>
+          </div>
+          <div class="card">
+            <div class="icon">⚖️</div>
+            <h3>Conflict handling</h3>
+            <p>When perspectives conflict, the policy prioritizes security, correctness and maintainability over speed and convenience.</p>
+          </div>
+        </div>
+
+        <div class="codebox" style="margin-top:18px;">
+          <pre><code>.agent/context/role-activation-policy.md
+.agent/roles/security-engineer.md
+.agent/roles/ux-designer.md
+.agent/roles/accessibility-specialist.md
+.agent/roles/devops-engineer.md
+.agent/roles/integration-architect.md
+.agent/roles/domain-expert.md</code></pre>
+        </div>
+      </div>
+    </div>
+  </section>
 
   <section id="mcp" class="section">
     <div class="container">

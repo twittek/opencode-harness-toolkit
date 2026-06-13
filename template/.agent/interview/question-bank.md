@@ -125,3 +125,35 @@ F) Filesystem / local tools
 G) Database / analytics
 H) Other / custom
 ```
+
+
+## Role model discovery questions
+
+High-value early question:
+
+```text
+Which specialist perspectives should the harness include?
+```
+
+Options:
+
+```text
+A) Keep it minimal: architect, requirements, developer, tester, reviewer
+B) Security and compliance
+C) UX and accessibility
+D) DevOps and operations
+E) Integrations and external systems
+F) Data, analytics or reporting
+G) Domain expertise and business rules
+H) Multiple specialist roles
+I) Other / custom
+```
+
+Follow-up questions:
+
+```text
+Does the project handle authentication, authorization, secrets or sensitive data?
+Does the project include user-facing interfaces?
+Does the project require deployment or operational support?
+Does the project require domain-specific business knowledge?
+```

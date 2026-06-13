@@ -83,3 +83,53 @@ If no external systems are present, prune:
 - MCP discovery
 - external documentation access
 - issue tracker automation
+
+
+## Role model inference
+
+If authentication, authorization, secrets or sensitive data are present, keep:
+
+```text
+security-engineer
+reviewer
+integration-architect when external systems are involved
+```
+
+If user-facing UI is present, keep:
+
+```text
+ux-designer
+accessibility-specialist
+tester
+```
+
+If CI/CD, deployment or operations are present, keep:
+
+```text
+devops-engineer
+observability-engineer
+security-engineer for production-adjacent changes
+```
+
+If external systems or automation are present, keep:
+
+```text
+integration-architect
+security-engineer
+```
+
+If data pipelines, reporting or migrations are present, keep:
+
+```text
+data-engineer
+tester
+performance-engineer when data size or latency matters
+```
+
+If business rules or specialized terminology are present, keep:
+
+```text
+domain-expert
+requirements-engineer
+product-manager
+```
