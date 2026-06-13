@@ -113,6 +113,7 @@ opencode-harness-toolkit/
     │       ├── harness-retro.md
     └── .agent/
         ├── context/
+        ├── interview/
         ├── playbooks/
         ├── roles/
         ├── scripts/
@@ -230,6 +231,248 @@ After `/harness-init`, the project-specific harness should additionally contain 
 Depending on the project, `/harness-init` may also create optional files for GitLab, GitHub, monorepos, security, APIs, documentation, or dependency policies.
 
 ---
+
+## Adaptive Scenario Discovery
+
+Harness Toolkit does not use a static questionnaire. The interview follows an **Akinator-style adaptive discovery model**.
+
+The core idea:
+
+```text
+Ask the next question that reduces uncertainty the most.
+```
+
+This is inspired by:
+
+```text
+- Bayesian inference
+- entropy reduction
+- information gain
+- decision trees
+- active learning
+- adaptive questioning
+```
+
+The agent starts with many possible development scenarios and uses every answer to update its hypothesis.
+
+Example scenario candidates:
+
+```text
+frontend-learning-project
+browser-game-prototype
+production-saas-application
+internal-business-tool
+backend-api-service
+integration-heavy-enterprise-project
+data-ai-workflow
+legacy-migration
+library-package
+devops-automation
+```
+
+After each answer, the agent updates which scenarios are more likely and prunes irrelevant branches.
+
+### Mathematical foundations
+
+The interview combines several related fields:
+
+```text
+Bayesian inference
+→ probability theory and Bayesian statistics
+→ updates the likelihood of possible project scenarios after every answer
+
+Information gain and entropy reduction
+→ information theory
+→ selects the question that reduces uncertainty the most
+
+Decision trees and pruning
+→ machine learning, computer science and statistics
+→ removes irrelevant branches of the scenario space as soon as they become unlikely
+
+Active learning and adaptive questioning
+→ machine learning
+→ the system actively chooses the next most useful question instead of following a static form
+```
+
+A concise description:
+
+```text
+Bayesian scenario inference meets information-gain-based questioning.
+```
+
+Or in German:
+
+```text
+Bayessche Szenario-Inferenz trifft auf informationsgewinnbasierte Fragenauswahl.
+```
+
+This distinction is important:
+
+```text
+Bayesian inference decides how beliefs change after an answer.
+Information theory decides which question is worth asking next.
+Decision-tree pruning decides which branches can be skipped.
+Active learning turns the interview into an adaptive process.
+```
+
+Together, these ideas make the interview feel intelligent: the agent does not ask everything. It asks the question with the highest expected value for reducing uncertainty.
+
+### Why question order matters
+
+A weak early question is too specific:
+
+```text
+Do you use Oracle Spatial?
+```
+
+This is a bad first question because it only helps if the project is already known to be GIS- or integration-heavy.
+
+A stronger early question is:
+
+```text
+Are there external systems or integrations?
+```
+
+This splits the project space much earlier. If the answer is "No", the agent can skip integration policies, MCP discovery, external credentials and wrapper scripts. If the answer is "Yes", those branches stay active.
+
+Another weak early question:
+
+```text
+Do you use Vitest or Jest?
+```
+
+A better earlier question:
+
+```text
+Should automated tests be part of the quality gates?
+```
+
+Only after the answer is "Yes" does it make sense to ask about the concrete test runner.
+
+Another weak early question:
+
+```text
+Should a GitLab issue comment be created with glab issue note?
+```
+
+A better earlier question:
+
+```text
+Which system do you use for work items and code reviews?
+```
+
+Options might be:
+
+```text
+A) GitLab
+B) GitHub
+C) Jira
+D) Azure DevOps
+E) Local only
+F) Other / custom
+```
+
+### Bayesian update behavior
+
+The agent should behave as if it maintains a probability distribution over possible project scenarios.
+
+Example answer:
+
+```text
+Frontend-only application
+```
+
+Likely scenarios increase:
+
+```text
+frontend-learning-project
+browser-game-prototype
+ui-prototype
+static-webapp
+```
+
+Less likely scenarios decrease:
+
+```text
+backend-api-service
+database-migration
+enterprise-integration-platform
+devops-automation-only
+```
+
+Pruned by default:
+
+```text
+database migrations
+enterprise auth
+backend deployment
+API contract governance
+```
+
+This is how the interview becomes short and intelligent: irrelevant branches disappear immediately.
+
+### Decision-tree pruning
+
+The interview should feel like a well-designed decision tree.
+
+Good:
+
+```text
+Does the application have a backend?
+```
+
+This can remove a large number of follow-up questions.
+
+Bad:
+
+```text
+If the application has a backend: does it use NestJS, and if yes, does it use PostgreSQL, and if yes, does it need migrations?
+```
+
+That violates the interview principle.
+
+The rule is:
+
+```text
+One question. One answer. Update the model. Ask the next best question.
+```
+
+### Step-by-step principle
+
+The interview must follow the Akinator principle:
+
+```text
+Is it an animal?
+```
+
+not:
+
+```text
+Is it an animal and, if yes, does it have four legs and, if yes, does it live in water?
+```
+
+For Harness Toolkit, this means:
+
+```text
+- exactly one question at a time
+- selectable OpenCode multiple-choice options whenever available
+- A/B/C fallback when selectable options are unavailable
+- always include Other / custom
+- no file generation before the final summary and explicit approval
+```
+
+### Real AI bootstrapping
+
+This is real bootstrapping:
+
+```text
+An AI identifies its own missing context,
+asks analytically optimized questions,
+closes the highest-value information gaps first,
+and then generates its own productive project harness.
+```
+
+The generated harness is not just a generic template. It is the first productive version of the project's agent operating system.
 
 ## Command overview
 

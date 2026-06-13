@@ -19,3 +19,10 @@ opencode.jsonc
 ```
 
 Do not put project-specific secrets into this template.
+
+
+Interview engine files live under:
+
+```text
+.agent/interview/
+```

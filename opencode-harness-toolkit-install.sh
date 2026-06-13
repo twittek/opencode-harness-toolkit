@@ -46,7 +46,7 @@ fi
 
 echo
 echo "OpenCode harness toolkit installed."
-echo "OpenCode Harness Toolkit version: v27"
+echo "OpenCode Harness Toolkit version: v30"
 echo
 echo "Target:"
 echo "  $TARGET_DIR"

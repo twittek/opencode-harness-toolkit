@@ -790,7 +790,8 @@
    <nav class="nav-links">
     <a href="#install">Install</a>
     <a href="#why">Why</a>
-    <a href="#platform">Platform</a>
+    <a href="#adaptive-discovery">Adaptive Discovery</a>
+        <a href="#platform">Platform</a>
     <a href="#commands">Commands</a>
     <a href="#usecases">Use cases</a>
     <a href="#governance">Governance</a>
@@ -807,7 +808,7 @@
      <h1>Make AI agents <span class="grad">reliable by design.</span></h1>
      <p class="hero-sub">
       Prompt engineering makes agents useful. Harness engineering makes agents dependable.
-      Harness Toolkit turns context, tools, rules, feedback loops, and versioned governance into a repeatable operating system for agentic software development.
+      Harness Toolkit combines Bayesian scenario inference with information-gain-based questioning to close the highest-value context gaps first, then turns context, tools, rules, feedback loops, and versioned governance into a repeatable operating system for agentic software development.
      </p>
      <div class="hero-actions">
       <a href="#commands" class="btn primary">Explore the toolkit →</a>
@@ -899,6 +900,71 @@ opencode
      </div>
     </div>
    </div>
+  </section>
+
+
+  <section id="adaptive-discovery" class="section">
+    <div class="container">
+      <div class="box-section">
+        <div class="section-head">
+          <h2>Adaptive Scenario Discovery</h2>
+          <p>The interview works like an Akinator-style diagnostic system: Bayesian inference updates scenario probabilities, while information-gain-based questioning asks the next question that reduces uncertainty the most.</p>
+        </div>
+
+        <div class="banner" style="box-shadow:none;margin-bottom:22px;">
+          <h2><span class="muted-line">Not a static questionnaire.</span><br><span class="blue-line">A Bayesian bootstrapping interview.</span></h2>
+          <div class="principles">
+            <div class="principle">
+              <h3>Bayesian inference</h3>
+              <p><strong>Field:</strong> probability theory and Bayesian statistics. Every answer updates the likelihood of possible development scenarios.</p>
+            </div>
+            <div class="principle">
+              <h3>Information theory</h3>
+              <p><strong>Concepts:</strong> entropy reduction and information gain. The next question is chosen because it reduces uncertainty the most.</p>
+            </div>
+            <div class="principle">
+              <h3>Decision trees</h3>
+              <p><strong>Field:</strong> machine learning, computer science and statistics. Irrelevant branches are pruned as soon as they become unlikely.</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="cards">
+          <div class="card">
+            <div class="icon">❌</div>
+            <h3>Weak early question</h3>
+            <p><code>Do you use Oracle Spatial?</code></p>
+            <p>This is too narrow. It only helps after the interview already knows that GIS or spatial data is relevant.</p>
+          </div>
+          <div class="card">
+            <div class="icon">✅</div>
+            <h3>High-value early question</h3>
+            <p><code>Are there external systems or integrations?</code></p>
+            <p>This partitions the scenario space early and decides whether integration policies, scripts or MCP discovery stay active.</p>
+          </div>
+          <div class="card">
+            <div class="icon">∑</div>
+            <h3>Mathematical intuition</h3>
+            <p>A good question maximizes expected information gain and minimizes entropy in the remaining scenario distribution.</p>
+          </div>
+        </div>
+
+        <div class="codebox" style="margin-top:18px;">
+          <pre><code>Bayesian inference updates beliefs.
+Information theory chooses the next best question.
+Decision-tree pruning removes irrelevant branches.
+Active learning makes the interview adaptive.</code></pre>
+        </div>
+
+        <div class="codebox" style="margin-top:18px;">
+          <pre><code>One question.
+One answer.
+Update the scenario model.
+Prune irrelevant branches.
+Ask the next best question.</code></pre>
+        </div>
+      </div>
+    </div>
   </section>
 
   <section id="platform" class="section">
