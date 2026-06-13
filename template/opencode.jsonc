@@ -36,6 +36,10 @@
       "description": "Apply active findings for the current harness version.",
       "template": "Apply active findings for the current harness version. Follow `.opencode/command/harness-update.md` exactly."
     },
+    "harness-mcp": {
+      "description": "Discover, evaluate and plan MCP server usage.",
+      "template": "Follow `.opencode/command/harness-mcp.md` exactly."
+    },
     "harness-retro": {
       "description": "Collect usage feedback and write retro findings for the current harness version.",
       "template": "Run the harness retrospective. Follow `.opencode/command/harness-retro.md` exactly."

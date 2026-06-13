@@ -52,3 +52,18 @@ When generating or editing `opencode.jsonc`:
 - store role descriptions under `.agent/roles/`
 - command entries should contain only `description` and `template`
 - generate the OpenCode config correctly from the start
+
+
+## MCP discovery command
+
+Use `/harness-mcp` for controlled MCP discovery, recommendations, risk review and installation planning.
+
+Rules:
+
+```text
+- do not install MCP servers without explicit approval
+- do not modify opencode.jsonc without explicit approval
+- do not store secrets in harness files
+- classify MCP candidates by risk category
+- write run artifacts under .agent/runs/harness-mcp/
+```

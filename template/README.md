@@ -36,3 +36,17 @@ Integration files live under:
 .agent/mcp/mcp-policy.md
 .agent/scripts/
 ```
+
+
+MCP discovery command:
+
+```text
+/harness-mcp
+```
+
+MCP files live under:
+
+```text
+.agent/mcp/
+.agent/runs/harness-mcp/
+```

@@ -793,6 +793,7 @@
     <a href="#adaptive-discovery">Adaptive Discovery</a>
         <a href="#platform">Platform</a>
     <a href="#integrations">Integrations</a>
+        <a href="#mcp">MCP</a>
         <a href="#commands">Commands</a>
     <a href="#usecases">Use cases</a>
     <a href="#governance">Governance</a>
@@ -1055,6 +1056,65 @@ Ask the next best question.</code></pre>
             <div class="icon">📌</div>
             <h3>Policy-driven</h3>
             <p>Each system gets purpose, access method, read/write boundaries, approval rules and forbidden operations.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+  <section id="mcp" class="section">
+    <div class="container">
+      <div class="box-section">
+        <div class="section-head">
+          <h2>MCP Discovery & Planning</h2>
+          <p><code>/harness-mcp</code> discovers MCP opportunities, evaluates risk and creates approval-first installation plans.</p>
+        </div>
+
+        <div class="cards">
+          <div class="card">
+            <div class="icon">🧩</div>
+            <h3>Capability gaps</h3>
+            <p>The command identifies where MCP could help: repositories, work tracking, documentation, design systems, browser automation or local tooling.</p>
+          </div>
+          <div class="card">
+            <div class="icon">⚖️</div>
+            <h3>Risk classification</h3>
+            <p>Servers are classified as read-only, write-capable, browser-control, filesystem, secret-sensitive, production-adjacent or unknown.</p>
+          </div>
+          <div class="card">
+            <div class="icon">✅</div>
+            <h3>Approval first</h3>
+            <p>No MCP server is installed or configured automatically. The command writes recommendations and asks before changing config.</p>
+          </div>
+        </div>
+
+        <div class="codebox" style="margin-top:18px;">
+          <pre><code>/harness-mcp
+
+1. Discover capability gaps
+2. Recommend MCP candidates
+3. Review risk
+4. Create installation plan
+5. Ask for approval
+6. Apply config only after approval</code></pre>
+        </div>
+
+        <div class="cards" style="margin-top:18px;">
+          <div class="card">
+            <div class="icon">📁</div>
+            <h3>Stable policy files</h3>
+            <p><code>.agent/mcp/mcp-policy.md</code><br><code>.agent/mcp/mcp-registry.md</code><br><code>.agent/mcp/approved-mcp-servers.md</code></p>
+          </div>
+          <div class="card">
+            <div class="icon">📝</div>
+            <h3>Run artifacts</h3>
+            <p><code>.agent/runs/harness-mcp/&lt;date&gt;/mcp-recommendations.md</code><br><code>mcp-risk-review.md</code><br><code>mcp-installation-plan.md</code></p>
+          </div>
+          <div class="card">
+            <div class="icon">🔒</div>
+            <h3>Config safety</h3>
+            <p>The command preserves the strict OpenCode config contract and never stores secrets in harness files.</p>
           </div>
         </div>
       </div>

@@ -583,6 +583,119 @@ secrets → never store in harness files
 
 This keeps the harness useful without giving agents uncontrolled access to external tools.
 
+## MCP Discovery & Planning
+
+Harness Toolkit includes a dedicated MCP command:
+
+```text
+/harness-mcp
+```
+
+This command performs controlled MCP discovery, recommendation and installation planning.
+
+It does **not** blindly install MCP servers.
+
+### Why MCP discovery is separate
+
+MCP servers can be powerful. Some are read-only, but others can:
+
+```text
+- write to external systems
+- control a browser session
+- access the filesystem
+- interact with secret-sensitive systems
+- affect production-adjacent environments
+```
+
+Therefore MCP handling is intentionally separated from `/harness-init`.
+
+`/harness-init` may document MCP needs.
+
+`/harness-mcp` evaluates MCP candidates and creates a plan.
+
+Configuration changes happen only after explicit approval.
+
+### MCP workflow
+
+```text
+1. Discover capability gaps.
+2. Map gaps to MCP candidate categories.
+3. Assess value.
+4. Assess risk.
+5. Create recommendations.
+6. Create an installation plan.
+7. Ask for approval.
+8. Apply config only after approval.
+```
+
+### MCP risk categories
+
+```text
+read-only
+write-capable
+browser-control
+filesystem
+secret-sensitive
+production-adjacent
+unknown
+```
+
+Default rules:
+
+```text
+unknown → do not install
+write-capable → approval required
+browser-control → approval required
+filesystem → approval required
+secret-sensitive → approval required
+production-adjacent → approval required
+```
+
+### MCP artifacts
+
+The command writes run-specific findings under:
+
+```text
+.agent/runs/harness-mcp/<date>/
+```
+
+Typical outputs:
+
+```text
+mcp-discovery-report.md
+mcp-recommendations.md
+mcp-risk-review.md
+mcp-installation-plan.md
+```
+
+Stable MCP policy files live under:
+
+```text
+.agent/mcp/mcp-policy.md
+.agent/mcp/mcp-registry.md
+.agent/mcp/approved-mcp-servers.md
+.agent/mcp/denied-mcp-servers.md
+```
+
+### Approval-first configuration
+
+Before changing `opencode.jsonc`, `/harness-mcp` must show:
+
+```text
+MCP installation/update plan
+
+- MCP server:
+- Purpose:
+- Risk category:
+- Required permissions:
+- Config files to change:
+- Secrets required:
+- Fallback without MCP:
+- Rollback plan:
+```
+
+Then ask for explicit approval.
+
 ## Command overview
 
 ### `/harness-init`

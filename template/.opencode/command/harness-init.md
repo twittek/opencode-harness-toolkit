@@ -227,7 +227,7 @@ If the user mentions MCP servers or asks for tool automation, document MCP candi
 .agent/mcp/mcp-policy.md
 ```
 
-Do not install MCP servers during `/harness-init`.
+Do not install MCP servers during `/harness-init`. Use `/harness-mcp` for controlled MCP discovery, risk review and installation planning.
 
 Only create recommendations or installation plans unless the user explicitly requests an installation step.
 

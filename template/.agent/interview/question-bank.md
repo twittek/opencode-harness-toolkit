@@ -88,3 +88,40 @@ Which quality, security or monitoring tools are relevant?
 ```
 
 Avoid asking for CLI commands before the system itself is known.
+
+
+## MCP discovery questions
+
+Use these questions in `/harness-mcp`.
+
+```text
+Which MCP outcome do you want?
+```
+
+Options:
+
+```text
+A) Document existing MCP servers only
+B) Recommend useful MCP servers
+C) Create an installation plan
+D) Review an MCP server before approval
+E) Update OpenCode MCP config after approval
+F) Other / custom
+```
+
+```text
+Which external systems should MCP support first?
+```
+
+Options:
+
+```text
+A) GitLab / GitHub
+B) Jira / work tracking
+C) Confluence / documentation
+D) Figma / design
+E) Browser automation
+F) Filesystem / local tools
+G) Database / analytics
+H) Other / custom
+```
