@@ -170,3 +170,28 @@ C) Rich: use more harness context when the model has a large context window
 D) 128K optimized: modular loading with strong context hygiene
 E) Other / custom
 ```
+
+## Self-verification questions
+
+High-value verification question:
+
+```text
+How strict should final self-verification be?
+```
+
+Options:
+
+```text
+A) Lightweight: short requirement check before final response
+B) Standard: requirement match, changed files and checks run
+C) Strict: requirement traceability, tests/checks, risks and assumptions
+D) Regulated: evidence-based verification and explicit approval points
+E) Other / custom
+```
+
+Default recommendation:
+
+```text
+Standard for normal projects.
+Strict for harness changes, integrations, MCP, security-sensitive work or production-adjacent systems.
+```

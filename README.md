@@ -1268,6 +1268,44 @@ These defaults are intentionally conservative. The harness can later be tuned th
 
 ---
 
+## Self-Verification Policy
+
+The toolkit includes a self-verification policy so agents do not report completion prematurely.
+
+Generated policy file:
+
+```text
+.agent/context/self-verification-policy.md
+```
+
+Core rule:
+
+```text
+Every task must end with a self-verification pass before the final response.
+```
+
+The agent must verify:
+
+```text
+- whether the result matches the original user request
+- whether only intended files/content were changed
+- whether relevant harness policies were followed
+- whether available checks/tests were run or explicitly skipped with a reason
+- whether remaining risks or assumptions need to be reported
+```
+
+Recommended final response format:
+
+```text
+Verification:
+- Requirement match: ...
+- Files changed: ...
+- Checks run: ...
+- Open risks: ...
+```
+
+For harness changes, integrations, MCP, security-sensitive work or production-adjacent systems, use stricter verification with requirement traceability and explicit risk reporting.
+
 ## Context Loading Policy
 
 Harness Toolkit now includes a context loading policy for large-context models.

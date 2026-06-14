@@ -23,6 +23,7 @@ AGENTS.md
 .agent/context/definition-of-done.md
 .agent/context/risk-profile.md
 .agent/context/context-loading-policy.md
+.agent/context/self-verification-policy.md
 ```
 
 ### Tier 2: Load when relevant

@@ -1039,3 +1039,38 @@ Report in German:
 - current harness version
 - whether the OpenCode config self-check passed
 - recommended next command: `/harness-check`
+
+## Required self-verification
+
+Before reporting completion, perform a self-verification pass.
+
+Use:
+
+```text
+.agent/context/self-verification-policy.md
+```
+
+Verify:
+
+```text
+- requirement match: the result matches the user's request
+- only intended files/content were changed
+- relevant harness policies were followed
+- available checks/tests were run or explicitly skipped with a reason
+- remaining risks or assumptions are reported honestly
+```
+
+## Harness-init completion checklist
+
+Before completing `/harness-init`, verify:
+
+```text
+- requirement match: generated guidance matches the interview input
+- project profile reflects the selected scenario
+- role activation is justified
+- context loading policy exists
+- self-verification policy exists
+- OpenCode config uses valid top-level keys
+- lifecycle commands are registered
+- no unrelated template or backup noise was introduced
+```

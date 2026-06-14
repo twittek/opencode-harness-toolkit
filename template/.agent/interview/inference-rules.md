@@ -156,3 +156,21 @@ template
 *.bak.*
 .DS_Store
 ```
+
+## Self-verification inference
+
+If the task changes files, configuration, generated artifacts, lifecycle commands, MCP settings or integration behavior, require at least standard self-verification.
+
+Prefer strict self-verification when the task touches:
+
+```text
+- harness policies
+- OpenCode configuration
+- MCP configuration
+- external systems
+- security, secrets or permissions
+- generated release artifacts
+- production-adjacent workflows
+```
+
+Never infer that verification can be skipped because the task appears simple.

@@ -65,3 +65,10 @@ Context loading policy:
 ```text
 .agent/context/context-loading-policy.md
 ```
+
+
+Self-verification policy:
+
+```text
+.agent/context/self-verification-policy.md
+```

@@ -795,6 +795,7 @@
     <a href="#integrations">Integrations</a>
         <a href="#roles">Roles</a>
         <a href="#context-loading">Context Loading</a>
+        <a href="#self-verification">Self-Verification</a>
         <a href="#mcp">MCP</a>
         <a href="#commands">Commands</a>
     <a href="#usecases">Use cases</a>
@@ -1116,6 +1117,43 @@ Ask the next best question.</code></pre>
 Tier 2: load relevant roles, integrations and policies
 Tier 3: load run artifacts only on explicit need
 Tier 4: never load node_modules, dist, build, coverage, template, backups or logs</code></pre>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="self-verification" class="section">
+    <div class="container">
+      <div class="box-section">
+        <div class="section-head">
+          <h2>Self-Verification Policy</h2>
+          <p>Agents must verify their own work against the original requirement before reporting completion.</p>
+        </div>
+
+        <div class="cards">
+          <div class="card">
+            <div class="icon">✅</div>
+            <h3>Requirement match</h3>
+            <p>Every task ends with a check that the generated result actually satisfies the user's request.</p>
+          </div>
+          <div class="card">
+            <div class="icon">🧪</div>
+            <h3>Checks and tests</h3>
+            <p>Agents should run available validation steps or explicitly say why they were not run.</p>
+          </div>
+          <div class="card">
+            <div class="icon">⚠️</div>
+            <h3>Honest completion</h3>
+            <p>Remaining assumptions, risks or skipped checks must be reported instead of hidden.</p>
+          </div>
+        </div>
+
+        <div class="codebox" style="margin-top:18px;">
+          <pre><code>Verification:
+- Requirement match: ...
+- Files changed: ...
+- Checks run: ...
+- Open risks: ...</code></pre>
         </div>
       </div>
     </div>

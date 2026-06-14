@@ -103,3 +103,23 @@ Final response in German:
 - changelog location
 - remaining findings
 - recommended next command
+
+## Required self-verification
+
+Before reporting completion, perform a self-verification pass.
+
+Use:
+
+```text
+.agent/context/self-verification-policy.md
+```
+
+Verify:
+
+```text
+- requirement match: the result matches the user's request
+- only intended files/content were changed
+- relevant harness policies were followed
+- available checks/tests were run or explicitly skipped with a reason
+- remaining risks or assumptions are reported honestly
+```

@@ -67,6 +67,33 @@ Rules:
 - write run artifacts under .agent/runs/harness-mcp/
 ```
 
+## Self-verification policy
+
+Use `.agent/context/self-verification-policy.md` before reporting completion.
+
+Every task must end with a self-verification pass before the final response.
+
+Minimum verification:
+
+```text
+- check the result against the user's original request
+- check that only intended files/content were changed
+- run available tests/checks or explain why not
+- report remaining risks or assumptions honestly
+```
+
+Do not claim completion without verification.
+
+For implementation or artifact changes, include a concise final verification summary:
+
+```text
+Verification:
+- Requirement match: ...
+- Files changed: ...
+- Checks run: ...
+- Open risks: ...
+```
+
 ## Context Loading Policy
 
 Use `.agent/context/context-loading-policy.md` to decide which harness files to load.

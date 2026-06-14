@@ -267,3 +267,23 @@ The final response should include:
 - what still needs approval
 - where the run artifacts were written
 ```
+
+## Required self-verification
+
+Before reporting completion, perform a self-verification pass.
+
+Use:
+
+```text
+.agent/context/self-verification-policy.md
+```
+
+Verify:
+
+```text
+- requirement match: the result matches the user's request
+- only intended files/content were changed
+- relevant harness policies were followed
+- available checks/tests were run or explicitly skipped with a reason
+- remaining risks or assumptions are reported honestly
+```

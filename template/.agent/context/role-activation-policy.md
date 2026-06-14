@@ -70,3 +70,28 @@ security > correctness > maintainability > speed > convenience
 Do not mention role activation mechanically in every answer.
 
 Mention roles only when it helps the user understand trade-offs or risk.
+
+## Self-verification role behavior
+
+All roles must participate in final self-verification for their area.
+
+Examples:
+
+```text
+developer
+→ verifies implementation matches the requirement and checks/tests were run
+
+tester
+→ verifies acceptance criteria, edge cases and regression risk
+
+security-engineer
+→ verifies permissions, secrets and unsafe side effects
+
+integration-architect
+→ verifies external-system behavior, write boundaries and fallback paths
+
+technical-writer
+→ verifies documentation matches the actual implemented behavior
+```
+
+If multiple roles are active, the final response should summarize the combined verification outcome.
