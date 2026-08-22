@@ -13,9 +13,9 @@ opencode.jsonc
 .opencode/command/harness-check.md
 .opencode/command/harness-update.md
 .opencode/command/harness-retro.md
-.agent/context/harness-version.json
-.agent/context/harness-changelog.md
-.agent/playbooks/harness-update.md
+.agents/context/harness-version.json
+.agents/context/harness-changelog.md
+.agents/playbooks/harness-update.md
 ```
 
 Do not put project-specific secrets into this template.
@@ -24,17 +24,17 @@ Do not put project-specific secrets into this template.
 Interview engine files live under:
 
 ```text
-.agent/interview/
+.agents/interview/
 ```
 
 
 Integration files live under:
 
 ```text
-.agent/integrations/
-.agent/context/integration-policy.md
-.agent/mcp/mcp-policy.md
-.agent/scripts/
+.agents/integrations/
+.agents/context/integration-policy.md
+.agents/mcp/mcp-policy.md
+.agents/scripts/
 ```
 
 
@@ -47,28 +47,28 @@ MCP discovery command:
 MCP files live under:
 
 ```text
-.agent/mcp/
-.agent/runs/harness-mcp/
+.agents/mcp/
+.agents/runs/harness-mcp/
 ```
 
 
 Role files live under:
 
 ```text
-.agent/roles/
-.agent/context/role-activation-policy.md
+.agents/roles/
+.agents/context/role-activation-policy.md
 ```
 
 
 Context loading policy:
 
 ```text
-.agent/context/context-loading-policy.md
+.agents/context/context-loading-policy.md
 ```
 
 
 Self-verification policy:
 
 ```text
-.agent/context/self-verification-policy.md
+.agents/context/self-verification-policy.md
 ```

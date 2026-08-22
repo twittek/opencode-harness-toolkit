@@ -1,22 +1,22 @@
-# GitHub Integration
+# GitLab Integration
 
-Use this file when the project uses GitHub for repository hosting, issues, pull requests or actions.
+Use this file when the project uses GitLab for repository hosting, issues, merge requests or CI/CD.
 
 ## Recommended access
 
 Preferred access path:
 
 ```text
-gh CLI through approved wrapper scripts
+glab CLI through approved wrapper scripts
 ```
 
 ## Allowed read operations
 
 ```text
 - read issues
-- read pull requests
+- read merge requests
 - read branches
-- read GitHub Actions status
+- read CI pipeline status
 - read repository metadata
 ```
 
@@ -24,10 +24,10 @@ gh CLI through approved wrapper scripts
 
 ```text
 - create issue comments
-- create pull request comments
+- create merge request comments
 - create branches
-- create pull requests
-- trigger workflows
+- create merge requests
+- trigger pipelines
 - change labels or assignees
 ```
 
@@ -37,8 +37,8 @@ gh CLI through approved wrapper scripts
 - deleting issues
 - deleting branches
 - force-pushing
-- changing repository settings
-- modifying secrets or variables
+- changing protected branch settings
+- modifying CI/CD variables
 - reading or printing secrets
 ```
 
@@ -47,7 +47,7 @@ gh CLI through approved wrapper scripts
 Prefer wrappers under:
 
 ```text
-.agent/scripts/github-*.sh
+.agents/scripts/gitlab-*.sh
 ```
 
-Do not invent ad-hoc `gh` commands for write operations when a wrapper exists.
+Do not invent ad-hoc `glab` commands for write operations when a wrapper exists.

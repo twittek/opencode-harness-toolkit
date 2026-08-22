@@ -18,30 +18,30 @@ The harness is a structured knowledge space, not one giant prompt.
 
 ```text
 AGENTS.md
-.agent/context/project-profile.md
-.agent/context/autonomy-policy.md
-.agent/context/definition-of-done.md
-.agent/context/risk-profile.md
-.agent/context/context-loading-policy.md
-.agent/context/self-verification-policy.md
+.agents/context/project-profile.md
+.agents/context/autonomy-policy.md
+.agents/context/definition-of-done.md
+.agents/context/risk-profile.md
+.agents/context/context-loading-policy.md
+.agents/context/self-verification-policy.md
 ```
 
 ### Tier 2: Load when relevant
 
 ```text
-.agent/context/role-activation-policy.md
-.agent/context/integration-policy.md
-.agent/mcp/mcp-policy.md
-.agent/roles/*.md
-.agent/integrations/*.md
-.agent/interview/*.md
-.agent/playbooks/*.md
+.agents/context/role-activation-policy.md
+.agents/context/integration-policy.md
+.agents/mcp/mcp-policy.md
+.agents/roles/*.md
+.agents/integrations/*.md
+.agents/interview/*.md
+.agents/playbooks/*.md
 ```
 
 ### Tier 3: Load only on explicit need
 
 ```text
-.agent/runs/**
+.agents/runs/**
 ```
 
 ### Tier 4: Never load automatically

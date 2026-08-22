@@ -57,24 +57,24 @@ If external systems are present, increase:
 
 Keep:
 
-- .agent/context/integration-policy.md
-- .agent/integrations/external-systems.md
-- .agent/mcp/mcp-policy.md
+- .agents/context/integration-policy.md
+- .agents/integrations/external-systems.md
+- .agents/mcp/mcp-policy.md
 
 If GitLab is selected, keep:
 
-- .agent/integrations/gitlab.md
-- .agent/scripts/gitlab-issue-comment.sh
+- .agents/integrations/gitlab.md
+- .agents/scripts/gitlab-issue-comment.sh
 
 If GitHub is selected, keep:
 
-- .agent/integrations/github.md
-- .agent/scripts/github-issue-comment.sh
+- .agents/integrations/github.md
+- .agents/scripts/github-issue-comment.sh
 
 If Jira is selected, keep:
 
-- .agent/integrations/jira.md
-- .agent/scripts/jira-issue-comment.example.sh
+- .agents/integrations/jira.md
+- .agents/scripts/jira-issue-comment.example.sh
 
 If no external systems are present, prune:
 

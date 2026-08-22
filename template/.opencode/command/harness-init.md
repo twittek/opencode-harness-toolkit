@@ -206,33 +206,33 @@ F) Other / custom
 When external systems are present, generate or update:
 
 ```text
-.agent/context/integration-policy.md
-.agent/integrations/external-systems.md
+.agents/context/integration-policy.md
+.agents/integrations/external-systems.md
 ```
 
 When a known system is selected, also generate or update the matching file:
 
 ```text
-.agent/integrations/gitlab.md
-.agent/integrations/github.md
-.agent/integrations/jira.md
-.agent/integrations/confluence.md
-.agent/integrations/figma.md
-.agent/integrations/sonarqube.md
+.agents/integrations/gitlab.md
+.agents/integrations/github.md
+.agents/integrations/jira.md
+.agents/integrations/confluence.md
+.agents/integrations/figma.md
+.agents/integrations/sonarqube.md
 ```
 
 When wrappers are useful, generate or keep scripts under:
 
 ```text
-.agent/scripts/
+.agents/scripts/
 ```
 
 Examples:
 
 ```text
-.agent/scripts/gitlab-issue-comment.sh
-.agent/scripts/github-issue-comment.sh
-.agent/scripts/jira-issue-comment.example.sh
+.agents/scripts/gitlab-issue-comment.sh
+.agents/scripts/github-issue-comment.sh
+.agents/scripts/jira-issue-comment.example.sh
 ```
 
 ### Integration policy rules
@@ -263,7 +263,7 @@ secret handling → never store secrets in harness files
 If the user mentions MCP servers or asks for tool automation, document MCP candidates in:
 
 ```text
-.agent/mcp/mcp-policy.md
+.agents/mcp/mcp-policy.md
 ```
 
 Do not install MCP servers during `/harness-init`. Use `/harness-mcp` for controlled MCP discovery, risk review and installation planning.
@@ -299,7 +299,7 @@ Default recommendation:
 Generate or update:
 
 ```text
-.agent/context/context-loading-policy.md
+.agents/context/context-loading-policy.md
 ```
 
 Important rule:
@@ -359,34 +359,34 @@ Does the project require domain-specific business knowledge?
 When roles are relevant, generate or update:
 
 ```text
-.agent/context/role-activation-policy.md
-.agent/roles/
+.agents/context/role-activation-policy.md
+.agents/roles/
 ```
 
 Core roles:
 
 ```text
-.agent/roles/architect.md
-.agent/roles/requirements-engineer.md
-.agent/roles/developer.md
-.agent/roles/tester.md
-.agent/roles/reviewer.md
+.agents/roles/architect.md
+.agents/roles/requirements-engineer.md
+.agents/roles/developer.md
+.agents/roles/tester.md
+.agents/roles/reviewer.md
 ```
 
 Specialist roles:
 
 ```text
-.agent/roles/security-engineer.md
-.agent/roles/ux-designer.md
-.agent/roles/accessibility-specialist.md
-.agent/roles/devops-engineer.md
-.agent/roles/integration-architect.md
-.agent/roles/data-engineer.md
-.agent/roles/domain-expert.md
-.agent/roles/technical-writer.md
-.agent/roles/performance-engineer.md
-.agent/roles/observability-engineer.md
-.agent/roles/product-manager.md
+.agents/roles/security-engineer.md
+.agents/roles/ux-designer.md
+.agents/roles/accessibility-specialist.md
+.agents/roles/devops-engineer.md
+.agents/roles/integration-architect.md
+.agents/roles/data-engineer.md
+.agents/roles/domain-expert.md
+.agents/roles/technical-writer.md
+.agents/roles/performance-engineer.md
+.agents/roles/observability-engineer.md
+.agents/roles/product-manager.md
 ```
 
 Default:
@@ -502,7 +502,7 @@ Required lifecycle commands:
 Role descriptions must be stored under:
 
 ```text
-.agent/roles/
+.agents/roles/
 ```
 
 Do not create `.opencode/agent/*.md` and do not reference role files from `opencode.jsonc`.
@@ -960,7 +960,7 @@ Forbidden `opencode.jsonc` patterns:
 If role files are needed, create them under:
 
 ```text
-.agent/roles/
+.agents/roles/
 ```
 
 Do not create `.opencode/agent/*.md` unless the exact OpenCode agent file schema is explicitly known and requested by the developer.
@@ -975,35 +975,35 @@ Generate at least:
 - `.opencode/command/harness-check.md`
 - `.opencode/command/harness-update.md`
 - `.opencode/command/harness-retro.md`
-- `.agent/context/project-profile.md`
-- `.agent/context/harness-scope.md`
-- `.agent/context/harness-version.json`
-- `.agent/context/harness-changelog.md`
-- `.agent/context/context-index.md`
-- `.agent/context/definition-of-done.md`
-- `.agent/context/autonomy-policy.md`
-- `.agent/context/risk-profile.md`
-- `.agent/context/context-safety-policy.md`
-- `.agent/roles/architect.md`
-- `.agent/roles/refinement.md`
-- `.agent/roles/developer.md`
-- `.agent/roles/tester.md`
-- `.agent/playbooks/refinement.md`
-- `.agent/playbooks/architecture.md`
-- `.agent/playbooks/development-best-practices.md`
-- `.agent/playbooks/testing.md`
-- `.agent/playbooks/review.md`
-- `.agent/playbooks/harness-check.md`
-- `.agent/playbooks/harness-update.md`
-- `.agent/playbooks/harness-retrospective.md`
-- `.agent/templates/refinement.md`
-- `.agent/templates/architecture-plan.md`
-- `.agent/templates/review-report.md`
-- `.agent/templates/test-report.md`
-- `.agent/templates/mr-description.md`
-- `.agent/scripts/quality-gates.sh`
-- `.agent/scripts/load-issue.sh`
-- `.agent/runs/.gitkeep`
+- `.agents/context/project-profile.md`
+- `.agents/context/harness-scope.md`
+- `.agents/context/harness-version.json`
+- `.agents/context/harness-changelog.md`
+- `.agents/context/context-index.md`
+- `.agents/context/definition-of-done.md`
+- `.agents/context/autonomy-policy.md`
+- `.agents/context/risk-profile.md`
+- `.agents/context/context-safety-policy.md`
+- `.agents/roles/architect.md`
+- `.agents/roles/refinement.md`
+- `.agents/roles/developer.md`
+- `.agents/roles/tester.md`
+- `.agents/playbooks/refinement.md`
+- `.agents/playbooks/architecture.md`
+- `.agents/playbooks/development-best-practices.md`
+- `.agents/playbooks/testing.md`
+- `.agents/playbooks/review.md`
+- `.agents/playbooks/harness-check.md`
+- `.agents/playbooks/harness-update.md`
+- `.agents/playbooks/harness-retrospective.md`
+- `.agents/templates/refinement.md`
+- `.agents/templates/architecture-plan.md`
+- `.agents/templates/review-report.md`
+- `.agents/templates/test-report.md`
+- `.agents/templates/mr-description.md`
+- `.agents/scripts/quality-gates.sh`
+- `.agents/scripts/load-issue.sh`
+- `.agents/runs/.gitkeep`
 
 Generate optional files only when relevant.
 
@@ -1023,7 +1023,7 @@ Also verify:
 - `opencode.jsonc` contains `"command"`
 - `opencode.jsonc` contains `"permission"`
 - lifecycle command files exist
-- role files exist under `.agent/roles/`
+- role files exist under `.agents/roles/`
 - no `.opencode/agent` directory was created
 - no unknown OpenCode config keys were generated
 
@@ -1047,7 +1047,7 @@ Before reporting completion, perform a self-verification pass.
 Use:
 
 ```text
-.agent/context/self-verification-policy.md
+.agents/context/self-verification-policy.md
 ```
 
 Verify:
