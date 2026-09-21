@@ -111,7 +111,7 @@ opencode-harness-toolkit/
     │       ├── harness-check.md
     │       ├── harness-update.md
     │       ├── harness-retro.md
-    └── .agent/
+    └── .agents/
         ├── context/
         ├── interview/
         ├── playbooks/
@@ -134,7 +134,7 @@ Required rules:
 - use permission, not permissions
 - do not create agents or agent mappings
 - do not reference .opencode/agent/*.md
-- store role descriptions under .agent/roles/
+- store role descriptions under .agents/roles/
 - command entries should contain only description and template
 ```
 
@@ -196,13 +196,13 @@ opencode.jsonc
 .opencode/command/harness-check.md
 .opencode/command/harness-update.md
 .opencode/command/harness-retro.md
-.agent/context/harness-version.json
-.agent/context/harness-changelog.md
-.agent/playbooks/harness-update.md
-.agent/runs/.gitkeep
-.agent/runs/harness-check/.gitkeep
-.agent/runs/harness-update/.gitkeep
-.agent/runs/harness-retro/.gitkeep
+.agents/context/harness-version.json
+.agents/context/harness-changelog.md
+.agents/playbooks/harness-update.md
+.agents/runs/.gitkeep
+.agents/runs/harness-check/.gitkeep
+.agents/runs/harness-update/.gitkeep
+.agents/runs/harness-retro/.gitkeep
 ```
 
 After `/harness-init`, the project-specific harness should additionally contain files such as:
@@ -212,20 +212,20 @@ After `/harness-init`, the project-specific harness should additionally contain 
 .opencode/agent/refinement.md
 .opencode/agent/developer.md
 .opencode/agent/tester.md
-.agent/context/project-profile.md
-.agent/context/harness-scope.md
-.agent/context/context-index.md
-.agent/context/definition-of-done.md
-.agent/context/autonomy-policy.md
-.agent/context/risk-profile.md
-.agent/context/context-safety-policy.md
-.agent/playbooks/refinement.md
-.agent/playbooks/architecture.md
-.agent/playbooks/development-best-practices.md
-.agent/playbooks/testing.md
-.agent/playbooks/review.md
-.agent/scripts/quality-gates.sh
-.agent/scripts/load-issue.sh
+.agents/context/project-profile.md
+.agents/context/harness-scope.md
+.agents/context/context-index.md
+.agents/context/definition-of-done.md
+.agents/context/autonomy-policy.md
+.agents/context/risk-profile.md
+.agents/context/context-safety-policy.md
+.agents/playbooks/refinement.md
+.agents/playbooks/architecture.md
+.agents/playbooks/development-best-practices.md
+.agents/playbooks/testing.md
+.agents/playbooks/review.md
+.agents/scripts/quality-gates.sh
+.agents/scripts/load-issue.sh
 ```
 
 Depending on the project, `/harness-init` may also create optional files for GitLab, GitHub, monorepos, security, APIs, documentation, or dependency policies.
@@ -524,23 +524,23 @@ Quality, security and monitoring
 When external systems are relevant, the harness can generate or update:
 
 ```text
-.agent/context/integration-policy.md
-.agent/integrations/external-systems.md
-.agent/integrations/gitlab.md
-.agent/integrations/github.md
-.agent/integrations/jira.md
-.agent/integrations/confluence.md
-.agent/integrations/figma.md
-.agent/integrations/sonarqube.md
-.agent/mcp/mcp-policy.md
+.agents/context/integration-policy.md
+.agents/integrations/external-systems.md
+.agents/integrations/gitlab.md
+.agents/integrations/github.md
+.agents/integrations/jira.md
+.agents/integrations/confluence.md
+.agents/integrations/figma.md
+.agents/integrations/sonarqube.md
+.agents/mcp/mcp-policy.md
 ```
 
 It can also provide safe wrapper scripts:
 
 ```text
-.agent/scripts/gitlab-issue-comment.sh
-.agent/scripts/github-issue-comment.sh
-.agent/scripts/jira-issue-comment.example.sh
+.agents/scripts/gitlab-issue-comment.sh
+.agents/scripts/github-issue-comment.sh
+.agents/scripts/jira-issue-comment.example.sh
 ```
 
 ### Wrapper-first rule
@@ -550,7 +550,7 @@ If a wrapper script exists, agents should use it instead of inventing ad-hoc CLI
 Good:
 
 ```text
-.agent/scripts/gitlab-issue-comment.sh 123 .agent/runs/comment.md
+.agents/scripts/gitlab-issue-comment.sh 123 .agents/runs/comment.md
 ```
 
 Riskier:
@@ -641,13 +641,13 @@ This question determines whether the harness should include additional policies 
 Generated role guidance lives under:
 
 ```text
-.agent/roles/
+.agents/roles/
 ```
 
 The activation policy lives under:
 
 ```text
-.agent/context/role-activation-policy.md
+.agents/context/role-activation-policy.md
 ```
 
 Examples:
@@ -753,7 +753,7 @@ production-adjacent → approval required
 The command writes run-specific findings under:
 
 ```text
-.agent/runs/harness-mcp/<date>/
+.agents/runs/harness-mcp/<date>/
 ```
 
 Typical outputs:
@@ -768,10 +768,10 @@ mcp-installation-plan.md
 Stable MCP policy files live under:
 
 ```text
-.agent/mcp/mcp-policy.md
-.agent/mcp/mcp-registry.md
-.agent/mcp/approved-mcp-servers.md
-.agent/mcp/denied-mcp-servers.md
+.agents/mcp/mcp-policy.md
+.agents/mcp/mcp-registry.md
+.agents/mcp/approved-mcp-servers.md
+.agents/mcp/denied-mcp-servers.md
 ```
 
 ### Approval-first configuration
@@ -914,7 +914,7 @@ What it checks:
 Output location:
 
 ```text
-.agent/runs/harness-check/<current-version>/<date>/
+.agents/runs/harness-check/<current-version>/<date>/
 ```
 
 Typical output files:
@@ -974,11 +974,11 @@ Apply active findings for the current harness version, update the changelog, and
 What it reads:
 
 ```text
-.agent/runs/harness-check/<current-version>/*/active-findings.md
-.agent/runs/harness-check/<current-version>/*/recommended-actions.md
-.agent/runs/harness-retro/<current-version>/*/active-findings.md
-.agent/runs/harness-retro/<current-version>/*/proposed-changes.md
-.agent/runs/harness-retro/<current-version>/*/patch-plan.md
+.agents/runs/harness-check/<current-version>/*/active-findings.md
+.agents/runs/harness-check/<current-version>/*/recommended-actions.md
+.agents/runs/harness-retro/<current-version>/*/active-findings.md
+.agents/runs/harness-retro/<current-version>/*/proposed-changes.md
+.agents/runs/harness-retro/<current-version>/*/patch-plan.md
 ```
 
 What it does:
@@ -995,7 +995,7 @@ What it does:
 Output location:
 
 ```text
-.agent/runs/harness-update/<current-version>/<date>/
+.agents/runs/harness-update/<current-version>/<date>/
 ```
 
 Typical output files:
@@ -1071,7 +1071,7 @@ Evidence → Gibt es konkrete Beispiele?
 Output location:
 
 ```text
-.agent/runs/harness-retro/<current-version>/<date>/
+.agents/runs/harness-retro/<current-version>/<date>/
 ```
 
 Typical output files:
@@ -1122,7 +1122,7 @@ The harness is versioned independently from your application.
 Version file:
 
 ```text
-.agent/context/harness-version.json
+.agents/context/harness-version.json
 ```
 
 Example:
@@ -1141,7 +1141,7 @@ Example:
 Changelog:
 
 ```text
-.agent/context/harness-changelog.md
+.agents/context/harness-changelog.md
 ```
 
 Every harness change must be recorded there.
@@ -1213,13 +1213,13 @@ This avoids accidentally applying outdated recommendations after the harness has
 If GitLab is selected during `/harness-init`, the harness should create:
 
 ```text
-.agent/skills/gitlab-glab.md
-.agent/scripts/gitlab-issue-load.sh
-.agent/scripts/gitlab-issue-comment.sh
-.agent/scripts/gitlab-mr-create-draft.sh
-.agent/scripts/gitlab-mr-comment.sh
-.agent/scripts/gitlab-api.sh
-.agent/config/gitlab.env.example
+.agents/skills/gitlab-glab.md
+.agents/scripts/gitlab-issue-load.sh
+.agents/scripts/gitlab-issue-comment.sh
+.agents/scripts/gitlab-mr-create-draft.sh
+.agents/scripts/gitlab-mr-comment.sh
+.agents/scripts/gitlab-api.sh
+.agents/config/gitlab.env.example
 ```
 
 The GitLab skill must enforce:
@@ -1232,7 +1232,7 @@ The GitLab skill must enforce:
 - use GITLAB_PROJECT_ID for glab api when known
 - never post long Markdown inline via glab issue note -m "..."
 - always write comments to Markdown files first
-- publish issue comments via .agent/scripts/gitlab-issue-comment.sh
+- publish issue comments via .agents/scripts/gitlab-issue-comment.sh
 - do not merge, close issues, delete branches or change labels without approval
 ```
 
@@ -1275,7 +1275,7 @@ The toolkit includes a self-verification policy so agents do not report completi
 Generated policy file:
 
 ```text
-.agent/context/self-verification-policy.md
+.agents/context/self-verification-policy.md
 ```
 
 Core rule:
@@ -1324,7 +1324,7 @@ Use the smallest useful context set.
 Generated policy file:
 
 ```text
-.agent/context/context-loading-policy.md
+.agents/context/context-loading-policy.md
 ```
 
 ### Loading tiers

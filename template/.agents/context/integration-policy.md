@@ -27,14 +27,14 @@ write → approval required
 
 ## Wrapper-first rule
 
-If a wrapper script exists under `.agent/scripts/`, agents must use it instead of inventing ad-hoc CLI or API calls.
+If a wrapper script exists under `.agents/scripts/`, agents must use it instead of inventing ad-hoc CLI or API calls.
 
 Examples:
 
 ```text
-.agent/scripts/gitlab-issue-comment.sh
-.agent/scripts/github-pr-comment.sh
-.agent/scripts/jira-issue-comment.sh
+.agents/scripts/gitlab-issue-comment.sh
+.agents/scripts/github-pr-comment.sh
+.agents/scripts/jira-issue-comment.sh
 ```
 
 ## Credentials
@@ -85,7 +85,7 @@ The following actions always require explicit user approval:
 If an MCP server is available for an external system, document it in:
 
 ```text
-.agent/mcp/mcp-policy.md
+.agents/mcp/mcp-policy.md
 ```
 
 Do not install MCP servers automatically during `/harness-init`.

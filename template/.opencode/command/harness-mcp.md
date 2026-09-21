@@ -30,13 +30,13 @@ Read these files when present:
 ```text
 AGENTS.md
 opencode.jsonc
-.agent/context/integration-policy.md
-.agent/integrations/external-systems.md
-.agent/mcp/mcp-policy.md
-.agent/mcp/mcp-registry.md
-.agent/mcp/approved-mcp-servers.md
-.agent/mcp/denied-mcp-servers.md
-.agent/interview/interview-engine.md
+.agents/context/integration-policy.md
+.agents/integrations/external-systems.md
+.agents/mcp/mcp-policy.md
+.agents/mcp/mcp-registry.md
+.agents/mcp/approved-mcp-servers.md
+.agents/mcp/denied-mcp-servers.md
+.agents/interview/interview-engine.md
 ```
 
 Also inspect project-specific documentation if referenced by the harness.
@@ -148,25 +148,25 @@ For every MCP candidate, document:
 Write findings under:
 
 ```text
-.agent/runs/harness-mcp/<date>/
+.agents/runs/harness-mcp/<date>/
 ```
 
 Recommended files:
 
 ```text
-.agent/runs/harness-mcp/<date>/mcp-discovery-report.md
-.agent/runs/harness-mcp/<date>/mcp-recommendations.md
-.agent/runs/harness-mcp/<date>/mcp-risk-review.md
-.agent/runs/harness-mcp/<date>/mcp-installation-plan.md
+.agents/runs/harness-mcp/<date>/mcp-discovery-report.md
+.agents/runs/harness-mcp/<date>/mcp-recommendations.md
+.agents/runs/harness-mcp/<date>/mcp-risk-review.md
+.agents/runs/harness-mcp/<date>/mcp-installation-plan.md
 ```
 
 Update stable policy files only after the user approves:
 
 ```text
-.agent/mcp/mcp-policy.md
-.agent/mcp/mcp-registry.md
-.agent/mcp/approved-mcp-servers.md
-.agent/mcp/denied-mcp-servers.md
+.agents/mcp/mcp-policy.md
+.agents/mcp/mcp-registry.md
+.agents/mcp/approved-mcp-servers.md
+.agents/mcp/denied-mcp-servers.md
 ```
 
 Update `opencode.jsonc` only after explicit approval.
@@ -275,7 +275,7 @@ Before reporting completion, perform a self-verification pass.
 Use:
 
 ```text
-.agent/context/self-verification-policy.md
+.agents/context/self-verification-policy.md
 ```
 
 Verify:

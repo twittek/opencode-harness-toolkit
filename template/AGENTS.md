@@ -20,24 +20,24 @@ The harness exists to make an AI agent reliable, controlled, repeatable, and pro
 Current version is tracked in:
 
 ```text
-.agent/context/harness-version.json
+.agents/context/harness-version.json
 ```
 
 All harness changes must be documented in:
 
 ```text
-.agent/context/harness-changelog.md
+.agents/context/harness-changelog.md
 ```
 
 ## General rules
 
 - Keep global instructions compact.
 - Prefer focused playbooks over huge prompts.
-- Use `.agent/runs/<task-id>/` for reports and handoffs.
+- Use `.agents/runs/<task-id>/` for reports and handoffs.
 - Do not post long Markdown inline into shell commands.
-- If GitLab is used, read `.agent/skills/gitlab-glab.md` first.
+- If GitLab is used, read `.agents/skills/gitlab-glab.md` first.
 - If GitLab is used, do not invent `glab` commands or flags.
-- If GitLab is used, comments must be written to Markdown files first and posted via `.agent/scripts/gitlab-issue-comment.sh`.
+- If GitLab is used, comments must be written to Markdown files first and posted via `.agents/scripts/gitlab-issue-comment.sh`.
 - After completing a task, explicitly verify the result against the requirements.
 
 ## OpenCode Config Safety
@@ -49,7 +49,7 @@ When generating or editing `opencode.jsonc`:
 - use `permission`, not `permissions`
 - do not create `agents` or `agent` mappings
 - do not reference `.opencode/agent/*.md`
-- store role descriptions under `.agent/roles/`
+- store role descriptions under `.agents/roles/`
 - command entries should contain only `description` and `template`
 - generate the OpenCode config correctly from the start
 
@@ -64,12 +64,12 @@ Rules:
 - do not modify opencode.jsonc without explicit approval
 - do not store secrets in harness files
 - classify MCP candidates by risk category
-- write run artifacts under .agent/runs/harness-mcp/
+- write run artifacts under .agents/runs/harness-mcp/
 ```
 
 ## Self-verification policy
 
-Use `.agent/context/self-verification-policy.md` before reporting completion.
+Use `.agents/context/self-verification-policy.md` before reporting completion.
 
 Every task must end with a self-verification pass before the final response.
 
@@ -96,7 +96,7 @@ Verification:
 
 ## Context Loading Policy
 
-Use `.agent/context/context-loading-policy.md` to decide which harness files to load.
+Use `.agents/context/context-loading-policy.md` to decide which harness files to load.
 
 Default behavior:
 
@@ -117,13 +117,13 @@ Use the smallest useful context set.
 The harness uses role files under:
 
 ```text
-.agent/roles/
+.agents/roles/
 ```
 
 and activation rules under:
 
 ```text
-.agent/context/role-activation-policy.md
+.agents/context/role-activation-policy.md
 ```
 
 Roles are not always active. Activate the smallest useful role set for the task.

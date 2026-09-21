@@ -14,11 +14,11 @@ Do not modify harness files.
 
 Read current version from:
 
-`.agent/context/harness-version.json`
+`.agents/context/harness-version.json`
 
 Write reports under:
 
-`.agent/runs/harness-check/<current-version>/<date>/`
+`.agents/runs/harness-check/<current-version>/<date>/`
 
 If version is missing, use `unknown` and create a critical finding.
 
@@ -69,11 +69,11 @@ Inspect harness files:
 - `opencode.jsonc` or `opencode.json`
 - `.opencode/command/*.md`
 - `.opencode/agent/*.md`
-- `.agent/context/*.md`
-- `.agent/playbooks/*.md`
-- `.agent/templates/*.md`
-- `.agent/skills/*.md`
-- `.agent/scripts/*.sh`
+- `.agents/context/*.md`
+- `.agents/playbooks/*.md`
+- `.agents/templates/*.md`
+- `.agents/skills/*.md`
+- `.agents/scripts/*.sh`
 
 Check:
 - missing lifecycle files
@@ -99,7 +99,7 @@ Check whether the harness uses the smallest useful context set.
 Verify:
 
 ```text
-- .agent/context/context-loading-policy.md exists
+- .agents/context/context-loading-policy.md exists
 - Tier 1 baseline files are defined
 - role-aware loading rules exist
 - integration-aware loading rules exist
@@ -115,7 +115,7 @@ Before reporting completion, perform a self-verification pass.
 Use:
 
 ```text
-.agent/context/self-verification-policy.md
+.agents/context/self-verification-policy.md
 ```
 
 Verify:

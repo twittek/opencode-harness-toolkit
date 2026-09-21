@@ -40,8 +40,8 @@ while IFS= read -r -d '' src; do
   copy_file "$src"
 done < <(find "$TEMPLATE_DIR" -type f -print0 | sort -z)
 
-if [[ -d "$TARGET_DIR/.agent/scripts" ]]; then
-  find "$TARGET_DIR/.agent/scripts" -type f -name "*.sh" -exec chmod +x {} \;
+if [[ -d "$TARGET_DIR/.agents/scripts" ]]; then
+  find "$TARGET_DIR/.agents/scripts" -type f -name "*.sh" -exec chmod +x {} \;
 fi
 
 echo
