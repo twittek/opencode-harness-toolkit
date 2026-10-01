@@ -25,7 +25,7 @@
   },
   "command": {
     "harness-init": {
-      "description": "Create an OpenCode agent harness after an adaptive German project interview.",
+      "description": "Create an OpenCode agent harness through adaptive, evidence-driven discovery.",
       "template": "Run the adaptive project harness initialization interview. Follow `.opencode/command/harness-init.md` exactly."
     },
     "harness-check": {

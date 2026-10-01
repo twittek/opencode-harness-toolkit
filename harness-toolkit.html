@@ -910,16 +910,16 @@ opencode
     <div class="container">
       <div class="box-section">
         <div class="section-head">
-          <h2>Adaptive Scenario Discovery</h2>
-          <p>The interview works like an Akinator-style diagnostic system: Bayesian inference updates scenario probabilities, while information-gain-based questioning asks the next question that reduces uncertainty the most.</p>
+          <h2>Adaptive Harness Discovery</h2>
+          <p>The interview maintains a multidimensional belief state, uses project evidence first and asks the eligible question with the highest expected weighted information gain.</p>
         </div>
 
         <div class="banner" style="box-shadow:none;margin-bottom:22px;">
-          <h2><span class="muted-line">Not a static questionnaire.</span><br><span class="blue-line">A Bayesian bootstrapping interview.</span></h2>
+          <h2><span class="muted-line">Not a static questionnaire.</span><br><span class="blue-line">Evidence-driven adaptive discovery.</span></h2>
           <div class="principles">
             <div class="principle">
               <h3>Bayesian inference</h3>
-              <p><strong>Field:</strong> probability theory and Bayesian statistics. Every answer updates the likelihood of possible development scenarios.</p>
+              <p><strong>Field:</strong> probability theory and Bayesian statistics. Every answer updates independent harness-relevant beliefs.</p>
             </div>
             <div class="principle">
               <h3>Information theory</h3>
@@ -943,27 +943,26 @@ opencode
             <div class="icon">✅</div>
             <h3>High-value early question</h3>
             <p><code>Are there external systems or integrations?</code></p>
-            <p>This partitions the scenario space early and decides whether integration policies, scripts or MCP discovery stay active.</p>
+            <p>This can reduce several integration uncertainties at once when repository evidence has not already answered them.</p>
           </div>
           <div class="card">
             <div class="icon">∑</div>
             <h3>Mathematical intuition</h3>
-            <p>A good question maximizes expected information gain and minimizes entropy in the remaining scenario distribution.</p>
+            <p>A good question maximizes weighted information gain over uncertainties that actually change the generated harness.</p>
           </div>
         </div>
 <div class="codebox" style="margin-top:18px;">
-          <pre><code>Bayesian inference updates beliefs.
-Information theory chooses the next best question.
-Decision-tree pruning removes irrelevant branches.
-Active learning makes the interview adaptive.</code></pre>
+          <pre><code>Repository evidence initializes beliefs.
+Information theory compares candidate questions.
+Safety constraints define which candidates are eligible.
+Topic pruning removes irrelevant discovery branches.</code></pre>
         </div>
 
         <div class="codebox" style="margin-top:18px;">
-          <pre><code>One question.
-One answer.
-Update the scenario model.
-Prune irrelevant branches.
-Ask the next best question.</code></pre>
+          <pre><code>Inspect evidence.
+Compare questions across active topics.
+Ask one maximum-value question.
+Update entropy and generation readiness.</code></pre>
         </div>
       </div>
     </div>
@@ -1031,13 +1030,13 @@ Ask the next best question.</code></pre>
         </div>
 
         <div class="codebox" style="margin-top:18px;">
-          <pre><code>.agents/context/integration-policy.md
-.agents/integrations/external-systems.md
-.agents/integrations/gitlab.md
-.agents/integrations/github.md
-.agents/integrations/jira.md
-.agents/scripts/gitlab-issue-comment.sh
-.agents/scripts/github-issue-comment.sh</code></pre>
+          <pre><code>.agent/context/integration-policy.md
+.agent/integrations/external-systems.md
+.agent/integrations/gitlab.md
+.agent/integrations/github.md
+.agent/integrations/jira.md
+.agent/scripts/gitlab-issue-comment.sh
+.agent/scripts/github-issue-comment.sh</code></pre>
         </div>
 
         <div class="cards" style="margin-top:18px;">
@@ -1088,13 +1087,13 @@ Ask the next best question.</code></pre>
         </div>
 
         <div class="codebox" style="margin-top:18px;">
-          <pre><code>.agents/context/role-activation-policy.md
-.agents/roles/security-engineer.md
-.agents/roles/ux-designer.md
-.agents/roles/accessibility-specialist.md
-.agents/roles/devops-engineer.md
-.agents/roles/integration-architect.md
-.agents/roles/domain-expert.md</code></pre>
+          <pre><code>.agent/context/role-activation-policy.md
+.agent/roles/security-engineer.md
+.agent/roles/ux-designer.md
+.agent/roles/accessibility-specialist.md
+.agent/roles/devops-engineer.md
+.agent/roles/integration-architect.md
+.agent/roles/domain-expert.md</code></pre>
         </div>
       </div>
     </div>
@@ -1199,12 +1198,12 @@ Tier 4: never load node_modules, dist, build, coverage, template, backups or log
           <div class="card">
             <div class="icon">📁</div>
             <h3>Stable policy files</h3>
-            <p><code>.agents/mcp/mcp-policy.md</code><br><code>.agents/mcp/mcp-registry.md</code><br><code>.agents/mcp/approved-mcp-servers.md</code></p>
+            <p><code>.agent/mcp/mcp-policy.md</code><br><code>.agent/mcp/mcp-registry.md</code><br><code>.agent/mcp/approved-mcp-servers.md</code></p>
           </div>
           <div class="card">
             <div class="icon">📝</div>
             <h3>Run artifacts</h3>
-            <p><code>.agents/runs/harness-mcp/&lt;date&gt;/mcp-recommendations.md</code><br><code>mcp-risk-review.md</code><br><code>mcp-installation-plan.md</code></p>
+            <p><code>.agent/runs/harness-mcp/&lt;date&gt;/mcp-recommendations.md</code><br><code>mcp-risk-review.md</code><br><code>mcp-installation-plan.md</code></p>
           </div>
           <div class="card">
             <div class="icon">🔒</div>

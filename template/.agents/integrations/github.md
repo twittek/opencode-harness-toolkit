@@ -47,7 +47,7 @@ gh CLI through approved wrapper scripts
 Prefer wrappers under:
 
 ```text
-.agents/scripts/github-*.sh
+.agent/scripts/github-*.sh
 ```
 
 Do not invent ad-hoc `gh` commands for write operations when a wrapper exists.

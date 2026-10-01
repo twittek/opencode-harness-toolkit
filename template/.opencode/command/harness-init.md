@@ -1,45 +1,5 @@
-## Mandatory Question Tool Policy
-
-The adaptive interview is designed for OpenCode's interactive question UI.
-
-For every interview step with predefined answer options:
-
-```text
-Use the OpenCode question tool first.
-```
-
-Plain A/B/C text is a fallback mode, not the primary mode.
-
-```text
-Using plain A/B/C text is a fallback mode, not the primary mode.
-Do not use fallback mode unless tool usage is unavailable.
-```
-
-Required behavior:
-
-```text
-1. Use the OpenCode question tool.
-2. Ask exactly one question.
-3. Provide selectable options.
-4. Include `Other / custom`.
-5. Wait for the user's selection.
-6. Update the scenario model.
-7. Ask the next best question.
-```
-
-Fallback behavior is only allowed when the question tool is unavailable or fails:
-
-```text
-1. State that fallback mode is being used.
-2. Render A/B/C options as plain text.
-3. Include `Other / custom`.
-4. Ask the user to answer with a letter or custom text.
-```
-
-Do not choose fallback mode merely because it is easier to render.
-
 ---
-description: "Initialize the project harness through a guided one-question-at-a-time setup assistant."
+description: "Initialize a project-specific harness through an adaptive, evidence-driven interview."
 ---
 
 # Harness Init Command
@@ -48,380 +8,410 @@ description: "Initialize the project harness through a guided one-question-at-a-
 
 Create the initial project-specific AI-agent harness.
 
-The purpose of the harness is fixed:
+The harness exists to make agent work reliable, controlled, repeatable and project-specific.
 
-```text
-To make an AI agent reliable, controlled, repeatable, and project-specific for this project.
-```
-
-Do not ask the user why a harness is needed. Ask what the project needs so the harness can be configured correctly.
+This command uses a genuinely adaptive interview. It must not run a fixed questionnaire or ask topic blocks in a predefined order.
 
 ## Language
 
-- Ask interview questions in German.
-- Write generated harness files in English.
-- Report results in German.
-
-## Integration & Tooling Discovery
-
-The adaptive interview must discover external systems early, because they strongly influence the generated harness.
-
-Use information-gain logic:
-
-Good early question:
-
 ```text
-Are there external systems or tools the agents should know about?
+interview questions → German
+generated harness files → English
+final report → German
 ```
 
-This can activate or prune large branches:
+## Required interview resources
+
+Read these files before starting discovery:
 
 ```text
-- issue tracking
-- code review
-- documentation systems
-- design systems
-- quality analysis
-- monitoring
-- CI/CD
-- cloud/deployment
-- MCP planning
-- wrapper scripts
+.agent/interview/interview-engine.md
+.agent/interview/interview-state-schema.md
+.agent/interview/topic-catalog.md
+.agent/interview/question-bank.md
+.agent/interview/inference-rules.md
+.agent/interview/scenario-taxonomy.md
 ```
 
-### One-question-at-a-time flow
+Load individual files under `.agent/interview/topics/` only when their catalog signals are present or their relevance remains uncertain and potentially important.
 
-Do not ask for all integration details at once.
+Do not load all topic packs by default.
 
-Recommended sequence:
-
-Question 1:
+## Non-negotiable adaptive behavior
 
 ```text
-Are there external systems or tools the agents should know about?
+No fixed first question.
+No fixed question order.
+No mandatory topic sequence.
+No automatic walk through every catalog question.
+Exactly one user question at a time.
+Every selected question must reduce harness-relevant uncertainty.
 ```
 
-Options:
+The current belief state determines the next question.
+
+## Phase 0: Resolve the discovery subject
+
+Determine what the harness is being created for before interpreting repository evidence.
+
+The default discovery subject is the product, application, service or bounded subproject in the target repository. The harness implementation itself is control infrastructure and must not be mistaken for the product merely because its files are prominent or richly documented.
+
+Classify evidence before using it:
 
 ```text
-A) No external systems
-B) Repository and code review only
-C) Work tracking / tickets
-D) Documentation / knowledge base
-E) Design / UX tools
-F) Quality / security / monitoring tools
-G) Multiple systems
-H) Other / custom
+product evidence
+→ product source, product README, domain documentation, manifests, tests, CI/CD and deployment files
+
+harness/control evidence
+→ AGENTS.md, .agent/**, .opencode/** and opencode.jsonc
+→ use for inherited rules, current harness state and bootstrap constraints
+→ do not use to infer the product's purpose, users, architecture or domain
+
+toolkit/package evidence
+→ template/**, toolkit installer files and toolkit maintenance documentation
+→ exclude from product discovery unless the user explicitly selects the toolkit itself as the product
 ```
 
-If the user selects a branch, ask exactly one follow-up question for that branch.
-
-Example:
+Record one discovery mode in the belief state:
 
 ```text
-Which repository and code review system do you use?
+target-product-bootstrap          default
+existing-harness-reinitialization only when explicitly requested or clearly evidenced
+toolkit-self-development          only when explicitly requested or clearly confirmed
 ```
 
-Options:
+Infer the subject from the user's request, workspace root and product evidence when possible. If the repository is a monorepo, contains both a toolkit and a product, or the intended target remains materially ambiguous, ask exactly one focused disambiguation question before product discovery. For example:
 
 ```text
-A) GitLab
-B) GitHub
-C) Azure DevOps
-D) Bitbucket
-E) Local Git only
-F) Other / custom
+Welche fachliche oder technische Lösung soll diese Harness unterstützen:
+das Produkt in diesem Repository, das Harness-Toolkit selbst oder ein bestimmtes Modul?
 ```
 
-Example:
+This is not a mandatory first question. Skip it whenever the subject can be established reliably from evidence.
+
+## Phase 1: Product evidence discovery
+
+After resolving the discovery subject, inspect evidence inside that boundary when it is safe and relevant:
 
 ```text
-Which work tracking system do you use?
+the user's request
+README and documentation
+repository and workspace structure
+build and dependency manifests
+test configuration
+CI/CD files
+deployment and infrastructure manifests
+Git remotes
+existing agent instructions, only as inherited constraints
+existing OpenCode configuration, only as runtime configuration
+existing harness or policy files, only as current control state
 ```
 
-Options:
+Do not make changes during evidence discovery.
 
-```text
-A) Jira
-B) GitLab Issues
-C) GitHub Issues
-D) Azure Boards
-E) Linear
-F) Other / custom
-```
-
-Example:
-
-```text
-Which documentation or knowledge system do you use?
-```
-
-Options:
-
-```text
-A) Confluence
-B) GitHub/GitLab Wiki
-C) Notion
-D) Markdown in repository
-E) SharePoint
-F) Other / custom
-```
-
-Example:
-
-```text
-Which design or UX system do you use?
-```
-
-Options:
-
-```text
-A) Figma
-B) Sketch
-C) Adobe XD
-D) Design files in repository
-E) No dedicated design system
-F) Other / custom
-```
-
-Example:
-
-```text
-Which quality, security or monitoring tools are relevant?
-```
-
-Options:
-
-```text
-A) SonarQube / SonarCloud
-B) Sentry
-C) Grafana / Prometheus
-D) Datadog
-E) OWASP / dependency scanning
-F) Other / custom
-```
-
-### Generated integration artifacts
-
-When external systems are present, generate or update:
-
-```text
-.agents/context/integration-policy.md
-.agents/integrations/external-systems.md
-```
-
-When a known system is selected, also generate or update the matching file:
-
-```text
-.agents/integrations/gitlab.md
-.agents/integrations/github.md
-.agents/integrations/jira.md
-.agents/integrations/confluence.md
-.agents/integrations/figma.md
-.agents/integrations/sonarqube.md
-```
-
-When wrappers are useful, generate or keep scripts under:
-
-```text
-.agents/scripts/
-```
+Extract facts, hypotheses and uncertainty into the belief state. Record the source and confidence of each inference.
 
 Examples:
 
 ```text
-.agents/scripts/gitlab-issue-comment.sh
-.agents/scripts/github-issue-comment.sh
-.agents/scripts/jira-issue-comment.example.sh
+package.json shows React and Playwright
+→ strong evidence for frontend and browser-test dimensions
+
+.gitlab-ci.yml and Kubernetes manifests exist
+→ strong evidence for delivery and operations relevance
+
+the repository contains an OAuth library
+→ security topic is relevant, but the intended authorization policy is not proven
 ```
 
-### Integration policy rules
+Do not ask the user to repeat reliable repository facts. Ask for confirmation only when an inference is ambiguous, conflicts with another source or changes permissions, risk or generated artifacts.
 
-The generated harness must document for each external system:
+## Phase 2: Initialize the belief state
+
+Build the multidimensional state described in:
 
 ```text
-- purpose
-- access method
-- read permissions
-- write permissions
-- approval requirements
-- forbidden operations
-- wrapper scripts
-- credential expectations without storing secrets
+.agent/interview/interview-state-schema.md
 ```
 
-Default:
+Do not force the project into a single exclusive scenario.
+
+For unresolved dimensions, maintain coarse normalized probabilities and calculate weighted entropy as defined by the interview engine.
+
+At minimum assess coverage for:
 
 ```text
-unknown system → no access
-write action → explicit approval required
-secret handling → never store secrets in harness files
+discovery subject
+project intent
+runtime context
+agent responsibilities
+autonomy and approval boundaries
+quality expectations
+integration access
+risk profile
 ```
 
-### MCP planning
+## Phase 3: Generate candidates
 
-If the user mentions MCP servers or asks for tool automation, document MCP candidates in:
+Use `topic-catalog.md` to activate relevant topic packs.
+
+Generate candidate questions from all active topics, not only the topic used by the previous question.
+
+A candidate must declare internally:
 
 ```text
-.agents/mcp/mcp-policy.md
+question id
+topic id
+dimensions it can resolve
+plausible answer branches
+estimated branch probabilities
+expected posterior entropy
+affected harness outputs
+interaction cost
+safety relevance
 ```
 
-Do not install MCP servers during `/harness-init`. Use `/harness-mcp` for controlled MCP discovery, risk review and installation planning.
+Candidate questions in topic packs are formulation patterns. Adapt them to the repository and current state. Create a project-specific candidate when it has greater expected information gain.
 
-Only create recommendations or installation plans unless the user explicitly requests an installation step.
+Discard redundant, irrelevant, dominated or premature candidates.
 
-## Context Loading Policy Discovery
+## Phase 4: Select the next question
 
-The generated harness must include a context loading strategy.
-
-A strong harness is not meant to be loaded fully for every task.
+For every eligible candidate, estimate:
 
 ```text
-How should the harness manage context loading?
+ExpectedPosteriorEntropy(q)
+  = Σ P(answer | state, q) × H_weighted(state after answer)
+
+InformationGain(q)
+  = H_weighted(current state) - ExpectedPosteriorEntropy(q)
+
+QuestionValue(q)
+  = InformationGain(q) / InteractionCost(q)
 ```
 
-Options:
+Select the eligible question with maximum `QuestionValue`.
+
+When command execution is available and approved, use `.agent/scripts/interview-ranker.py` to perform the entropy arithmetic deterministically. The LLM supplies the semantic belief distributions and hypothetical posteriors; the helper validates and ranks them.
+
+The objective is weighted harness-relevant entropy reduction, not generic curiosity.
+
+Safety constraints define eligibility. If a critical safety unknown exists, consider only candidates that can resolve a critical unknown, then choose maximum information gain among them.
+
+Do not claim exact mathematical certainty. Use coarse probability estimates consistently and preserve uncertainty when evidence is weak.
+
+## Phase 5: Ask one question
+
+For questions with predefined branches, use OpenCode's interactive question tool first.
+
+Required interaction:
 
 ```text
-A) Compact: load only baseline files and explicit task files
-B) Balanced: baseline plus relevant roles, integrations and policies
-C) Rich: use more harness context when the model has a large context window
-D) 128K optimized: modular loading with strong context hygiene
-E) Other / custom
+ask exactly one concise question
+provide selectable options when useful
+include Other / custom
+allow free text
+wait for the answer
 ```
 
-Default recommendation:
+Plain A/B/C text is fallback mode only when the question tool is unavailable or fails. State that fallback mode is being used.
+
+Free-text questions are allowed when options would constrain a novel or project-specific answer.
+
+Do not print internal probabilities, entropy tables or the full belief state unless the user asks.
+
+## Phase 6: Update and re-plan
+
+After every answer:
 
 ```text
-128K optimized: modular loading with strong context hygiene
+record explicit facts
+update every affected dimension
+normalize probability distributions
+recalculate weighted entropy
+activate newly relevant topics
+prune topics made irrelevant
+remove questions made redundant
+regenerate the complete candidate set
+select the new maximum-value question
 ```
+
+Never continue an earlier planned sequence when the answer changes candidate value.
+
+If one answer supplies several facts, consume all of them and avoid unnecessary follow-ups.
+
+Prefer a concise hypothesis-confirmation question when repository evidence can resolve several correlated dimensions at once.
+
+## Safety coverage
+
+Before generation, the final state must contain sufficient evidence for:
+
+```text
+what work the agent may perform
+which normal edits may be autonomous
+which external writes require approval
+which destructive or irreversible actions are forbidden
+whether production or sensitive data is relevant
+which checks and self-verification are required
+```
+
+An inherited organization or project policy may answer these questions without user interaction.
+
+Use safe defaults only for non-blocking uncertainty and expose every default in the final summary.
+
+## Stop criterion
+
+Do not use a fixed number of questions.
+
+Stop the interview when:
+
+```text
+criticalUnknowns is empty
+required output coverage is sufficient
+remaining uncertainty has safe documented defaults
+the best remaining candidate has QuestionValue below the stop threshold
+```
+
+Initial default:
+
+```text
+stopThreshold = 0.15
+```
+
+The threshold is a heuristic to be calibrated from later interview outcomes.
+
+Do not continue because unused questions remain in a topic pack.
+
+## Final summary and approval
+
+Before writing or modifying harness files, present a concise German summary:
+
+```text
+Zusammenfassung der geplanten Harness
+
+Zielprodukt und Geltungsbereich
+- ...
+
+Bestätigte Fakten
+- ...
+
+Aus Repository und Antworten abgeleitete Annahmen
+- ...
+
+Verwendete sichere Defaults
+- ...
+
+Agentenaufgaben und Rollen
+- ...
+
+Autonomie, Freigaben und Verbote
+- ...
+
+Quality Gates und Definition of Done
+- ...
+
+Integrationen und Zugriffsklassen
+- ...
+
+Zu erzeugende oder anzupassende Dateien
+- ...
+
+Verbleibende nicht-blockierende Unsicherheit
+- ...
+```
+
+Then ask exactly one approval question with these choices:
+
+```text
+Generate the harness
+Adjust assumptions
+Cancel
+```
+
+Generate files only after explicit approval.
+
+If the user selects adjustment, ask which assumption or area should change, update the belief state and resume adaptive selection.
+
+## Generation principles
+
+The final belief state drives generation. The question sequence does not.
+
+Generate only relevant roles, policies, playbooks, templates and integrations.
+
+Prefer the smallest coherent harness that satisfies the final state. Do not copy every optional template merely because it exists.
+
+Generated guidance must distinguish:
+
+```text
+confirmed project facts
+organization or project policies
+evidence-based inferences
+safe defaults
+open assumptions
+```
+
+## Integration generation
+
+When external systems are relevant, generate or update:
+
+```text
+.agent/context/integration-policy.md
+.agent/integrations/external-systems.md
+```
+
+Generate system-specific files only for selected systems:
+
+```text
+.agent/integrations/gitlab.md
+.agent/integrations/github.md
+.agent/integrations/jira.md
+.agent/integrations/confluence.md
+.agent/integrations/figma.md
+.agent/integrations/sonarqube.md
+```
+
+For each system document:
+
+```text
+purpose
+access method
+read permissions
+write permissions
+approval requirements
+forbidden operations
+credential expectations without secret values
+wrapper scripts when applicable
+```
+
+Do not install MCP servers during `/harness-init`. Use `/harness-mcp` for discovery, risk review and approved configuration changes.
+
+## Role generation
+
+Select the smallest useful role set from the final belief state.
+
+Store role descriptions under:
+
+```text
+.agent/roles/
+```
+
+Do not create `.opencode/agent/*.md` unless a separately validated OpenCode agent schema is explicitly requested.
+
+## Context-loading generation
 
 Generate or update:
 
 ```text
-.agents/context/context-loading-policy.md
+.agent/context/context-loading-policy.md
 ```
 
-Important rule:
+Keep modular context loading. A large context window is not permission to load the entire harness.
 
-```text
-The harness is a structured knowledge space, not one giant prompt.
-Do not load everything just because it fits.
-Use the smallest useful context set.
-```
+## Strict OpenCode config contract
 
-## Role Model Discovery
+When generating `opencode.jsonc`, preserve a schema-valid OpenCode configuration.
 
-The adaptive interview must identify which specialist roles the project harness needs.
-
-Use a high-information question:
-
-```text
-Which specialist perspectives should the harness include?
-```
-
-Options:
-
-```text
-A) Keep it minimal: architect, requirements, developer, tester, reviewer
-B) Security and compliance
-C) UX and accessibility
-D) DevOps and operations
-E) Integrations and external systems
-F) Data, analytics or reporting
-G) Domain expertise and business rules
-H) Multiple specialist roles
-I) Other / custom
-```
-
-Ask exactly one follow-up question for the selected branch.
-
-Examples:
-
-```text
-Does the project handle authentication, authorization, secrets or sensitive data?
-```
-
-```text
-Does the project include user-facing interfaces?
-```
-
-```text
-Does the project require deployment or operational support?
-```
-
-```text
-Does the project require domain-specific business knowledge?
-```
-
-### Generated role artifacts
-
-When roles are relevant, generate or update:
-
-```text
-.agents/context/role-activation-policy.md
-.agents/roles/
-```
-
-Core roles:
-
-```text
-.agents/roles/architect.md
-.agents/roles/requirements-engineer.md
-.agents/roles/developer.md
-.agents/roles/tester.md
-.agents/roles/reviewer.md
-```
-
-Specialist roles:
-
-```text
-.agents/roles/security-engineer.md
-.agents/roles/ux-designer.md
-.agents/roles/accessibility-specialist.md
-.agents/roles/devops-engineer.md
-.agents/roles/integration-architect.md
-.agents/roles/data-engineer.md
-.agents/roles/domain-expert.md
-.agents/roles/technical-writer.md
-.agents/roles/performance-engineer.md
-.agents/roles/observability-engineer.md
-.agents/roles/product-manager.md
-```
-
-Default:
-
-```text
-activate only relevant roles
-avoid role noise
-prefer the smallest useful role set
-```
-
-## Guided interview mode
-
-`/harness-init` must behave like a guided setup assistant.
-
-### Interaction rules
-
-- Ask exactly one question at a time.
-- Do not present long grouped question blocks.
-- Wait for the user's answer before asking the next question.
-- Use OpenCode's question tool for questions with predefined options.
-- If the ask/question tool is available, use selectable options.
-- If the ask/question tool is unavailable or fails, fall back to plain text A/B/C options.
-- Always include an `Other / custom` option when predefined options may not fit.
-- Let the user answer by selecting an option, typing the letter, or writing free text.
-- After every answer, silently update the project understanding and decide the next most relevant question.
-- Skip questions that are already answered by the user's previous responses.
-- Ask follow-up questions only when the answer changes generated files, safety rules, or workflow behavior.
-- Do not generate or modify files during the interview phase.
-- Do not generate the harness until the user explicitly confirms the final summary.
-
-### Strict OpenCode config contract
-
-When generating `opencode.jsonc`, generate a valid OpenCode project configuration from the start.
-
-Required top-level shape:
+Required shape for the supported OpenCode version:
 
 ```jsonc
 {
@@ -433,7 +423,7 @@ Required top-level shape:
 }
 ```
 
-Allowed optional top-level keys only when explicitly needed:
+Allowed optional top-level keys only when needed:
 
 ```text
 mcp
@@ -442,31 +432,14 @@ formatter
 lsp
 ```
 
-Do not invent OpenCode config keys.
-
-Forbidden top-level keys:
+Required lifecycle command entries:
 
 ```text
-agents
-agent
-commands
-permissions
-providers
-provider
-tools
-tool
-rules
-```
-
-Forbidden command properties:
-
-```text
-agent
-agents
-model
-permission
-permissions
-tools
+harness-init
+harness-check
+harness-update
+harness-retro
+harness-mcp
 ```
 
 Each command entry must contain only:
@@ -476,601 +449,121 @@ description
 template
 ```
 
-Required lifecycle commands:
-
-```jsonc
-"command": {
-  "harness-init": {
-    "description": "Initialize the project harness.",
-    "template": "Follow `.opencode/command/harness-init.md` exactly."
-  },
-  "harness-check": {
-    "description": "Audit the current harness version.",
-    "template": "Follow `.opencode/command/harness-check.md` exactly."
-  },
-  "harness-update": {
-    "description": "Apply active findings for the current harness version.",
-    "template": "Follow `.opencode/command/harness-update.md` exactly."
-  },
-  "harness-retro": {
-    "description": "Collect usage feedback for the current harness version.",
-    "template": "Follow `.opencode/command/harness-retro.md` exactly."
-  }
-}
-```
-
-Role descriptions must be stored under:
+For this supported config contract, do not introduce:
 
 ```text
-.agents/roles/
+agents
+agent
+commands
+permissions
+providers
+provider
+rules
 ```
 
-Do not create `.opencode/agent/*.md` and do not reference role files from `opencode.jsonc`.
+Do not silently replace a known working model or provider. When model configuration is unknown, preserve the existing value or ask only if it blocks generation.
 
-### Ask-tool preference
+## Required generated output
 
-For multiple-choice questions, use OpenCode's ask/question capability with selectable options whenever possible.
-
-Use this behavior conceptually:
+Generate or update the relevant subset of these stable artifacts:
 
 ```text
-Question title: Project type
-Question: Welche Art von Projekt ist das?
-Options:
-- Frontend-only application
-- Backend/API service
-- Fullstack application
-- CLI/tooling project
-- Library/package
-- Monorepo
-- Other / custom
+AGENTS.md
+opencode.jsonc
+.opencode/command/harness-init.md
+.opencode/command/harness-check.md
+.opencode/command/harness-update.md
+.opencode/command/harness-retro.md
+.opencode/command/harness-mcp.md
+.agent/context/project-profile.md
+.agent/context/harness-scope.md
+.agent/context/harness-version.json
+.agent/context/harness-changelog.md
+.agent/context/context-index.md
+.agent/context/definition-of-done.md
+.agent/context/autonomy-policy.md
+.agent/context/risk-profile.md
+.agent/context/context-safety-policy.md
+.agent/context/context-loading-policy.md
+.agent/context/self-verification-policy.md
+.agent/context/role-activation-policy.md
+.agent/playbooks/harness-update.md
+.agent/runs/.gitkeep
 ```
 
-If the ask/question tool is not available, render the same question as plain text:
+Generate additional role, playbook, integration, template and script files only when supported by the final belief state.
+
+Do not remove the adaptive interview engine or topic packs during generation.
+
+## Required post-generation checks
+
+Verify:
 
 ```text
-Frage 1: Welche Art von Projekt ist das?
-
-A) Frontend-only Anwendung
-B) Backend/API-Service
-C) Fullstack-Anwendung
-D) CLI-/Tooling-Projekt
-E) Library/Package
-F) Monorepo
-G) Sonstiges / eigene Beschreibung
-
-Bitte antworte mit A–G oder beschreibe es kurz frei.
+required files exist
+OpenCode config shape matches the supported contract
+all five lifecycle commands are registered
+role files are under .agent/roles/
+no unapproved MCP server was added or enabled
+generated guidance matches confirmed facts and disclosed assumptions
+project-profile and harness-scope identify the resolved target product or module
+harness/toolkit files were not used as product evidence unless explicitly selected as the subject
+irrelevant optional artifacts were not generated
+safety-critical dimensions are represented in policy files
 ```
 
-### Interview state
+Check the config for forbidden patterns and inspect every match rather than assuming all text matches are errors.
 
-Maintain an internal interview state with these fields:
+## Interview telemetry
 
-- project_goal
-- project_type
-- target_result
-- domain
-- users
-- tech_stack
-- frontend_stack
-- backend_stack
-- persistence
-- auth
-- deployment
-- git_hosting
-- issue_workflow
-- agent_responsibilities
-- autonomy_level
-- forbidden_actions
-- quality_gates
-- test_strategy
-- documentation_needs
-- special_tools
-- open_questions
-- skipped_sections
-
-Do not print the full state after every answer unless the user asks for it.
-
-### Initial question
-
-Start with this exact first question in German:
+When the approved harness enables interview telemetry, write a compact run artifact after generation containing:
 
 ```text
-Lass uns die Harness Schritt für Schritt aufsetzen.
-
-Frage 1: Welche Art von Projekt ist das?
-
-A) Frontend-only Anwendung
-B) Backend/API-Service
-C) Fullstack-Anwendung
-D) CLI-/Tooling-Projekt
-E) Library/Package
-F) Monorepo
-G) Sonstiges / eigene Beschreibung
-
-Bitte antworte mit A–G oder beschreibe es kurz frei.
+question ids and topics
+estimated entropy before and after each answer
+information-gain estimate
+dimensions updated
+topics activated and pruned
+stop reason
 ```
 
-If selectable options are available, present the same options as selectable choices.
+Do not include secrets, raw credentials or unnecessary free-text content.
 
-## Adaptive interview flow
+Telemetry is intended to calibrate the interview strategy later. It must not be used to claim model training or automatic learning in the bootstrap version.
 
-Ask questions in this order, but skip irrelevant sections based on previous answers.
-
-### 1. Project type
-
-Question:
-Welche Art von Projekt ist das?
-
-Options:
-- Frontend-only application
-- Backend/API service
-- Fullstack application
-- CLI/tooling project
-- Library/package
-- Monorepo
-- Other / custom
-
-Routing:
-- Frontend-only: skip backend, database, API deployment unless mentioned.
-- Backend/API: ask API, persistence, auth, deployment.
-- Fullstack: ask frontend and backend.
-- CLI/tooling: ask commands, inputs, outputs, test strategy.
-- Library/package: ask package manager, public/private usage, API surface, release process.
-- Monorepo: ask packages/apps and boundaries.
-
-### 2. Target result
-
-Question:
-Was soll am Ende entstehen?
-
-Options:
-- Learning project / experiment
-- Prototype
-- MVP
-- Internal tool
-- Production application
-- Migration/refactoring project
-- Other / custom
-
-Routing:
-- Learning/prototype: use lighter governance, but keep safety rules.
-- MVP/production: ask stricter questions about quality gates, tests, deployment, security.
-- Migration/refactoring: ask about existing constraints and regression safety.
-
-### 3. Domain and users
-
-Question:
-In welcher Domäne bewegt sich das Projekt und wer nutzt es?
-
-Options:
-- Consumer/web game
-- Internal business application
-- Customer-facing portal
-- Developer tooling
-- Data/AI workflow
-- Energy/utilities domain
-- Other / custom
-
-Ask a short free-text follow-up only if needed:
-Welche Nutzergruppen oder Rollen sind relevant?
-
-### 4. Tech stack
-
-Question:
-Welcher Tech Stack ist geplant oder vorhanden?
-
-Options:
-- React + Vite + TypeScript
-- Angular
-- Vue/Nuxt
-- Node/NestJS
-- Java/Spring
-- Python
-- Other / custom
-- Unknown yet
-
-Routing:
-- If frontend stack only: ask UI, tests, browser tooling.
-- If backend included: ask API style, persistence, auth.
-- If unknown: generate technology-neutral harness.
-
-### 5. Persistence
-
-Ask only if backend/fullstack/data project or user mentioned persistence.
-
-Question:
-Gibt es Persistenz oder Datenbankänderungen?
-
-Options:
-- No persistence
-- Local/browser storage only
-- SQL database
-- NoSQL database
-- Files/object storage
-- Existing database
-- Other / custom
-
-### 6. Authentication and permissions
-
-Ask only if users/accounts/security are relevant.
-
-Question:
-Gibt es Authentifizierung, Rollen oder Berechtigungen?
-
-Options:
-- No auth
-- Simple local/demo auth
-- OAuth/OIDC/Keycloak
-- Existing enterprise auth
-- Role-based permissions
-- Unknown yet
-- Other / custom
-
-### 7. Git and issue workflow
-
-Question:
-Welche Git-/Issue-Umgebung soll die Harness unterstützen?
-
-Options:
-- Git only, no issue automation
-- GitLab with glab
-- GitHub with gh
-- Local only
-- Not decided yet
-- Other / custom
-
-Routing:
-- GitLab: ask repository path and whether project ID is known.
-- GitHub: ask owner/repo if needed.
-- Local only: skip issue/MR automation.
-
-### 8. Agent responsibilities
-
-Question:
-Welche Arbeiten soll der Agent übernehmen?
-
-Options:
-- Requirements/refinement
-- Architecture planning
-- Implementation
-- Testing
-- Review
-- Documentation
-- Issue/MR communication
-- All of the above
-- Other / custom
-
-Allow multiple selections if the ask tool supports it. If not, ask the user to list letters.
-
-### 9. Autonomy level
-
-Question:
-Wie autonom darf der Agent arbeiten?
-
-Options:
-- Very cautious: ask before most edits
-- Balanced: edit normal project files, ask for risky actions
-- Implementation-focused: make scoped changes and run tests
-- Highly autonomous in sandbox only
-- Custom
-
-Default:
-Balanced.
-
-### 10. Forbidden actions
-
-Question:
-Welche Aktionen sollen grundsätzlich verboten oder genehmigungspflichtig sein?
-
-Options:
-- Merge/close/delete branches
-- Deployments
-- Dependency additions
-- Auth/permission changes
-- Database migrations
-- File deletions
-- Test weakening
-- Production data access
-- All safety defaults
-- Custom
-
-Allow multiple selections if possible. Default:
-All safety defaults.
-
-### 11. Quality gates
-
-Question:
-Welche Qualitätsprüfungen sollen als Standard gelten?
-
-Options:
-- lint
-- typecheck
-- unit tests
-- integration tests
-- e2e tests
-- build
-- accessibility checks
-- visual regression
-- manual smoke test
-- Other / custom
-
-Allow multiple selections if possible.
-
-### 12. Special tools
-
-Question:
-Welche zusätzlichen Tools soll die Harness berücksichtigen?
-
-Options:
-- Chrome DevTools MCP
-- GitLab/glab wrapper scripts
-- GitHub/gh wrapper scripts
-- Playwright
-- Cypress
-- Docker
-- Local LLM/LiteLLM/OpenCode setup
-- None
-- Other / custom
-
-### 13. Documentation needs
-
-Question:
-Welche Dokumentation soll der Agent pflegen oder erzeugen?
-
-Options:
-- README
-- Architecture notes
-- ADRs
-- Refinement documents
-- Test reports
-- MR descriptions
-- Changelog
-- User documentation
-- Other / custom
-
-## Completion criteria for the interview
-
-The interview is complete when enough information exists to safely generate:
-
-- OpenCode config
-- AGENTS.md
-- lifecycle commands
-- role descriptions
-- context files
-- playbooks
-- templates
-- quality gate scripts
-- optional GitLab/GitHub scripts
-
-Do not over-interview. Prefer a concise setup that can later be improved through `/harness-retro`.
-
-## Final summary and approval
-
-Before generating files, show a concise German summary:
-
-```text
-Zusammenfassung der geplanten Harness
-
-- Projektart:
-- Zielbild:
-- Domäne/Nutzer:
-- Tech Stack:
-- Git-/Issue-Workflow:
-- Agentenrollen:
-- Autonomie-Level:
-- Sicherheitsgrenzen:
-- Quality Gates:
-- Zusätzliche Tools:
-- Zu erzeugende Dateien:
-
-Soll ich die Harness jetzt mit diesen Annahmen erzeugen?
-```
-
-Options:
-- Yes, generate the harness
-- Adjust answers
-- Cancel
-
-If selectable options are available, use them.
-
-Only generate files after explicit confirmation such as:
-- "Ja"
-- "Generate"
-- "Erzeugen"
-- selecting "Yes, generate the harness"
-
-If the user chooses "Adjust answers", ask which section should be changed and continue the interview.
-
-## OpenCode config hardening rules
-
-The generated `opencode.jsonc` must be schema-safe.
-
-Mandatory rules:
-
-- Use `instructions` as an array:
-
-```jsonc
-"instructions": ["AGENTS.md"]
-```
-
-- Use `command`, not `commands`.
-- Use `permission`, not `permissions`.
-- Do not create an `agents` object/map in `opencode.jsonc`.
-- Do not add `agent` fields to command definitions.
-- Do not reference `.opencode/agent/*.md` from `opencode.jsonc`.
-- Do not invent OpenCode config keys.
-- Keep command definitions minimal: `description` and `template` only.
-- Keep provider/model configuration simple and do not modify global provider files.
-- Preserve existing known-good provider names unless the developer explicitly asks to change them.
-
-Allowed `opencode.jsonc` shape:
-
-```jsonc
-{
-  "$schema": "https://opencode.ai/config.json",
-  "model": "<provider>/<model>",
-  "instructions": ["AGENTS.md"],
-  "permission": {
-    "edit": "ask",
-    "bash": {
-      "git *": "allow",
-      "npm run *": "allow",
-      "pnpm *": "allow",
-      "npx *": "ask",
-      "rm *": "deny",
-      "*": "ask"
-    },
-    "external_directory": {
-      "~/secrets/**": "deny",
-      "*": "ask"
-    }
-  },
-  "command": {
-    "harness-init": {
-      "description": "Initialize the project harness.",
-      "template": "Follow `.opencode/command/harness-init.md` exactly."
-    },
-    "harness-check": {
-      "description": "Audit the current harness version.",
-      "template": "Follow `.opencode/command/harness-check.md` exactly."
-    },
-    "harness-update": {
-      "description": "Apply active findings for the current harness version.",
-      "template": "Follow `.opencode/command/harness-update.md` exactly."
-    },
-    "harness-retro": {
-      "description": "Collect usage feedback for the current harness version.",
-      "template": "Follow `.opencode/command/harness-retro.md` exactly."
-    }
-  }
-}
-```
-
-Forbidden `opencode.jsonc` patterns:
-
-```jsonc
-"instructions": "AGENTS.md"
-"agents": { "developer": ".opencode/agent/developer.md" }
-"commands": []
-"permissions": {}
-"command": { "x": { "agent": "developer" } }
-```
-
-If role files are needed, create them under:
-
-```text
-.agents/roles/
-```
-
-Do not create `.opencode/agent/*.md` unless the exact OpenCode agent file schema is explicitly known and requested by the developer.
-
-## Required generated output files
-
-Generate at least:
-
-- `AGENTS.md`
-- `opencode.jsonc`
-- `.opencode/command/harness-init.md`
-- `.opencode/command/harness-check.md`
-- `.opencode/command/harness-update.md`
-- `.opencode/command/harness-retro.md`
-- `.agents/context/project-profile.md`
-- `.agents/context/harness-scope.md`
-- `.agents/context/harness-version.json`
-- `.agents/context/harness-changelog.md`
-- `.agents/context/context-index.md`
-- `.agents/context/definition-of-done.md`
-- `.agents/context/autonomy-policy.md`
-- `.agents/context/risk-profile.md`
-- `.agents/context/context-safety-policy.md`
-- `.agents/roles/architect.md`
-- `.agents/roles/refinement.md`
-- `.agents/roles/developer.md`
-- `.agents/roles/tester.md`
-- `.agents/playbooks/refinement.md`
-- `.agents/playbooks/architecture.md`
-- `.agents/playbooks/development-best-practices.md`
-- `.agents/playbooks/testing.md`
-- `.agents/playbooks/review.md`
-- `.agents/playbooks/harness-check.md`
-- `.agents/playbooks/harness-update.md`
-- `.agents/playbooks/harness-retrospective.md`
-- `.agents/templates/refinement.md`
-- `.agents/templates/architecture-plan.md`
-- `.agents/templates/review-report.md`
-- `.agents/templates/test-report.md`
-- `.agents/templates/mr-description.md`
-- `.agents/scripts/quality-gates.sh`
-- `.agents/scripts/load-issue.sh`
-- `.agents/runs/.gitkeep`
-
-Generate optional files only when relevant.
-
-## Required post-generation self-check
-
-Before reporting success, verify:
-
-```bash
-grep -R '"agents"\|"commands"\|"permissions"\|"agent":\|"provider"\|"providers"' opencode.jsonc .opencode 2>/dev/null || true
-```
-
-The result must not show invalid OpenCode config keys.
-
-Also verify:
-
-- `opencode.jsonc` contains `"instructions": ["AGENTS.md"]`
-- `opencode.jsonc` contains `"command"`
-- `opencode.jsonc` contains `"permission"`
-- lifecycle command files exist
-- role files exist under `.agents/roles/`
-- no `.opencode/agent` directory was created
-- no unknown OpenCode config keys were generated
-
-If invalid keys are found, fix them before finishing.
-
-## Final response after generation
+## Final response
 
 Report in German:
 
-- that the guided interview was completed
-- what was created
-- where the harness files are
-- current harness version
-- whether the OpenCode config self-check passed
-- recommended next command: `/harness-check`
+```text
+that adaptive discovery completed
+which evidence sources were used
+how many questions were needed
+why the interview stopped
+what was generated or updated
+which assumptions and safe defaults remain
+current harness version
+whether post-generation checks passed
+recommended next command: /harness-check
+```
 
 ## Required self-verification
 
-Before reporting completion, perform a self-verification pass.
-
-Use:
+Before reporting completion, use:
 
 ```text
-.agents/context/self-verification-policy.md
+.agent/context/self-verification-policy.md
 ```
 
 Verify:
 
 ```text
-- requirement match: the result matches the user's request
-- only intended files/content were changed
-- relevant harness policies were followed
-- available checks/tests were run or explicitly skipped with a reason
-- remaining risks or assumptions are reported honestly
-```
-
-## Harness-init completion checklist
-
-Before completing `/harness-init`, verify:
-
-```text
-- requirement match: generated guidance matches the interview input
-- project profile reflects the selected scenario
-- role activation is justified
-- context loading policy exists
-- self-verification policy exists
-- OpenCode config uses valid top-level keys
-- lifecycle commands are registered
-- no unrelated template or backup noise was introduced
+the result matches the user's approved summary
+only intended files were changed
+the interview was adaptive rather than sequential
+candidate questions were compared before selection
+critical safety coverage was complete
+the OpenCode configuration remains valid
+available checks were run or skipped with an explicit reason
+remaining risks and assumptions are reported honestly
 ```

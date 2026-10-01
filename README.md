@@ -23,6 +23,7 @@ After running the toolkit script, your project gets an OpenCode command set:
 /harness-check   → audit the current harness version
 /harness-update  → apply active findings and increment the harness version
 /harness-retro   → collect usage feedback and create retro findings
+/harness-mcp     → discover and plan MCP usage with approval gates
 ```
 
 This gives you a full lifecycle:
@@ -31,6 +32,8 @@ This gives you a full lifecycle:
 Initialize → Check → Update → Retro → Check again
 ```
 
+MCP discovery is an optional approval-first branch of this lifecycle.
+
 Think of it like this:
 
 ```text
@@ -38,6 +41,7 @@ Think of it like this:
 /harness-check   = technical inspection / TÜV
 /harness-update  = controlled implementation of findings
 /harness-retro   = team retrospective / satisfaction-based improvement
+/harness-mcp     = controlled MCP discovery and installation planning
 ```
 
 ---
@@ -79,11 +83,13 @@ Then run:
 /harness-init
 ```
 
-The install script copies the toolkit files from:
+The install script copies the harness scaffold from:
 
 ```text
 opencode-harness-toolkit/template/
 ```
+
+`template/README.md` is toolkit maintenance documentation and is not installed. The target project's existing `README.md` remains untouched so `/harness-init` can use it as product evidence.
 
 into your project root. Existing files are backed up before being overwritten.
 
@@ -110,10 +116,15 @@ opencode-harness-toolkit/
     │       ├── harness-init.md
     │       ├── harness-check.md
     │       ├── harness-update.md
+    │       ├── harness-mcp.md
     │       ├── harness-retro.md
     └── .agents/
         ├── context/
         ├── interview/
+        │   ├── interview-engine.md
+        │   ├── interview-state-schema.md
+        │   ├── topic-catalog.md
+        │   └── topics/
         ├── playbooks/
         ├── roles/
         ├── scripts/
@@ -163,6 +174,16 @@ The script only performs these actions:
 - print next steps
 ```
 
+## Development checks
+
+Run the standard-library test suite from the toolkit directory:
+
+```bash
+PYTHONDONTWRITEBYTECODE=1 python3 -m unittest discover -s tests -v
+```
+
+The tests verify the entropy ranker, safety restrictions, modular topic contract, lifecycle-command registration and absence of the former fixed interview flow.
+
 ## Customizing the bootstrap
 
 To customize what gets installed, edit files directly under:
@@ -196,6 +217,11 @@ opencode.jsonc
 .opencode/command/harness-check.md
 .opencode/command/harness-update.md
 .opencode/command/harness-retro.md
+.opencode/command/harness-mcp.md
+.agents/interview/interview-engine.md
+.agents/interview/interview-state-schema.md
+.agents/interview/topic-catalog.md
+.agents/interview/topics/*.md
 .agents/context/harness-version.json
 .agents/context/harness-changelog.md
 .agents/playbooks/harness-update.md
@@ -208,10 +234,10 @@ opencode.jsonc
 After `/harness-init`, the project-specific harness should additionally contain files such as:
 
 ```text
-.opencode/agent/architect.md
-.opencode/agent/refinement.md
-.opencode/agent/developer.md
-.opencode/agent/tester.md
+.agents/roles/architect.md
+.agents/roles/requirements-engineer.md
+.agents/roles/developer.md
+.agents/roles/tester.md
 .agents/context/project-profile.md
 .agents/context/harness-scope.md
 .agents/context/context-index.md
@@ -232,247 +258,135 @@ Depending on the project, `/harness-init` may also create optional files for Git
 
 ---
 
-## Adaptive Scenario Discovery
+## Adaptive Harness Discovery
 
-Harness Toolkit does not use a static questionnaire. The interview follows an **Akinator-style adaptive discovery model**.
+`/harness-init` does not run a predefined questionnaire. It maintains a multidimensional belief state, uses repository evidence before asking questions and selects the next question by expected weighted information gain.
 
-The core idea:
-
-```text
-Ask the next question that reduces uncertainty the most.
-```
-
-This is inspired by:
+Before product discovery starts, the engine resolves the discovery subject: the product, service or bounded module the harness is intended to support. By default, `AGENTS.md`, `.agents/**`, `.opencode/**`, `opencode.jsonc`, toolkit templates and installer documentation are treated as control evidence—not as evidence for the product's purpose or architecture. If a monorepo or mixed toolkit/product repository leaves the target ambiguous, the engine asks one focused target question; otherwise it proceeds without it.
 
 ```text
-- Bayesian inference
-- entropy reduction
-- information gain
-- decision trees
-- active learning
-- adaptive questioning
+inspect evidence
+→ update beliefs
+→ activate relevant topic packs
+→ compare candidate questions
+→ ask the maximum-value question
+→ update entropy and prune topics
+→ stop when generation readiness is sufficient
 ```
 
-The agent starts with many possible development scenarios and uses every answer to update its hypothesis.
+### Multidimensional beliefs
 
-Example scenario candidates:
+Projects are not forced into one exclusive scenario such as "frontend project" or "enterprise application". The engine maintains uncertainty over independent dimensions:
 
 ```text
-frontend-learning-project
-browser-game-prototype
-production-saas-application
-internal-business-tool
-backend-api-service
-integration-heavy-enterprise-project
-data-ai-workflow
-legacy-migration
-library-package
-devops-automation
+project intent and delivery stage
+architecture and runtime
+users, domain and data sensitivity
+authentication and permissions
+external integrations
+agent responsibilities and autonomy
+quality gates and documentation
 ```
 
-After each answer, the agent updates which scenarios are more likely and prunes irrelevant branches.
+Repository evidence may resolve dimensions before the first question. A detected framework, CI pipeline or deployment manifest is recorded with its source and confidence instead of being asked again.
 
-### Mathematical foundations
+### Weighted entropy reduction
 
-The interview combines several related fields:
+For a dimension with hypotheses `i`, the engine uses Shannon entropy:
 
 ```text
-Bayesian inference
-→ probability theory and Bayesian statistics
-→ updates the likelihood of possible project scenarios after every answer
-
-Information gain and entropy reduction
-→ information theory
-→ selects the question that reduces uncertainty the most
-
-Decision trees and pruning
-→ machine learning, computer science and statistics
-→ removes irrelevant branches of the scenario space as soon as they become unlikely
-
-Active learning and adaptive questioning
-→ machine learning
-→ the system actively chooses the next most useful question instead of following a static form
+H(d) = -Σ p(i) × log2(p(i))
 ```
 
-A concise description:
+Total uncertainty is weighted by harness impact and risk:
 
 ```text
-Bayesian scenario inference meets information-gain-based questioning.
+H_weighted(state) = Σ H(d) × impact(d) × risk(d)
 ```
 
-Or in German:
+For every eligible candidate question:
 
 ```text
-Bayessche Szenario-Inferenz trifft auf informationsgewinnbasierte Fragenauswahl.
+InformationGain(q)
+  = H_weighted(current state)
+    - Σ P(answer | q) × H_weighted(state after answer)
+
+QuestionValue(q)
+  = InformationGain(q) / InteractionCost(q)
 ```
 
-This distinction is important:
+The optional `.agents/scripts/interview-ranker.py` helper performs this entropy arithmetic deterministically from LLM-supplied belief distributions and hypothetical posteriors. It uses only the Python standard library.
+
+The engine asks the eligible question with maximum value. Safety-critical unknowns constrain which candidates are eligible.
+
+This is not generic curiosity optimization. A question is valuable only when different answers change generated policies, roles, permissions, playbooks, quality gates or other harness artifacts.
+
+### Modular topic packs
+
+Discovery knowledge lives under:
 
 ```text
-Bayesian inference decides how beliefs change after an answer.
-Information theory decides which question is worth asking next.
-Decision-tree pruning decides which branches can be skipped.
-Active learning turns the interview into an adaptive process.
+.agents/interview/topics/
 ```
 
-Together, these ideas make the interview feel intelligent: the agent does not ask everything. It asks the question with the highest expected value for reducing uncertainty.
-
-### Why question order matters
-
-A weak early question is too specific:
+The initial catalog includes:
 
 ```text
-Do you use Oracle Spatial?
+discovery subject and evidence boundary
+project intent
+architecture
+frontend and UX
+backend and data
+security
+integrations
+delivery and operations
+quality and verification
+agent governance
+documentation
 ```
 
-This is a bad first question because it only helps if the project is already known to be GIS- or integration-heavy.
+Topic packs provide activation signals, uncertainty dimensions, evidence sources, candidate-question patterns, completion conditions and safe defaults. They are not interview blocks and define no global order.
 
-A stronger early question is:
+New topic packs can be added without changing the core engine.
+
+### Dynamic first question
+
+There is no hard-coded first question.
+
+For an existing repository, the first question may confirm a high-impact hypothesis:
 
 ```text
-Are there external systems or integrations?
+I found a Spring backend, an Angular frontend, GitLab CI and Kubernetes
+manifests. Should I treat this as an existing production system where the
+harness must prioritize regression safety and approval-gated deployments?
 ```
 
-This splits the project space much earlier. If the answer is "No", the agent can skip integration policies, MCP discovery, external credentials and wrapper scripts. If the answer is "Yes", those branches stay active.
+For an empty project, the highest-value first question may instead ask which outcome should be built.
 
-Another weak early question:
+### Stop criterion
+
+The interview stops when:
 
 ```text
-Do you use Vitest or Jest?
+no critical safety unknown remains
+required harness outputs can be generated
+remaining uncertainty has documented safe defaults
+the best remaining question has low expected information gain
 ```
 
-A better earlier question:
+It does not stop after a fixed number of questions and does not continue merely because unused catalog questions remain.
+
+### Interaction contract
 
 ```text
-Should automated tests be part of the quality gates?
+one question at a time
+OpenCode question tool for predefined choices
+free text when choices would constrain the answer
+Other / custom remains available
+no harness generation before final summary and explicit approval
 ```
 
-Only after the answer is "Yes" does it make sense to ask about the concrete test runner.
-
-Another weak early question:
-
-```text
-Should a GitLab issue comment be created with glab issue note?
-```
-
-A better earlier question:
-
-```text
-Which system do you use for work items and code reviews?
-```
-
-Options might be:
-
-```text
-A) GitLab
-B) GitHub
-C) Jira
-D) Azure DevOps
-E) Local only
-F) Other / custom
-```
-
-### Bayesian update behavior
-
-The agent should behave as if it maintains a probability distribution over possible project scenarios.
-
-Example answer:
-
-```text
-Frontend-only application
-```
-
-Likely scenarios increase:
-
-```text
-frontend-learning-project
-browser-game-prototype
-ui-prototype
-static-webapp
-```
-
-Less likely scenarios decrease:
-
-```text
-backend-api-service
-database-migration
-enterprise-integration-platform
-devops-automation-only
-```
-
-Pruned by default:
-
-```text
-database migrations
-enterprise auth
-backend deployment
-API contract governance
-```
-
-This is how the interview becomes short and intelligent: irrelevant branches disappear immediately.
-
-### Decision-tree pruning
-
-The interview should feel like a well-designed decision tree.
-
-Good:
-
-```text
-Does the application have a backend?
-```
-
-This can remove a large number of follow-up questions.
-
-Bad:
-
-```text
-If the application has a backend: does it use NestJS, and if yes, does it use PostgreSQL, and if yes, does it need migrations?
-```
-
-That violates the interview principle.
-
-The rule is:
-
-```text
-One question. One answer. Update the model. Ask the next best question.
-```
-
-### Step-by-step principle
-
-The interview must follow the Akinator principle:
-
-```text
-Is it an animal?
-```
-
-not:
-
-```text
-Is it an animal and, if yes, does it have four legs and, if yes, does it live in water?
-```
-
-For Harness Toolkit, this means:
-
-```text
-- exactly one question at a time
-- selectable OpenCode multiple-choice options whenever available
-- A/B/C fallback when selectable options are unavailable
-- always include Other / custom
-- no file generation before the final summary and explicit approval
-```
-
-### Real AI bootstrapping
-
-This is real bootstrapping:
-
-```text
-An AI identifies its own missing context,
-asks analytically optimized questions,
-closes the highest-value information gaps first,
-and then generates its own productive project harness.
-```
-
-The generated harness is not just a generic template. It is the first productive version of the project's agent operating system.
+The final belief state drives generation. The path of questions does not.
 
 ## Integration & Tooling Discovery
 
@@ -863,25 +777,22 @@ GitLab project with issues and MRs
 - one question at a time
 - selectable OpenCode ask/question options when available
 - A/B/C fallback when selectable options are unavailable
-- adaptive skip logic
+- repository evidence before questions
+- candidate comparison across modular topic packs
+- maximum weighted information gain per question
+- no fixed first question or topic order
 - no file generation during the interview
 - final summary before generation
 - explicit approval required before files are written
 ```
 
-Typical first question:
+The first question depends on available evidence. For an empty project it may be:
 
 ```text
-Welche Art von Projekt ist das?
-
-A) Frontend-only Anwendung
-B) Backend/API-Service
-C) Fullstack-Anwendung
-D) CLI-/Tooling-Projekt
-E) Library/Package
-F) Monorepo
-G) Sonstiges / eigene Beschreibung
+Was soll entstehen oder verändert werden, und welches Ergebnis soll am Ende erreicht sein?
 ```
+
+For an existing project it may instead confirm a repository-derived hypothesis that resolves several high-impact dimensions at once.
 
 ---
 
@@ -1356,7 +1267,7 @@ Recommended model strength:
 
 | Command | Recommended strength | Reason |
 |---|---|---|
-| `/harness-init` | very strong model recommended | Requires adaptive interviewing, scenario inference, tool/question usage, project-specific synthesis and coherent harness generation. |
+| `/harness-init` | very strong model recommended | Requires evidence extraction, adaptive belief updates, candidate ranking, tool/question usage and coherent harness generation. |
 | `/harness-check` | medium to strong model | Requires consistency checks, drift detection and policy reasoning. |
 | `/harness-update` | strong model recommended | Edits governance files and must avoid contradictions across the harness. |
 | `/harness-retro` | medium model for interview, strong model for consolidation | The interview itself is simpler; converting feedback into clean findings benefits from stronger reasoning. |

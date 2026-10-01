@@ -14,11 +14,11 @@ Do not modify harness files.
 
 Read current version from:
 
-`.agents/context/harness-version.json`
+`.agent/context/harness-version.json`
 
 Write reports under:
 
-`.agents/runs/harness-check/<current-version>/<date>/`
+`.agent/runs/harness-check/<current-version>/<date>/`
 
 If version is missing, use `unknown` and create a critical finding.
 
@@ -69,11 +69,16 @@ Inspect harness files:
 - `opencode.jsonc` or `opencode.json`
 - `.opencode/command/*.md`
 - `.opencode/agent/*.md`
-- `.agents/context/*.md`
-- `.agents/playbooks/*.md`
-- `.agents/templates/*.md`
-- `.agents/skills/*.md`
-- `.agents/scripts/*.sh`
+- `.agent/context/*.md`
+- `.agent/interview/*.md`
+- `.agent/interview/topics/*.md`
+- `.agent/roles/*.md`
+- `.agent/integrations/*.md`
+- `.agent/mcp/*.md`
+- `.agent/playbooks/*.md`
+- `.agent/templates/*.md`
+- `.agent/skills/*.md`
+- `.agent/scripts/*.sh`
 
 Check:
 - missing lifecycle files
@@ -85,6 +90,20 @@ Check:
 - GitLab/GitHub guardrail gaps
 - context strategy not 128K-friendly
 - version/changelog hygiene
+
+Check adaptive interview integrity:
+
+```text
+- no fixed first question or global question order
+- the belief state models independent dimensions and probabilities
+- weighted entropy and expected information gain are defined
+- candidate questions are compared across active topics
+- safety-critical unknowns constrain candidate eligibility
+- topic packs are modular and do not behave as mandatory blocks
+- repository evidence is used before asking redundant questions
+- generation readiness and a stop criterion are defined
+- all topic-catalog references resolve to existing files
+```
 
 Final response in German:
 - current version
@@ -99,7 +118,7 @@ Check whether the harness uses the smallest useful context set.
 Verify:
 
 ```text
-- .agents/context/context-loading-policy.md exists
+- .agent/context/context-loading-policy.md exists
 - Tier 1 baseline files are defined
 - role-aware loading rules exist
 - integration-aware loading rules exist
@@ -115,7 +134,7 @@ Before reporting completion, perform a self-verification pass.
 Use:
 
 ```text
-.agents/context/self-verification-policy.md
+.agent/context/self-verification-policy.md
 ```
 
 Verify:

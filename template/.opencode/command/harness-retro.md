@@ -14,11 +14,11 @@ Do not directly modify harness files. Use `/harness-update` to apply findings.
 
 Read current version from:
 
-`.agents/context/harness-version.json`
+`.agent/context/harness-version.json`
 
 Write to:
 
-`.agents/runs/harness-retro/<current-version>/<date>/`
+`.agent/runs/harness-retro/<current-version>/<date>/`
 
 Create:
 - `retro.md`
@@ -67,7 +67,7 @@ Before reporting completion, perform a self-verification pass.
 Use:
 
 ```text
-.agents/context/self-verification-policy.md
+.agent/context/self-verification-policy.md
 ```
 
 Verify:

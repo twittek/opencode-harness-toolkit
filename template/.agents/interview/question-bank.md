@@ -1,197 +1,68 @@
-# Question Bank
+# Candidate Question Guidance
 
-Questions should be selected by expected information gain, not by fixed order.
+Questions are generated from active topic packs and current project evidence. This file does not define an interview sequence.
 
-## High-value early questions
+## Candidate quality
+
+A strong candidate question:
 
 ```text
-Soll das Ergebnis produktiv betrieben werden?
+resolves one or more high-impact unknowns
+causes different answers to produce meaningfully different harness output
+can prune multiple downstream branches
+is answerable without unnecessary research
+does not repeat reliable evidence
+is concise enough to ask alone
 ```
 
+Weak candidates ask for implementation details before their topic is relevant or collect preferences that do not change the harness.
+
+## Candidate comparison
+
+Before asking a question, compare candidates from all active topics.
+
+For each candidate estimate:
+
 ```text
-Does the application have a backend?
+answer branches and their probabilities
+affected belief dimensions
+expected posterior entropy
+generated artifacts affected
+risk relevance
+interaction cost
 ```
 
+Select the eligible candidate with maximum weighted information gain per unit of interaction cost.
+
+## Dynamic formulation
+
+Topic-pack questions are starting points. Adapt wording and options to the observed project.
+
+Prefer:
+
 ```text
-Gibt es echte Nutzer, Rollen oder Berechtigungen?
+I found GitLab CI and Kubernetes manifests. Are deployments managed by this
+repository, and should deployment changes always require approval?
 ```
 
+over:
+
 ```text
-Are there external systems or integrations?
+Do you use CI/CD?
 ```
 
-```text
-Ist es ein Neubau, eine Erweiterung, eine Migration oder ein Refactoring?
-```
+The first form confirms evidence and resolves governance impact in one answer.
+
+## Multi-fact answers
+
+When an answer resolves several dimensions, update all of them. Do not ask follow-up questions for facts the user already supplied.
+
+## Required interaction behavior
 
 ```text
-Soll der Agent Code ändern oder primär planen/dokumentieren?
-```
-
-## Lower-value detail questions
-
-Ask later only if the branch is active:
-
-```text
-Welche konkrete Testlibrary nutzt ihr?
-```
-
-```text
-Welche konkrete Datenbank?
-```
-
-```text
-Welcher konkrete MCP-Server?
-```
-
-```text
-Welcher konkrete GitLab-Befehl?
-```
-
-## Integration discovery questions
-
-High-value early question:
-
-```text
-Are there external systems or tools the agents should know about?
-```
-
-Repository and review branch:
-
-```text
-Which repository and code review system do you use?
-```
-
-Work tracking branch:
-
-```text
-Which work tracking system do you use?
-```
-
-Documentation branch:
-
-```text
-Which documentation or knowledge system do you use?
-```
-
-Design branch:
-
-```text
-Which design or UX system do you use?
-```
-
-Quality branch:
-
-```text
-Which quality, security or monitoring tools are relevant?
-```
-
-Avoid asking for CLI commands before the system itself is known.
-
-## MCP discovery questions
-
-Use these questions in `/harness-mcp`.
-
-```text
-Which MCP outcome do you want?
-```
-
-Options:
-
-```text
-A) Document existing MCP servers only
-B) Recommend useful MCP servers
-C) Create an installation plan
-D) Review an MCP server before approval
-E) Update OpenCode MCP config after approval
-F) Other / custom
-```
-
-```text
-Which external systems should MCP support first?
-```
-
-Options:
-
-```text
-A) GitLab / GitHub
-B) Jira / work tracking
-C) Confluence / documentation
-D) Figma / design
-E) Browser automation
-F) Filesystem / local tools
-G) Database / analytics
-H) Other / custom
-```
-
-## Role model discovery questions
-
-High-value early question:
-
-```text
-Which specialist perspectives should the harness include?
-```
-
-Options:
-
-```text
-A) Keep it minimal: architect, requirements, developer, tester, reviewer
-B) Security and compliance
-C) UX and accessibility
-D) DevOps and operations
-E) Integrations and external systems
-F) Data, analytics or reporting
-G) Domain expertise and business rules
-H) Multiple specialist roles
-I) Other / custom
-```
-
-Follow-up questions:
-
-```text
-Does the project handle authentication, authorization, secrets or sensitive data?
-Does the project include user-facing interfaces?
-Does the project require deployment or operational support?
-Does the project require domain-specific business knowledge?
-```
-
-## Context loading questions
-
-```text
-How should the harness manage context loading?
-```
-
-Options:
-
-```text
-A) Compact: load only baseline files and explicit task files
-B) Balanced: baseline plus relevant roles, integrations and policies
-C) Rich: use more harness context when the model has a large context window
-D) 128K optimized: modular loading with strong context hygiene
-E) Other / custom
-```
-
-## Self-verification questions
-
-High-value verification question:
-
-```text
-How strict should final self-verification be?
-```
-
-Options:
-
-```text
-A) Lightweight: short requirement check before final response
-B) Standard: requirement match, changed files and checks run
-C) Strict: requirement traceability, tests/checks, risks and assumptions
-D) Regulated: evidence-based verification and explicit approval points
-E) Other / custom
-```
-
-Default recommendation:
-
-```text
-Standard for normal projects.
-Strict for harness changes, integrations, MCP, security-sensitive work or production-adjacent systems.
+ask exactly one question at a time
+use the question tool for predefined choices
+include Other / custom
+allow free-text answers
+do not reveal internal scoring unless requested
 ```

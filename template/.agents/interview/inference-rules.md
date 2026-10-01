@@ -1,176 +1,64 @@
-# Inference Rules
+# Cross-Topic Inference Rules
 
-## Frontend-only
+Topic packs contain domain-specific routing guidance. These rules apply across topics.
 
-If the project is frontend-only, increase:
+## Evidence before questions
 
-- frontend-learning-project
-- browser-game-prototype
-- internal-ui-tool
+Inspect safe repository evidence before asking. Treat detected technology as strong evidence, not unquestionable truth.
 
-Decrease:
-
-- backend-api-service
-- database-migration
-- integration-heavy-enterprise-project
-
-Prune unless contradicted:
-
-- backend deployment
-- database migrations
-- API contract governance
-- enterprise auth
-
-## Production
-
-If the project is production-bound, increase:
-
-- security-engineer role
-- quality gates
-- deployment policy
-- observability policy
-- dependency governance
-
-## Learning or prototype
-
-If learning/prototype, increase:
-
-- fast feedback
-- lightweight quality gates
-- simple documentation
-
-Prune:
-
-- formal release management
-- production monitoring
-- enterprise governance
-
-## External systems exist
-
-If external systems are present, increase:
-
-- integration-policy
-- wrapper-scripts
-- MCP-planning
-- access-boundaries
-- credential-policy
-
-Keep:
-
-- .agents/context/integration-policy.md
-- .agents/integrations/external-systems.md
-- .agents/mcp/mcp-policy.md
-
-If GitLab is selected, keep:
-
-- .agents/integrations/gitlab.md
-- .agents/scripts/gitlab-issue-comment.sh
-
-If GitHub is selected, keep:
-
-- .agents/integrations/github.md
-- .agents/scripts/github-issue-comment.sh
-
-If Jira is selected, keep:
-
-- .agents/integrations/jira.md
-- .agents/scripts/jira-issue-comment.example.sh
-
-If no external systems are present, prune:
-
-- integration-specific wrapper scripts
-- MCP discovery
-- external documentation access
-- issue tracker automation
-
-## Role model inference
-
-If authentication, authorization, secrets or sensitive data are present, keep:
+## Relevance propagation
 
 ```text
-security-engineer
-reviewer
-integration-architect when external systems are involved
+production relevance
+→ increase security, verification, delivery and observability relevance
+
+external systems
+→ increase integration, credential and external-write governance relevance
+
+user-facing interface
+→ increase UX, accessibility and end-to-end quality relevance
+
+sensitive data or authentication
+→ make security coverage blocking before generation
+
+migration or refactoring
+→ increase regression, compatibility and architecture-boundary relevance
+
+agent write responsibilities
+→ increase autonomy, approval and self-verification relevance
 ```
 
-If user-facing UI is present, keep:
+## Safe pruning
+
+Prune a topic only when:
 
 ```text
-ux-designer
-accessibility-specialist
-tester
+reliable evidence makes it not applicable
+its possible answers would not change harness output
+an inherited policy already determines its result
 ```
 
-If CI/CD, deployment or operations are present, keep:
+Do not prune merely because a topic is uncommon.
+
+## Safe defaults
+
+Use defaults only for non-blocking uncertainty and list them in the final summary.
+
+Default direction:
 
 ```text
-devops-engineer
-observability-engineer
-security-engineer for production-adjacent changes
+unknown external write → approval required
+unknown destructive action → forbidden
+unknown production access → no access
+unknown secret handling → no secret material in harness files
+unknown verification level → standard verification
+unknown role activation → smallest useful role set
 ```
 
-If external systems or automation are present, keep:
+## Conflict handling
 
-```text
-integration-architect
-security-engineer
-```
+When evidence conflicts, prefer the higher-precedence source defined in `interview-state-schema.md`. Ask one clarification question when the conflict changes permissions, safety or generated artifacts.
 
-If data pipelines, reporting or migrations are present, keep:
+## No fixed flow
 
-```text
-data-engineer
-tester
-performance-engineer when data size or latency matters
-```
-
-If business rules or specialized terminology are present, keep:
-
-```text
-domain-expert
-requirements-engineer
-product-manager
-```
-
-## Context loading inference
-
-If the model has a large context window such as 128K, do not infer that the whole harness should always be loaded.
-
-Prefer:
-
-```text
-128K optimized
-modular loading
-strong context hygiene
-smallest useful context set
-```
-
-Prune from automatic context:
-
-```text
-node_modules
-dist
-build
-coverage
-template
-*.bak.*
-.DS_Store
-```
-
-## Self-verification inference
-
-If the task changes files, configuration, generated artifacts, lifecycle commands, MCP settings or integration behavior, require at least standard self-verification.
-
-Prefer strict self-verification when the task touches:
-
-```text
-- harness policies
-- OpenCode configuration
-- MCP configuration
-- external systems
-- security, secrets or permissions
-- generated release artifacts
-- production-adjacent workflows
-```
-
-Never infer that verification can be skipped because the task appears simple.
+Inference rules activate and prune candidates. They must never impose a global question order.

@@ -112,6 +112,8 @@ The harness is a structured knowledge space, not one giant prompt.
 For 128K context windows, do not load everything just because it fits.
 Use the smallest useful context set.
 
+For `/harness-init`, load `.agents/interview/topic-catalog.md` first and load individual `.agents/interview/topics/*.md` files only when their routing signals make them relevant.
+
 ## Role model
 
 The harness uses role files under:
@@ -166,3 +168,28 @@ Do not use fallback mode unless tool usage is unavailable.
 ```
 
 Always ask exactly one question at a time and include `Other / custom`.
+
+## Adaptive interview policy
+
+`/harness-init` must use `.agents/interview/interview-engine.md` and the modular topic packs under `.agents/interview/topics/`.
+
+Required behavior:
+
+```text
+- inspect available project evidence before asking
+- maintain a multidimensional belief state
+- compare candidate questions across all active topics
+- select the eligible question with maximum weighted information gain
+- recalculate candidates after every answer
+- stop based on generation readiness, not a fixed question count
+```
+
+Forbidden behavior:
+
+```text
+- fixed first question
+- fixed topic or question order
+- walking through every topic pack
+- asking for facts already established by reliable evidence
+- claiming Bayesian selection without comparing candidate questions
+```

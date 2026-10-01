@@ -19,6 +19,11 @@ copy_file() {
   local rel="${src#$TEMPLATE_DIR/}"
   local dst="$TARGET_DIR/$rel"
 
+  if [[ "$rel" == "README.md" ]]; then
+    echo "skipped:   $rel (toolkit maintenance documentation)"
+    return 0
+  fi
+
   mkdir -p "$(dirname "$dst")"
 
   if [[ -e "$dst" ]]; then
@@ -46,7 +51,7 @@ fi
 
 echo
 echo "OpenCode harness toolkit installed."
-echo "OpenCode Harness Toolkit version: v38"
+echo "OpenCode Harness Toolkit version: v40"
 echo
 echo "Target:"
 echo "  $TARGET_DIR"
@@ -62,4 +67,5 @@ echo "       /harness-check"
 echo
 echo "Notes:"
 echo "  - Existing files are backed up with suffix: $BACKUP_SUFFIX"
+echo "  - The target project's README.md is never overwritten."
 echo "  - This install script is template-based; edit files under template/ to customize the toolkit package."

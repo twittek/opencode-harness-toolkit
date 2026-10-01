@@ -46,5 +46,5 @@ Jira MCP server, Jira CLI or approved API wrapper scripts
 Prefer wrappers under:
 
 ```text
-.agents/scripts/jira-*.sh
+.agent/scripts/jira-*.sh
 ```
