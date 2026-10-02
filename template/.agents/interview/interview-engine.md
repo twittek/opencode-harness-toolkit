@@ -216,6 +216,7 @@ production or sensitive-data relevance
 required completion checks
 forbidden or irreversible actions
 the project-specific role set
+machine-evaluable policy rules and their required evidence
 ```
 
 A safety fact may come from an inherited organization policy, repository policy or user answer. Do not ask again when an authoritative source already supplies it.
@@ -309,6 +310,7 @@ Suggested decision rule:
 ready = criticalUnknowns is empty
         AND discoverySubject is sufficient
         AND roleSelection is sufficient
+        AND policyEvaluability is sufficient
         AND requiredOutputCoverage is complete
         AND maxRemainingQuestionValue < stopThreshold
 ```

@@ -137,6 +137,9 @@ After generating the harness, verify:
 - policies are present
 - no forbidden OpenCode config keys are introduced
 - generated guidance matches the interview input
+- policy registry validation passes
+- normative policy statements map to deterministic rule ids
+- missing evidence remains UNKNOWN rather than PASS
 ```
 
 ### /harness-check

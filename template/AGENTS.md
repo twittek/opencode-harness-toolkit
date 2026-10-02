@@ -134,6 +134,14 @@ Generate only confirmed roles under `.agents/roles/` and describe their routing 
 
 Do not copy or generate the entire role catalog. The final `AGENTS.md` must reference only roles that actually exist in the initialized project.
 
+## Machine-evaluable policies
+
+Use `.agents/policies/policy-contract.md` when `/harness-init` generates policies or compliance requirements.
+
+Normative prose is not sufficient. Every mandatory, forbidden or approval-gated behavior must map to a versioned rule in `.agents/policies/policy-registry.json` with typed signals, deterministic predicates, explicit unknown handling and reason codes.
+
+Missing evidence is `UNKNOWN`, never compliant by default. Decision-model output may be a declared signal, but the policy evaluator and configured thresholds determine the result and recommended action.
+
 ## Interactive question tool policy
 
 For any harness interview question with predefined options, use OpenCode's question tool first.

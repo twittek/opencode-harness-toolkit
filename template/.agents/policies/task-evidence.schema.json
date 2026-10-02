@@ -1,0 +1,31 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://opencode-harness.local/schemas/task-evidence.schema.json",
+  "title": "OpenCode Harness Task Evidence",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["taskId", "facts"],
+  "properties": {
+    "taskId": { "type": "string", "minLength": 1 },
+    "capturedAt": { "type": "string", "format": "date-time" },
+    "facts": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["value", "source", "observedAt", "provenance"],
+        "properties": {
+          "value": {},
+          "source": { "enum": ["observer", "decision-model", "static-policy"] },
+          "observedAt": { "type": "string", "format": "date-time" },
+          "provenance": {
+            "type": "object",
+            "additionalProperties": {
+              "type": ["string", "number", "integer", "boolean"]
+            }
+          }
+        }
+      }
+    }
+  }
+}

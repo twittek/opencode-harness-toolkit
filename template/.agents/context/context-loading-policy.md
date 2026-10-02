@@ -31,7 +31,10 @@ AGENTS.md
 ```text
 .agents/context/role-activation-policy.md
 .agents/context/integration-policy.md
+.agents/context/compliance-policy.md
 .agents/mcp/mcp-policy.md
+.agents/policies/policy-registry.json
+.agents/policies/policy-contract.md
 .agents/roles/*.md
 .agents/integrations/*.md
 .agents/interview/*.md

@@ -30,7 +30,7 @@ copy_file() {
   fi
 
   case "$rel" in
-    AGENTS.md|opencode.jsonc|.opencode/command/*.md|.agents/interview/*.md|.agents/interview/topics/*.md|.agents/context/context-loading-policy.md|.agents/context/self-verification-policy.md|.agents/scripts/interview-ranker.py)
+    AGENTS.md|opencode.jsonc|.opencode/command/*.md|.agents/interview/*.md|.agents/interview/topics/*.md|.agents/policies/policy-contract.md|.agents/policies/policy-registry.schema.json|.agents/policies/task-evidence.schema.json|.agents/policies/evaluation-result.schema.json|.agents/context/context-loading-policy.md|.agents/context/self-verification-policy.md|.agents/scripts/interview-ranker.py|.agents/scripts/policy-evaluator.py)
       ;;
     *)
       echo "deferred:  $rel (generated selectively by /harness-init)"
@@ -60,12 +60,12 @@ while IFS= read -r -d '' src; do
 done < <(find "$TEMPLATE_DIR" -type f -print0 | sort -z)
 
 if [[ -d "$TARGET_DIR/.agents/scripts" ]]; then
-  find "$TARGET_DIR/.agents/scripts" -type f -name "*.sh" -exec chmod +x {} \;
+  find "$TARGET_DIR/.agents/scripts" -type f \( -name "*.sh" -o -name "*.py" \) -exec chmod +x {} \;
 fi
 
 echo
 echo "OpenCode harness toolkit installed."
-echo "OpenCode Harness Toolkit version: v41"
+echo "OpenCode Harness Toolkit version: v42"
 echo
 echo "Target:"
 echo "  $TARGET_DIR"

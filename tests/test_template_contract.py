@@ -26,9 +26,12 @@ class TemplateContractTest(unittest.TestCase):
     def test_topic_catalog_is_modular(self):
         topics = sorted((TEMPLATE / ".agents/interview/topics").glob("*.md"))
         content_topics = [path for path in topics if path.name != "README.md"]
-        self.assertGreaterEqual(len(content_topics), 11)
+        self.assertGreaterEqual(len(content_topics), 12)
         self.assertIn(
             "discovery-subject.md", {path.name for path in content_topics}
+        )
+        self.assertIn(
+            "compliance-observability.md", {path.name for path in content_topics}
         )
         ids = []
         for topic in content_topics:
@@ -75,6 +78,11 @@ class TemplateContractTest(unittest.TestCase):
             ".agents/interview/inference-rules.md",
             ".agents/interview/scenario-taxonomy.md",
             ".agents/scripts/interview-ranker.py",
+            ".agents/policies/policy-contract.md",
+            ".agents/policies/policy-registry.schema.json",
+            ".agents/policies/task-evidence.schema.json",
+            ".agents/policies/evaluation-result.schema.json",
+            ".agents/scripts/policy-evaluator.py",
         ]
         for relative in required:
             self.assertTrue((TEMPLATE / relative).is_file(), relative)
@@ -102,6 +110,29 @@ class TemplateContractTest(unittest.TestCase):
         self.assertIn("It is not a list of roles that must all be installed", catalog)
         self.assertTrue(bootstrap_agents.startswith("<!-- harness-bootstrap: true -->"))
         self.assertIn("Treat stale bootstrap instructions", check)
+
+    def test_policy_generation_is_machine_evaluable(self):
+        command = (TEMPLATE / ".opencode/command/harness-init.md").read_text()
+        contract = (TEMPLATE / ".agents/policies/policy-contract.md").read_text()
+        check = (TEMPLATE / ".opencode/command/harness-check.md").read_text()
+
+        self.assertIn("## Policy and compliance generation", command)
+        self.assertIn("The JSON registry is the normative source", command)
+        self.assertIn("UNKNOWN", contract)
+        self.assertIn("NOT_APPLICABLE", contract)
+        self.assertIn("violationScore", contract)
+        self.assertIn("minimumCoverage", contract)
+        self.assertIn("## Policy evaluability checks", check)
+
+        json.loads(
+            (TEMPLATE / ".agents/policies/policy-registry.schema.json").read_text()
+        )
+        json.loads(
+            (TEMPLATE / ".agents/policies/task-evidence.schema.json").read_text()
+        )
+        json.loads(
+            (TEMPLATE / ".agents/policies/evaluation-result.schema.json").read_text()
+        )
 
     def test_installer_preserves_target_readme(self):
         installer = ROOT / "opencode-harness-toolkit-install.sh"
@@ -142,6 +173,18 @@ class TemplateContractTest(unittest.TestCase):
             )
             self.assertTrue(
                 (target / ".agents/context/self-verification-policy.md").is_file()
+            )
+            self.assertTrue(
+                (target / ".agents/policies/policy-contract.md").is_file()
+            )
+            self.assertTrue(
+                (target / ".agents/policies/task-evidence.schema.json").is_file()
+            )
+            self.assertTrue(
+                (target / ".agents/scripts/policy-evaluator.py").is_file()
+            )
+            self.assertFalse(
+                (target / ".agents/policies/policy-registry.json").exists()
             )
             self.assertEqual(
                 list((target / ".agents/roles").glob("*.md")), []

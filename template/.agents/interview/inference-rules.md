@@ -26,6 +26,12 @@ migration or refactoring
 
 agent write responsibilities
 → increase autonomy, approval and self-verification relevance
+
+normative requirements or compliance obligations
+→ activate compliance observability, typed signal discovery and policy operationalization
+
+decision-model classification
+→ treat model output as a versioned signal; keep thresholding and enforcement deterministic
 ```
 
 ## Safe pruning

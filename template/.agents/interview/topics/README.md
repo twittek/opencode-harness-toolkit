@@ -19,3 +19,5 @@ Candidate questions are optional templates. The interview engine may adapt or re
 Do not encode a mandatory internal order. Use prerequisites only when one fact is genuinely required to interpret another.
 
 Safety topics may declare blocking dimensions that must be resolved from evidence, policy or a user answer before generation.
+
+Topics that produce normative requirements must also activate `compliance-observability.md`. Their rules must be expressible through the machine-evaluable policy contract with typed signals, deterministic predicates and explicit unknown handling. Ambiguous prose is not an enforceable policy.
