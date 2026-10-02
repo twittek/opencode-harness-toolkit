@@ -10,15 +10,15 @@ activation: always-considered
 prerequisites:
   - discovery.subject
 outputs:
-  - .agent/context/project-profile.md
-  - .agent/context/harness-scope.md
+  - .agents/context/project-profile.md
+  - .agents/context/harness-scope.md
 ---
 
 # Project Intent
 
 Resolve what should be built or changed, why it matters, who uses it and how mature the intended result must be.
 
-Evaluate this topic only inside the resolved discovery-subject boundary. Do not infer product intent from `AGENTS.md`, `.agent/**`, `.opencode/**`, `opencode.jsonc`, toolkit templates or installer documentation. Those sources describe the control system unless the toolkit itself is the confirmed product.
+Evaluate this topic only inside the resolved discovery-subject boundary. Do not infer product intent from `AGENTS.md`, `.agents/**`, `.opencode/**`, `opencode.jsonc`, toolkit templates or installer documentation. Those sources describe the control system unless the toolkit itself is the confirmed product.
 
 ## Evidence signals
 

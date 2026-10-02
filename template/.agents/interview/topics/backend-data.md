@@ -12,9 +12,9 @@ activation-signals:
   - database-schema
   - data-pipeline
 outputs:
-  - .agent/roles/data-engineer.md
-  - .agent/playbooks/development-best-practices.md
-  - .agent/playbooks/testing.md
+  - .agents/roles/data-engineer.md
+  - .agents/playbooks/development-best-practices.md
+  - .agents/playbooks/testing.md
 ---
 
 # Backend and Data

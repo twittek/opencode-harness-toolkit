@@ -34,7 +34,7 @@ product evidence
 → may establish purpose, users, domain, architecture, runtime and delivery expectations
 
 harness/control evidence
-→ AGENTS.md, .agent/**, .opencode/** and opencode.jsonc
+→ AGENTS.md, .agents/**, .opencode/** and opencode.jsonc
 → may establish inherited rules, bootstrap state and runtime constraints
 → must not establish product identity or product architecture by itself
 
@@ -130,7 +130,7 @@ Do not maximize generic curiosity. Reduce uncertainty that changes the generated
 Create candidates from all currently relevant topic packs under:
 
 ```text
-.agent/interview/topics/
+.agents/interview/topics/
 ```
 
 Topic-pack questions are examples and reusable candidates, not mandatory blocks. The LLM may formulate a better project-specific question when it resolves the same dimensions more efficiently.
@@ -187,7 +187,7 @@ The probability estimates are beliefs, not facts. Keep them coarse and honest. T
 For exact entropy arithmetic, use the optional standard-library helper when execution is available and approved:
 
 ```text
-.agent/scripts/interview-ranker.py
+.agents/scripts/interview-ranker.py
 ```
 
 It accepts a JSON belief state and candidate-answer posteriors through a file or standard input. The LLM remains responsible for semantic hypotheses and probability estimates; the helper only performs deterministic entropy calculation and ranking.
@@ -215,6 +215,7 @@ external write behavior
 production or sensitive-data relevance
 required completion checks
 forbidden or irreversible actions
+the project-specific role set
 ```
 
 A safety fact may come from an inherited organization policy, repository policy or user answer. Do not ask again when an authoritative source already supplies it.
@@ -281,6 +282,8 @@ One confirmation may resolve multiple correlated dimensions.
 
 Start with `topic-catalog.md`, which contains summaries and routing signals.
 
+Load `role-catalog.md` when agent responsibilities are being resolved. Treat it as a candidate library, never as an installation manifest.
+
 Load full topic packs only when their activation signals are present or their relevance remains uncertain and potentially high-impact.
 
 Do not load every topic pack merely because context is available.
@@ -293,6 +296,7 @@ Stop asking questions when all of the following are true:
 
 ```text
 no blocking safety unknown remains
+the project-specific role set is confirmed
 required harness outputs can be generated
 remaining uncertainty has a safe documented default
 the best remaining candidate has low expected information gain
@@ -304,6 +308,7 @@ Suggested decision rule:
 ```text
 ready = criticalUnknowns is empty
         AND discoverySubject is sufficient
+        AND roleSelection is sufficient
         AND requiredOutputCoverage is complete
         AND maxRemainingQuestionValue < stopThreshold
 ```

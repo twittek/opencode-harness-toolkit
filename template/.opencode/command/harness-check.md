@@ -14,11 +14,11 @@ Do not modify harness files.
 
 Read current version from:
 
-`.agent/context/harness-version.json`
+`.agents/context/harness-version.json`
 
 Write reports under:
 
-`.agent/runs/harness-check/<current-version>/<date>/`
+`.agents/runs/harness-check/<current-version>/<date>/`
 
 If version is missing, use `unknown` and create a critical finding.
 
@@ -69,16 +69,16 @@ Inspect harness files:
 - `opencode.jsonc` or `opencode.json`
 - `.opencode/command/*.md`
 - `.opencode/agent/*.md`
-- `.agent/context/*.md`
-- `.agent/interview/*.md`
-- `.agent/interview/topics/*.md`
-- `.agent/roles/*.md`
-- `.agent/integrations/*.md`
-- `.agent/mcp/*.md`
-- `.agent/playbooks/*.md`
-- `.agent/templates/*.md`
-- `.agent/skills/*.md`
-- `.agent/scripts/*.sh`
+- `.agents/context/*.md`
+- `.agents/interview/*.md`
+- `.agents/interview/topics/*.md`
+- `.agents/roles/*.md`
+- `.agents/integrations/*.md`
+- `.agents/mcp/*.md`
+- `.agents/playbooks/*.md`
+- `.agents/templates/*.md`
+- `.agents/skills/*.md`
+- `.agents/scripts/*.sh`
 
 Check:
 - missing lifecycle files
@@ -111,6 +111,23 @@ Final response in German:
 - number of active findings
 - recommended next step
 
+## Generated structure checks
+
+Verify that initialization produced a project-specific structure rather than a copied toolkit scaffold:
+
+```text
+- AGENTS.md does not contain <!-- harness-bootstrap: true --> after initialization
+- AGENTS.md identifies the target product and references only files that exist
+- every role named by AGENTS.md and role-activation-policy.md has a matching file
+- every generated role is confirmed by the recorded role plan or explicitly retained as custom
+- absent catalog roles are not listed as active
+- generated roles contain project-specific responsibilities, boundaries and checks
+- generic toolkit boilerplate was not copied as final role guidance
+- optional integrations, policies and playbooks exist only when supported by the harness state
+```
+
+Treat stale bootstrap instructions, an all-role dump or references to absent files as active findings.
+
 ## Context Loading Policy checks
 
 Check whether the harness uses the smallest useful context set.
@@ -118,7 +135,7 @@ Check whether the harness uses the smallest useful context set.
 Verify:
 
 ```text
-- .agent/context/context-loading-policy.md exists
+- .agents/context/context-loading-policy.md exists
 - Tier 1 baseline files are defined
 - role-aware loading rules exist
 - integration-aware loading rules exist
@@ -134,7 +151,7 @@ Before reporting completion, perform a self-verification pass.
 Use:
 
 ```text
-.agent/context/self-verification-policy.md
+.agents/context/self-verification-policy.md
 ```
 
 Verify:

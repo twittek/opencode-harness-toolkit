@@ -10,8 +10,8 @@ activation-signals:
   - build-manifests
   - migration-or-refactoring
 outputs:
-  - .agent/playbooks/architecture.md
-  - .agent/roles/architect.md
+  - .agents/playbooks/architecture.md
+  - .agents/roles/architect.md
 ---
 
 # Architecture

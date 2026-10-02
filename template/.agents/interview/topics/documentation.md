@@ -11,8 +11,8 @@ activation-signals:
   - release-process
   - refinement-workflow
 outputs:
-  - .agent/roles/technical-writer.md
-  - .agent/templates
+  - .agents/roles/technical-writer.md
+  - .agents/templates
 ---
 
 # Documentation

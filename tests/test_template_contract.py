@@ -70,6 +70,7 @@ class TemplateContractTest(unittest.TestCase):
             ".agents/interview/interview-engine.md",
             ".agents/interview/interview-state-schema.md",
             ".agents/interview/topic-catalog.md",
+            ".agents/interview/role-catalog.md",
             ".agents/interview/question-bank.md",
             ".agents/interview/inference-rules.md",
             ".agents/interview/scenario-taxonomy.md",
@@ -86,6 +87,22 @@ class TemplateContractTest(unittest.TestCase):
         self.assertIn("toolkit/package evidence", engine)
         self.assertIn('"discoverySubject": "missing|partial|sufficient"', state)
 
+    def test_role_selection_is_confirmed_and_generated_selectively(self):
+        command = (TEMPLATE / ".opencode/command/harness-init.md").read_text()
+        state = (TEMPLATE / ".agents/interview/interview-state-schema.md").read_text()
+        catalog = (TEMPLATE / ".agents/interview/role-catalog.md").read_text()
+        bootstrap_agents = (TEMPLATE / "AGENTS.md").read_text()
+        check = (TEMPLATE / ".opencode/command/harness-check.md").read_text()
+
+        self.assertIn("Generate exactly the confirmed roles", command)
+        self.assertIn("Do not copy the generic toolkit role files verbatim", command)
+        self.assertIn("## AGENTS.md generation", command)
+        self.assertIn('"roleSelection": {', state)
+        self.assertIn('"status": "unknown|proposed|confirmed"', state)
+        self.assertIn("It is not a list of roles that must all be installed", catalog)
+        self.assertTrue(bootstrap_agents.startswith("<!-- harness-bootstrap: true -->"))
+        self.assertIn("Treat stale bootstrap instructions", check)
+
     def test_installer_preserves_target_readme(self):
         installer = ROOT / "opencode-harness-toolkit-install.sh"
         original = "# Existing Product\n\nProduct-specific evidence.\n"
@@ -93,7 +110,10 @@ class TemplateContractTest(unittest.TestCase):
         with tempfile.TemporaryDirectory() as directory:
             target = Path(directory)
             readme = target / "README.md"
+            agents = target / "AGENTS.md"
+            existing_agents = "# Existing Agent Rules\n\nKeep this requirement.\n"
             readme.write_text(original)
+            agents.write_text(existing_agents)
 
             subprocess.run(
                 [str(installer), str(target)],
@@ -104,6 +124,8 @@ class TemplateContractTest(unittest.TestCase):
 
             self.assertEqual(readme.read_text(), original)
             self.assertEqual(list(target.glob("README.md.bak.*")), [])
+            self.assertEqual(agents.read_text(), existing_agents)
+            self.assertEqual(list(target.glob("AGENTS.md.bak.*")), [])
 
         with tempfile.TemporaryDirectory() as directory:
             target = Path(directory)
@@ -114,6 +136,20 @@ class TemplateContractTest(unittest.TestCase):
                 text=True,
             )
             self.assertFalse((target / "README.md").exists())
+            self.assertTrue((target / "AGENTS.md").is_file())
+            self.assertTrue(
+                (target / ".agents/interview/role-catalog.md").is_file()
+            )
+            self.assertTrue(
+                (target / ".agents/context/self-verification-policy.md").is_file()
+            )
+            self.assertEqual(
+                list((target / ".agents/roles").glob("*.md")), []
+            )
+            self.assertFalse(
+                (target / ".agents/context/role-activation-policy.md").exists()
+            )
+            self.assertFalse((target / ".agents/integrations").exists())
 
 
 if __name__ == "__main__":

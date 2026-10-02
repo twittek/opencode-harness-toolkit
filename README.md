@@ -149,9 +149,9 @@ Required rules:
 - command entries should contain only description and template
 ```
 
-## Template-based toolkit
+## Bootstrap and generation model
 
-The package stores the harness scaffold as real files under `template/`.
+The package stores bootstrap resources and generation references as real files under `template/`.
 
 Benefits:
 
@@ -164,13 +164,15 @@ Benefits:
 - template files can be customized directly
 ```
 
-The script only performs these actions:
+The script performs these actions:
 
 ```text
 - locate the template directory
-- copy template files into the target project
+- copy only bootstrap commands, interview resources and baseline safety policies
+- defer project-specific roles, integrations, playbooks and policies to /harness-init
 - back up existing files before overwriting
-- make helper shell scripts executable
+- preserve the product README
+- preserve an existing project-authored AGENTS.md
 - print next steps
 ```
 
@@ -221,23 +223,17 @@ opencode.jsonc
 .agents/interview/interview-engine.md
 .agents/interview/interview-state-schema.md
 .agents/interview/topic-catalog.md
+.agents/interview/role-catalog.md
 .agents/interview/topics/*.md
-.agents/context/harness-version.json
-.agents/context/harness-changelog.md
-.agents/playbooks/harness-update.md
-.agents/runs/.gitkeep
-.agents/runs/harness-check/.gitkeep
-.agents/runs/harness-update/.gitkeep
-.agents/runs/harness-retro/.gitkeep
+.agents/scripts/interview-ranker.py
+.agents/context/context-loading-policy.md
+.agents/context/self-verification-policy.md
 ```
 
-After `/harness-init`, the project-specific harness should additionally contain files such as:
+The installer deliberately does not populate `.agents/roles/`, integrations, project policies, playbooks or run directories. After `/harness-init`, the project-specific harness contains only the artifacts supported by the approved interview state, such as:
 
 ```text
-.agents/roles/architect.md
-.agents/roles/requirements-engineer.md
-.agents/roles/developer.md
-.agents/roles/tester.md
+.agents/roles/<confirmed-role>.md
 .agents/context/project-profile.md
 .agents/context/harness-scope.md
 .agents/context/context-index.md
@@ -497,13 +493,13 @@ secrets → never store in harness files
 
 This keeps the harness useful without giving agents uncontrolled access to external tools.
 
-## Expanded Role Model
+## Adaptive Role Model
 
-Harness Toolkit can now generate a broader, policy-driven role model.
+Harness Toolkit generates a small, project-specific and policy-driven role model.
 
 The goal is not to create noisy subagents for every task. The goal is to give the agent explicit expert lenses and clear activation rules.
 
-Core roles:
+The catalog contains reusable candidates such as:
 
 ```text
 architect
@@ -529,15 +525,20 @@ observability-engineer
 product-manager
 ```
 
-### High-information role question
+### Adaptive role confirmation
 
-The adaptive interview asks:
+The interview first derives a proposed role set from project evidence, expected agent responsibilities and risk. Once the proposal is concrete enough, it asks for confirmation, for example:
 
 ```text
-Which specialist perspectives should the harness include?
+Für dieses Projekt schlage ich Developer, Tester und Security Engineer vor.
+Developer und Tester decken Implementierung und Regressionen ab; Security
+Engineer ist wegen Authentifizierung und externen Schreibzugriffen relevant.
+Welche Rollen möchtest du übernehmen, ergänzen oder entfernen?
 ```
 
-This question determines whether the harness should include additional policies for:
+The position and wording of this question remain adaptive. It is not a fixed checklist. The user can add, remove or define custom roles.
+
+The confirmed selection determines whether the harness should include guidance for:
 
 ```text
 - security and secrets
@@ -589,6 +590,9 @@ Business rules, terminology or domain-specific validation
 Default:
 
 ```text
+generate only confirmed roles
+tailor every role to the product and its policies
+do not copy generic toolkit role files
 activate only relevant roles
 avoid role noise
 prefer the smallest useful role set
@@ -724,8 +728,9 @@ What it does:
 - conducts an adaptive interview in German
 - asks only relevant follow-up questions
 - creates English harness files
-- creates the four core agent roles
-- creates context files, playbooks, templates and scripts
+- confirms a project-specific role set and creates only those roles
+- replaces the bootstrap AGENTS.md with a concise project-specific routing document
+- creates only relevant context files, playbooks, templates and scripts
 - sets up harness versioning
 - writes the initial changelog
 - applies safe defaults

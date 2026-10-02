@@ -11,9 +11,9 @@ activation-signals:
   - browser-assets
   - user-facing-interface
 outputs:
-  - .agent/roles/ux-designer.md
-  - .agent/roles/accessibility-specialist.md
-  - .agent/playbooks/testing.md
+  - .agents/roles/ux-designer.md
+  - .agents/roles/accessibility-specialist.md
+  - .agents/playbooks/testing.md
 ---
 
 # Frontend and UX

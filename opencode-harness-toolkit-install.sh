@@ -24,6 +24,20 @@ copy_file() {
     return 0
   fi
 
+  if [[ "$rel" == "AGENTS.md" && -e "$dst" ]]; then
+    echo "preserved: $rel (existing project instructions)"
+    return 0
+  fi
+
+  case "$rel" in
+    AGENTS.md|opencode.jsonc|.opencode/command/*.md|.agents/interview/*.md|.agents/interview/topics/*.md|.agents/context/context-loading-policy.md|.agents/context/self-verification-policy.md|.agents/scripts/interview-ranker.py)
+      ;;
+    *)
+      echo "deferred:  $rel (generated selectively by /harness-init)"
+      return 0
+      ;;
+  esac
+
   mkdir -p "$(dirname "$dst")"
 
   if [[ -e "$dst" ]]; then
@@ -51,7 +65,7 @@ fi
 
 echo
 echo "OpenCode harness toolkit installed."
-echo "OpenCode Harness Toolkit version: v40"
+echo "OpenCode Harness Toolkit version: v41"
 echo
 echo "Target:"
 echo "  $TARGET_DIR"
@@ -68,4 +82,5 @@ echo
 echo "Notes:"
 echo "  - Existing files are backed up with suffix: $BACKUP_SUFFIX"
 echo "  - The target project's README.md is never overwritten."
-echo "  - This install script is template-based; edit files under template/ to customize the toolkit package."
+echo "  - An existing project AGENTS.md is preserved for /harness-init to reconcile."
+echo "  - Only bootstrap resources are installed; /harness-init generates the project-specific harness."

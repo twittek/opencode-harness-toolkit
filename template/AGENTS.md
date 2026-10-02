@@ -1,4 +1,8 @@
-# Project Agent Instructions
+<!-- harness-bootstrap: true -->
+
+# Bootstrap Agent Instructions
+
+This file exists only to run `/harness-init` safely. The approved initialization replaces it with project-specific instructions.
 
 This project uses OpenCode with a project-local harness.
 
@@ -116,45 +120,19 @@ For `/harness-init`, load `.agents/interview/topic-catalog.md` first and load in
 
 ## Role model
 
-The harness uses role files under:
+During `/harness-init`, derive and confirm the smallest project-specific role set using:
 
 ```text
-.agents/roles/
+.agents/interview/role-catalog.md
 ```
 
-and activation rules under:
+Generate only confirmed roles under `.agents/roles/` and describe their routing in:
 
 ```text
 .agents/context/role-activation-policy.md
 ```
 
-Roles are not always active. Activate the smallest useful role set for the task.
-
-Core roles:
-
-```text
-architect
-requirements-engineer
-developer
-tester
-reviewer
-```
-
-Specialist roles:
-
-```text
-security-engineer
-ux-designer
-accessibility-specialist
-devops-engineer
-integration-architect
-data-engineer
-domain-expert
-technical-writer
-performance-engineer
-observability-engineer
-product-manager
-```
+Do not copy or generate the entire role catalog. The final `AGENTS.md` must reference only roles that actually exist in the initialized project.
 
 ## Interactive question tool policy
 

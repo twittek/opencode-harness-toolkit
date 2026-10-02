@@ -14,8 +14,8 @@ activation-signals:
   - external-credentials
 blocking-when-relevant: true
 outputs:
-  - .agent/context/risk-profile.md
-  - .agent/roles/security-engineer.md
+  - .agents/context/risk-profile.md
+  - .agents/roles/security-engineer.md
 ---
 
 # Security

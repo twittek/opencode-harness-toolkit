@@ -1030,13 +1030,13 @@ Update entropy and generation readiness.</code></pre>
         </div>
 
         <div class="codebox" style="margin-top:18px;">
-          <pre><code>.agent/context/integration-policy.md
-.agent/integrations/external-systems.md
-.agent/integrations/gitlab.md
-.agent/integrations/github.md
-.agent/integrations/jira.md
-.agent/scripts/gitlab-issue-comment.sh
-.agent/scripts/github-issue-comment.sh</code></pre>
+          <pre><code>.agents/context/integration-policy.md
+.agents/integrations/external-systems.md
+.agents/integrations/gitlab.md
+.agents/integrations/github.md
+.agents/integrations/jira.md
+.agents/scripts/gitlab-issue-comment.sh
+.agents/scripts/github-issue-comment.sh</code></pre>
         </div>
 
         <div class="cards" style="margin-top:18px;">
@@ -1064,8 +1064,8 @@ Update entropy and generation readiness.</code></pre>
     <div class="container">
       <div class="box-section">
         <div class="section-head">
-          <h2>Expanded Role Model</h2>
-          <p>The harness can generate specialist role guidance and activation rules so the agent applies the right expert perspective at the right time.</p>
+          <h2>Adaptive Role Model</h2>
+          <p>The interview proposes and confirms the smallest project-specific role set. Only confirmed roles are generated and each one is tailored to the product.</p>
         </div>
 
         <div class="cards">
@@ -1076,8 +1076,8 @@ Update entropy and generation readiness.</code></pre>
           </div>
           <div class="card">
             <div class="icon">🎯</div>
-            <h3>Activation policy</h3>
-            <p>Roles are activated only when relevant. The harness avoids role noise and uses the smallest useful role set.</p>
+            <h3>Confirmed selection</h3>
+            <p>The user can add, remove or define custom roles. The toolkit role catalog is not copied into the project as active roles.</p>
           </div>
           <div class="card">
             <div class="icon">⚖️</div>
@@ -1087,13 +1087,10 @@ Update entropy and generation readiness.</code></pre>
         </div>
 
         <div class="codebox" style="margin-top:18px;">
-          <pre><code>.agent/context/role-activation-policy.md
-.agent/roles/security-engineer.md
-.agent/roles/ux-designer.md
-.agent/roles/accessibility-specialist.md
-.agent/roles/devops-engineer.md
-.agent/roles/integration-architect.md
-.agent/roles/domain-expert.md</code></pre>
+          <pre><code>.agents/interview/role-catalog.md  → candidate library
+.agents/roles/&lt;confirmed-role&gt;.md → tailored guidance
+.agents/context/role-activation-policy.md → selected roles only
+AGENTS.md → project-specific routing</code></pre>
         </div>
       </div>
     </div>
@@ -1198,12 +1195,12 @@ Tier 4: never load node_modules, dist, build, coverage, template, backups or log
           <div class="card">
             <div class="icon">📁</div>
             <h3>Stable policy files</h3>
-            <p><code>.agent/mcp/mcp-policy.md</code><br><code>.agent/mcp/mcp-registry.md</code><br><code>.agent/mcp/approved-mcp-servers.md</code></p>
+            <p><code>.agents/mcp/mcp-policy.md</code><br><code>.agents/mcp/mcp-registry.md</code><br><code>.agents/mcp/approved-mcp-servers.md</code></p>
           </div>
           <div class="card">
             <div class="icon">📝</div>
             <h3>Run artifacts</h3>
-            <p><code>.agent/runs/harness-mcp/&lt;date&gt;/mcp-recommendations.md</code><br><code>mcp-risk-review.md</code><br><code>mcp-installation-plan.md</code></p>
+            <p><code>.agents/runs/harness-mcp/&lt;date&gt;/mcp-recommendations.md</code><br><code>mcp-risk-review.md</code><br><code>mcp-installation-plan.md</code></p>
           </div>
           <div class="card">
             <div class="icon">🔒</div>
@@ -1229,7 +1226,7 @@ Tier 4: never load node_modules, dist, build, coverage, template, backups or log
        <div class="command-number">01</div>
        <div class="command-name">/harness-init</div>
        <h3>Generate the project harness</h3>
-       <p>Selectable guided setup, one question at a time. German interview, English harness files, roles, playbooks, scripts, safety defaults, versioning, and changelog.</p>
+       <p>Adaptive guided setup, one question at a time. It replaces the bootstrap instructions with a project-specific AGENTS.md and generates only confirmed roles and relevant policies.</p>
       </div>
      </div>
 

@@ -12,8 +12,8 @@ activation-signals:
   - infrastructure-manifests
   - production-target
 outputs:
-  - .agent/roles/devops-engineer.md
-  - .agent/roles/observability-engineer.md
+  - .agents/roles/devops-engineer.md
+  - .agents/roles/observability-engineer.md
 ---
 
 # Delivery and Operations

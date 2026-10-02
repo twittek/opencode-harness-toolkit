@@ -12,16 +12,16 @@ Apply active findings for the current harness version, update the changelog, and
 
 Read current version from:
 
-`.agent/context/harness-version.json`
+`.agents/context/harness-version.json`
 
 Look for active findings in:
 
 ```text
-.agent/runs/harness-check/<current-version>/*/active-findings.md
-.agent/runs/harness-check/<current-version>/*/recommended-actions.md
-.agent/runs/harness-retro/<current-version>/*/active-findings.md
-.agent/runs/harness-retro/<current-version>/*/proposed-changes.md
-.agent/runs/harness-retro/<current-version>/*/patch-plan.md
+.agents/runs/harness-check/<current-version>/*/active-findings.md
+.agents/runs/harness-check/<current-version>/*/recommended-actions.md
+.agents/runs/harness-retro/<current-version>/*/active-findings.md
+.agents/runs/harness-retro/<current-version>/*/proposed-changes.md
+.agents/runs/harness-retro/<current-version>/*/patch-plan.md
 ```
 
 If no active findings exist for the current version, stop and answer in German:
@@ -34,7 +34,7 @@ Do not make changes without active findings.
 
 Create:
 
-`.agent/runs/harness-update/<current-version>/<date>/`
+`.agents/runs/harness-update/<current-version>/<date>/`
 
 Write:
 - `input-findings.md`
@@ -63,8 +63,8 @@ Use semantic versioning:
 
 After approved changes:
 1. increment version
-2. update `.agent/context/harness-version.json`
-3. append detailed entry to `.agent/context/harness-changelog.md`
+2. update `.agents/context/harness-version.json`
+3. append detailed entry to `.agents/context/harness-changelog.md`
 
 Every changed harness file must be mentioned in the changelog.
 
@@ -111,7 +111,7 @@ Before reporting completion, perform a self-verification pass.
 Use:
 
 ```text
-.agent/context/self-verification-policy.md
+.agents/context/self-verification-policy.md
 ```
 
 Verify:

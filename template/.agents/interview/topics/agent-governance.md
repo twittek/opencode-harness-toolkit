@@ -13,9 +13,10 @@ blocking-dimensions:
   - agent.approval-boundaries
   - agent.forbidden-actions
 outputs:
-  - .agent/context/autonomy-policy.md
-  - .agent/context/risk-profile.md
-  - .agent/context/role-activation-policy.md
+  - .agents/context/autonomy-policy.md
+  - .agents/context/risk-profile.md
+  - .agents/context/role-activation-policy.md
+  - .agents/roles/*.md
 ---
 
 # Agent Governance
@@ -42,6 +43,10 @@ Which actions must remain forbidden even in an isolated sandbox?
 
 Prefer one question that cleanly partitions responsibility and autonomy over separate questions for every tool.
 
+After responsibilities and project risks are sufficiently understood, derive a proposed role set from `../role-catalog.md`. If the user has not already selected roles explicitly, ask one confirmation question that shows only the recommended roles with project-specific reasons and allows additions, removals and custom roles.
+
+Role selection is not a fixed checklist and no role is mandatory merely because it appears in the catalog.
+
 ## Safe defaults
 
 ```text
@@ -52,4 +57,4 @@ destructive, production and secret-management actions are forbidden unless expli
 
 ## Completion
 
-Complete when permissions and prohibitions can be generated without relying on vague terms such as "be careful".
+Complete when permissions and prohibitions can be generated without relying on vague terms such as "be careful", and the selected role set is confirmed.

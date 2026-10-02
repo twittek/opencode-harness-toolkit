@@ -38,5 +38,5 @@ A server in this registry is not automatically approved.
 Approval must be documented in:
 
 ```text
-.agent/mcp/approved-mcp-servers.md
+.agents/mcp/approved-mcp-servers.md
 ```

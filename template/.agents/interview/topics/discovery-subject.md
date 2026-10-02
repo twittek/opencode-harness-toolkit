@@ -7,8 +7,8 @@ dimensions:
   - discovery.mode
 activation: always-evaluated-before-product-discovery
 outputs:
-  - .agent/context/project-profile.md
-  - .agent/context/harness-scope.md
+  - .agents/context/project-profile.md
+  - .agents/context/harness-scope.md
 ---
 
 # Discovery Subject
@@ -33,7 +33,7 @@ product evidence
 → eligible to describe purpose, domain, users and architecture
 
 harness/control evidence
-→ AGENTS.md, .agent/**, .opencode/** and opencode.jsonc
+→ AGENTS.md, .agents/**, .opencode/** and opencode.jsonc
 → eligible only for inherited constraints and current harness state
 
 toolkit/package evidence

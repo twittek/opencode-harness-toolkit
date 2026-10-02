@@ -13,9 +13,9 @@ activation-signals:
   - external-api
   - mcp-config
 outputs:
-  - .agent/context/integration-policy.md
-  - .agent/integrations/external-systems.md
-  - .agent/mcp/mcp-policy.md
+  - .agents/context/integration-policy.md
+  - .agents/integrations/external-systems.md
+  - .agents/mcp/mcp-policy.md
 ---
 
 # Integrations

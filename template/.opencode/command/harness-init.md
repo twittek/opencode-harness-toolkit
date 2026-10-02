@@ -25,15 +25,16 @@ final report → German
 Read these files before starting discovery:
 
 ```text
-.agent/interview/interview-engine.md
-.agent/interview/interview-state-schema.md
-.agent/interview/topic-catalog.md
-.agent/interview/question-bank.md
-.agent/interview/inference-rules.md
-.agent/interview/scenario-taxonomy.md
+.agents/interview/interview-engine.md
+.agents/interview/interview-state-schema.md
+.agents/interview/topic-catalog.md
+.agents/interview/role-catalog.md
+.agents/interview/question-bank.md
+.agents/interview/inference-rules.md
+.agents/interview/scenario-taxonomy.md
 ```
 
-Load individual files under `.agent/interview/topics/` only when their catalog signals are present or their relevance remains uncertain and potentially important.
+Load individual files under `.agents/interview/topics/` only when their catalog signals are present or their relevance remains uncertain and potentially important.
 
 Do not load all topic packs by default.
 
@@ -63,7 +64,7 @@ product evidence
 → product source, product README, domain documentation, manifests, tests, CI/CD and deployment files
 
 harness/control evidence
-→ AGENTS.md, .agent/**, .opencode/** and opencode.jsonc
+→ AGENTS.md, .agents/**, .opencode/** and opencode.jsonc
 → use for inherited rules, current harness state and bootstrap constraints
 → do not use to infer the product's purpose, users, architecture or domain
 
@@ -131,7 +132,7 @@ Do not ask the user to repeat reliable repository facts. Ask for confirmation on
 Build the multidimensional state described in:
 
 ```text
-.agent/interview/interview-state-schema.md
+.agents/interview/interview-state-schema.md
 ```
 
 Do not force the project into a single exclusive scenario.
@@ -145,6 +146,7 @@ discovery subject
 project intent
 runtime context
 agent responsibilities
+selected roles
 autonomy and approval boundaries
 quality expectations
 integration access
@@ -192,7 +194,7 @@ QuestionValue(q)
 
 Select the eligible question with maximum `QuestionValue`.
 
-When command execution is available and approved, use `.agent/scripts/interview-ranker.py` to perform the entropy arithmetic deterministically. The LLM supplies the semantic belief distributions and hypothetical posteriors; the helper validates and ranks them.
+When command execution is available and approved, use `.agents/scripts/interview-ranker.py` to perform the entropy arithmetic deterministically. The LLM supplies the semantic belief distributions and hypothetical posteriors; the helper validates and ranks them.
 
 The objective is weighted harness-relevant entropy reduction, not generic curiosity.
 
@@ -301,7 +303,10 @@ Aus Repository und Antworten abgeleitete Annahmen
 Verwendete sichere Defaults
 - ...
 
-Agentenaufgaben und Rollen
+Agentenaufgaben und bestätigte Rollen
+- ...
+
+Bestehende Rollen: erstellen, aktualisieren, beibehalten oder entfernen
 - ...
 
 Autonomie, Freigaben und Verbote
@@ -340,6 +345,8 @@ Generate only relevant roles, policies, playbooks, templates and integrations.
 
 Prefer the smallest coherent harness that satisfies the final state. Do not copy every optional template merely because it exists.
 
+Do not create empty optional directories or placeholder artifacts for pruned topics. The retained interview engine and catalogs are bootstrap/control resources; generated project guidance must remain separate from them.
+
 Generated guidance must distinguish:
 
 ```text
@@ -355,19 +362,19 @@ open assumptions
 When external systems are relevant, generate or update:
 
 ```text
-.agent/context/integration-policy.md
-.agent/integrations/external-systems.md
+.agents/context/integration-policy.md
+.agents/integrations/external-systems.md
 ```
 
 Generate system-specific files only for selected systems:
 
 ```text
-.agent/integrations/gitlab.md
-.agent/integrations/github.md
-.agent/integrations/jira.md
-.agent/integrations/confluence.md
-.agent/integrations/figma.md
-.agent/integrations/sonarqube.md
+.agents/integrations/gitlab.md
+.agents/integrations/github.md
+.agents/integrations/jira.md
+.agents/integrations/confluence.md
+.agents/integrations/figma.md
+.agents/integrations/sonarqube.md
 ```
 
 For each system document:
@@ -387,22 +394,79 @@ Do not install MCP servers during `/harness-init`. Use `/harness-mcp` for discov
 
 ## Role generation
 
-Select the smallest useful role set from the final belief state.
+Use `.agents/interview/role-catalog.md` to derive the smallest useful role set from the final belief state.
 
-Store role descriptions under:
+Roles are an explicit interview outcome. Do not silently install all catalog roles and do not assume that all generic "core" roles are required.
+
+For each candidate role, track internally:
 
 ```text
-.agent/roles/
+role id
+status: proposed | confirmed | excluded
+project-specific reason
+evidence ids
+responsibilities covered
+overlap with other roles
 ```
 
+Once enough project evidence exists, confirm the proposed set with one adaptive question unless the user already selected roles explicitly. Show only the recommended roles and their project-specific reasons. Allow the user to add, remove or define a custom role. This confirmation is required before generation, but its position is determined by information gain rather than a fixed question number.
+
+Generate exactly the confirmed roles under:
+
+```text
+.agents/roles/
+```
+
+Every generated role must follow the generated role contract in `role-catalog.md`. Tailor mission, responsibilities, triggers, context, approval boundaries and checks to the resolved product. Do not copy the generic toolkit role files verbatim.
+
+Reconcile an existing role directory during the approved generation step:
+
+```text
+selected generated roles
+→ create or update
+
+known generic toolkit roles that are not selected
+→ list for removal in the approval summary, then remove after approval
+→ classify as generic only when the content still contains the known toolkit boilerplate;
+  a catalog filename alone is not sufficient evidence for removal
+
+custom or user-authored roles that are not selected
+→ preserve by default and surface as retained custom roles
+→ remove only when explicitly included in the approved plan
+```
+
+The final `.agents/context/role-activation-policy.md` must mention only generated or explicitly retained roles. It must not list absent catalog roles.
+
 Do not create `.opencode/agent/*.md` unless a separately validated OpenCode agent schema is explicitly requested.
+
+## AGENTS.md generation
+
+When `AGENTS.md` contains `<!-- harness-bootstrap: true -->`, replace its bootstrap content during the approved generation step with a concise, project-specific instruction entry point.
+
+When an existing `AGENTS.md` has no bootstrap marker, treat it as project evidence and preserve its valid requirements. Present material rewrites or conflict resolutions in the approval summary instead of silently replacing user-authored instructions.
+
+The generated `AGENTS.md` must contain:
+
+```text
+resolved product identity and harness scope
+instruction precedence and repository boundaries
+the expected agent workflow for this project
+autonomy, approval and forbidden-action summary with links to detailed policies
+the confirmed role index with activation guidance
+project-specific quality gates and definition-of-done references
+relevant integrations and their access class
+context-loading and self-verification rules
+available harness lifecycle commands
+```
+
+Keep detailed rules in focused `.agents/` files and use `AGENTS.md` as the compact routing layer. Reference only files and roles that actually exist. Remove bootstrap wording, generic example roles and irrelevant integrations.
 
 ## Context-loading generation
 
 Generate or update:
 
 ```text
-.agent/context/context-loading-policy.md
+.agents/context/context-loading-policy.md
 ```
 
 Keep modular context loading. A large context window is not permission to load the entire harness.
@@ -475,20 +539,21 @@ opencode.jsonc
 .opencode/command/harness-update.md
 .opencode/command/harness-retro.md
 .opencode/command/harness-mcp.md
-.agent/context/project-profile.md
-.agent/context/harness-scope.md
-.agent/context/harness-version.json
-.agent/context/harness-changelog.md
-.agent/context/context-index.md
-.agent/context/definition-of-done.md
-.agent/context/autonomy-policy.md
-.agent/context/risk-profile.md
-.agent/context/context-safety-policy.md
-.agent/context/context-loading-policy.md
-.agent/context/self-verification-policy.md
-.agent/context/role-activation-policy.md
-.agent/playbooks/harness-update.md
-.agent/runs/.gitkeep
+.agents/context/project-profile.md
+.agents/context/harness-scope.md
+.agents/context/harness-version.json
+.agents/context/harness-changelog.md
+.agents/context/context-index.md
+.agents/context/definition-of-done.md
+.agents/context/autonomy-policy.md
+.agents/context/risk-profile.md
+.agents/context/context-safety-policy.md
+.agents/context/context-loading-policy.md
+.agents/context/self-verification-policy.md
+.agents/context/role-activation-policy.md
+.agents/roles/<each-confirmed-role>.md
+.agents/playbooks/harness-update.md
+.agents/runs/.gitkeep
 ```
 
 Generate additional role, playbook, integration, template and script files only when supported by the final belief state.
@@ -503,7 +568,10 @@ Verify:
 required files exist
 OpenCode config shape matches the supported contract
 all five lifecycle commands are registered
-role files are under .agent/roles/
+role files are under .agents/roles/
+the generated role files exactly match the confirmed role plan plus explicitly retained custom roles
+AGENTS.md is project-specific and references only files that exist
+AGENTS.md contains no bootstrap marker or generic all-role inventory
 no unapproved MCP server was added or enabled
 generated guidance matches confirmed facts and disclosed assumptions
 project-profile and harness-scope identify the resolved target product or module
@@ -552,7 +620,7 @@ recommended next command: /harness-check
 Before reporting completion, use:
 
 ```text
-.agent/context/self-verification-policy.md
+.agents/context/self-verification-policy.md
 ```
 
 Verify:

@@ -47,7 +47,7 @@ glab CLI through approved wrapper scripts
 Prefer wrappers under:
 
 ```text
-.agent/scripts/gitlab-*.sh
+.agents/scripts/gitlab-*.sh
 ```
 
 Do not invent ad-hoc `glab` commands for write operations when a wrapper exists.

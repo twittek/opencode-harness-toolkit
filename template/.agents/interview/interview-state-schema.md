@@ -15,7 +15,7 @@ This is a conceptual schema for the LLM-driven engine. Implementations may persi
     "confidence": 0.0,
     "excludedFromProductInference": [
       "AGENTS.md",
-      ".agent/**",
+      ".agents/**",
       ".opencode/**",
       "opencode.jsonc",
       "template/**"
@@ -52,6 +52,20 @@ This is a conceptual schema for the LLM-driven engine. Implementations may persi
     "pruned": [],
     "completed": []
   },
+  "roleSelection": {
+    "status": "unknown|proposed|confirmed",
+    "candidates": [
+      {
+        "id": "developer",
+        "status": "proposed|confirmed|excluded",
+        "reason": "project-specific reason",
+        "evidenceIds": [],
+        "coveredResponsibilities": []
+      }
+    ],
+    "selected": [],
+    "retainedCustomRoles": []
+  },
   "candidateQuestions": [
     {
       "id": "topic.question-id",
@@ -73,6 +87,7 @@ This is a conceptual schema for the LLM-driven engine. Implementations may persi
     "projectIntent": "missing|partial|sufficient",
     "runtimeContext": "missing|partial|sufficient",
     "agentResponsibilities": "missing|partial|sufficient",
+    "roleSelection": "missing|partial|sufficient",
     "autonomyBoundary": "missing|partial|sufficient",
     "qualityExpectations": "missing|partial|sufficient",
     "integrationAccess": "missing|partial|sufficient",
@@ -126,6 +141,7 @@ Evidence classification is evaluated before precedence. A highly detailed harnes
 ```text
 criticalUnknowns is empty
 discoverySubject coverage is sufficient
+roleSelection coverage is sufficient
 required coverage is sufficient
 remaining assumptions have safe defaults
 bestRemainingQuestionValue is below the configured stop threshold

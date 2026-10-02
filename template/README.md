@@ -1,6 +1,6 @@
 # Harness Toolkit Template
 
-This directory contains the harness scaffold used by `opencode-harness-toolkit-install.sh`.
+This directory contains bootstrap resources and generation references used by `opencode-harness-toolkit-install.sh` and `/harness-init`.
 
 This maintenance README is package documentation and is deliberately not copied to the target project. A target project's existing `README.md` must remain product evidence for adaptive discovery.
 
@@ -17,12 +17,14 @@ opencode.jsonc
 .opencode/command/harness-retro.md
 .opencode/command/harness-mcp.md
 .agents/interview/topic-catalog.md
+.agents/interview/role-catalog.md
 .agents/interview/topics/
 .agents/scripts/interview-ranker.py
-.agents/context/harness-version.json
-.agents/context/harness-changelog.md
-.agents/playbooks/harness-update.md
 ```
+
+The installer copies only the bootstrap allowlist: commands, interview resources, the entropy helper, bootstrap `AGENTS.md`, OpenCode configuration, and the context-loading and self-verification policies. Project-specific roles, integrations, policies, playbooks and run structures are deferred to `/harness-init`.
+
+If the target already contains `AGENTS.md`, the installer preserves it. During initialization it is treated as project evidence and reconciled through the approval summary instead of being overwritten silently.
 
 Do not put project-specific secrets into this template.
 
@@ -63,12 +65,13 @@ MCP files live under:
 ```
 
 
-Role files live under:
+Generic role references maintained by the toolkit live under:
 
 ```text
 .agents/roles/
-.agents/context/role-activation-policy.md
 ```
+
+They are not copied into target projects. `/harness-init` uses `.agents/interview/role-catalog.md`, confirms a project-specific role set and generates only those role files plus a matching activation policy.
 
 
 Context loading policy:

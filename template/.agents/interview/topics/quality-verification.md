@@ -8,9 +8,9 @@ dimensions:
   - quality.self-verification
 activation: always-considered
 outputs:
-  - .agent/context/definition-of-done.md
-  - .agent/context/self-verification-policy.md
-  - .agent/scripts/quality-gates.sh
+  - .agents/context/definition-of-done.md
+  - .agents/context/self-verification-policy.md
+  - .agents/scripts/quality-gates.sh
 ---
 
 # Quality and Verification
