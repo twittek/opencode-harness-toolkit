@@ -29,6 +29,7 @@ Read these files before starting discovery:
 .agents/interview/interview-state-schema.md
 .agents/interview/topic-catalog.md
 .agents/interview/role-catalog.md
+.agents/policies/policy-contract.md
 .agents/interview/question-bank.md
 .agents/interview/inference-rules.md
 .agents/interview/scenario-taxonomy.md
@@ -147,6 +148,7 @@ project intent
 runtime context
 agent responsibilities
 selected roles
+policy evaluability and observer signals
 autonomy and approval boundaries
 quality expectations
 integration access
@@ -255,6 +257,8 @@ which external writes require approval
 which destructive or irreversible actions are forbidden
 whether production or sensitive data is relevant
 which checks and self-verification are required
+which typed observer or decision-model signals prove each normative rule
+how missing evidence, low coverage and violation thresholds map to escalation
 ```
 
 An inherited organization or project policy may answer these questions without user interaction.
@@ -312,6 +316,12 @@ Bestehende Rollen: erstellen, aktualisieren, beibehalten oder entfernen
 Autonomie, Freigaben und Verbote
 - ...
 
+Maschinenprüfbare Policies, Observer-Signale und Eskalationsschwellen
+- ...
+
+Noch nicht operationalisierbare Compliance-Anforderungen
+- ...
+
 Quality Gates und Definition of Done
 - ...
 
@@ -356,6 +366,39 @@ evidence-based inferences
 safe defaults
 open assumptions
 ```
+
+## Policy and compliance generation
+
+Use `.agents/policies/policy-contract.md` as the mandatory format for every normative harness rule.
+
+Generate:
+
+```text
+.agents/policies/policy-registry.json
+.agents/context/compliance-policy.md
+```
+
+The JSON registry is the normative source. The Markdown document is a human-readable view that explains scope, rule ownership, thresholds and operational consequences while referencing stable rule ids.
+
+Convert every generated requirement expressed as `must`, `must not`, `required`, `forbidden` or `requires approval` into a registry rule. A prose policy may not introduce a normative requirement that is absent from the registry.
+
+Every registry rule must have:
+
+```text
+typed and provenance-aware input signals
+deterministic appliesWhen and assertion predicates
+PASS, FAIL, UNKNOWN and NOT_APPLICABLE semantics
+severity, weight and hard-gate setting
+explicit behavior for missing evidence
+stable fail and unknown reason codes
+version and policy source
+```
+
+Decision-model output is an input signal, not a policy decision. Declare the model score, classification, confidence and model version as typed signals when used. The deterministic policy predicate applies configured thresholds to those signals.
+
+If a requirement cannot be expressed without ambiguous interpretation, do not disguise it as an enforceable rule. Add it to `unobservableRequirements`, explain the missing telemetry or rubric in the final summary and resolve it through another interview question when it is safety-critical.
+
+Generate configurable registry thresholds for warning, escalation, blocking and minimum evidence coverage. Record whether the control plane operates in `observe`, `advise` or `enforce` mode; the evaluation result stays identical across modes.
 
 ## Integration generation
 
@@ -551,6 +594,8 @@ opencode.jsonc
 .agents/context/context-loading-policy.md
 .agents/context/self-verification-policy.md
 .agents/context/role-activation-policy.md
+.agents/context/compliance-policy.md
+.agents/policies/policy-registry.json
 .agents/roles/<each-confirmed-role>.md
 .agents/playbooks/harness-update.md
 .agents/runs/.gitkeep
@@ -578,6 +623,10 @@ project-profile and harness-scope identify the resolved target product or module
 harness/toolkit files were not used as product evidence unless explicitly selected as the subject
 irrelevant optional artifacts were not generated
 safety-critical dimensions are represented in policy files
+policy-registry.json passes `.agents/scripts/policy-evaluator.py validate`
+every normative Markdown requirement maps to a stable registry rule id
+UNKNOWN and NOT_APPLICABLE are not treated as PASS
+threshold ordering and minimum coverage are explicit
 ```
 
 Check the config for forbidden patterns and inspect every match rather than assuming all text matches are errors.

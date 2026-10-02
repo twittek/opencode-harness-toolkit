@@ -14,6 +14,7 @@ Load this index before selecting interview topics. Load a full topic pack only w
 | Delivery and operations | `topics/delivery-operations.md` | CI/CD, environments, deployment, observability | pipeline and infrastructure manifests |
 | Quality and verification | `topics/quality-verification.md` | tests, checks, definition of done | always considered; test and build evidence |
 | Agent governance | `topics/agent-governance.md` | responsibilities, selected roles, autonomy, approvals, prohibitions | always considered; requested agent work |
+| Compliance and observability | `topics/compliance-observability.md` | scorable rules, observer signals, unknown handling, thresholds, enforcement mode | policies, approvals, quality gates, external writes, production or regulated context |
 | Documentation | `topics/documentation.md` | maintained artifacts and audiences | docs tree, ADRs, release or compliance needs |
 
 ## Routing rule

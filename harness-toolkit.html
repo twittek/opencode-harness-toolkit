@@ -792,8 +792,9 @@
     <a href="#why">Why</a>
     <a href="#adaptive-discovery">Adaptive Discovery</a>
         <a href="#platform">Platform</a>
-    <a href="#integrations">Integrations</a>
+        <a href="#integrations">Integrations</a>
         <a href="#roles">Roles</a>
+        <a href="#policy-evaluation">Policy Evaluation</a>
         <a href="#context-loading">Context Loading</a>
         <a href="#self-verification">Self-Verification</a>
         <a href="#mcp">MCP</a>
@@ -1091,6 +1092,28 @@ Update entropy and generation readiness.</code></pre>
 .agents/roles/&lt;confirmed-role&gt;.md → tailored guidance
 .agents/context/role-activation-policy.md → selected roles only
 AGENTS.md → project-specific routing</code></pre>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="policy-evaluation" class="section">
+    <div class="container">
+      <div class="box-section">
+        <div class="section-head">
+          <h2>Machine-Evaluable Policy &amp; Compliance</h2>
+          <p>Normative rules are versioned data with typed evidence and deterministic predicates—not prose that an observer has to reinterpret.</p>
+        </div>
+        <div class="cards">
+          <div class="card"><div class="icon">📡</div><h3>Observable facts</h3><p>Observers and decision models emit typed values with task correlation, provenance, confidence and model version where applicable.</p></div>
+          <div class="card"><div class="icon">⚖️</div><h3>Explicit truth states</h3><p>Every rule evaluates to PASS, FAIL, UNKNOWN or NOT_APPLICABLE. Missing evidence never silently becomes compliant.</p></div>
+          <div class="card"><div class="icon">🚦</div><h3>Deterministic escalation</h3><p>Configurable violation and coverage thresholds map results to continue, warn, escalate or block.</p></div>
+        </div>
+        <div class="codebox" style="margin-top:18px;">
+          <pre><code>Observer / Decision Model → typed facts
+Policy Registry           → versioned predicates and thresholds
+Policy Evaluator          → score + coverage + reason codes
+Control Plane             → continue | warn | escalate | block</code></pre>
         </div>
       </div>
     </div>

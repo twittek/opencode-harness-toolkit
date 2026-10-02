@@ -184,7 +184,7 @@ Run the standard-library test suite from the toolkit directory:
 PYTHONDONTWRITEBYTECODE=1 python3 -m unittest discover -s tests -v
 ```
 
-The tests verify the entropy ranker, safety restrictions, modular topic contract, lifecycle-command registration and absence of the former fixed interview flow.
+The tests verify the entropy ranker, deterministic policy evaluator, safety restrictions, modular topic contract, lifecycle-command registration and absence of the former fixed interview flow.
 
 ## Customizing the bootstrap
 
@@ -226,6 +226,11 @@ opencode.jsonc
 .agents/interview/role-catalog.md
 .agents/interview/topics/*.md
 .agents/scripts/interview-ranker.py
+.agents/policies/policy-contract.md
+.agents/policies/policy-registry.schema.json
+.agents/policies/task-evidence.schema.json
+.agents/policies/evaluation-result.schema.json
+.agents/scripts/policy-evaluator.py
 .agents/context/context-loading-policy.md
 .agents/context/self-verification-policy.md
 ```
@@ -241,6 +246,8 @@ The installer deliberately does not populate `.agents/roles/`, integrations, pro
 .agents/context/autonomy-policy.md
 .agents/context/risk-profile.md
 .agents/context/context-safety-policy.md
+.agents/context/compliance-policy.md
+.agents/policies/policy-registry.json
 .agents/playbooks/refinement.md
 .agents/playbooks/architecture.md
 .agents/playbooks/development-best-practices.md
@@ -597,6 +604,73 @@ activate only relevant roles
 avoid role noise
 prefer the smallest useful role set
 ```
+
+## Machine-Evaluable Policy & Compliance
+
+Harness policies are generated as executable contracts, not as normative prose that an observer must reinterpret.
+
+```text
+Observer / Telemetry Sidecar
+→ typed facts with provenance
+
+Decision Model
+→ optional typed score or classification with model version and confidence
+
+Policy Registry
+→ versioned applicability and assertion predicates
+
+Deterministic Policy Evaluator
+→ PASS | FAIL | UNKNOWN | NOT_APPLICABLE
+→ compliance score, violation score and evidence coverage
+
+Control Plane
+→ continue | warn | escalate | block
+```
+
+The canonical source is:
+
+```text
+.agents/policies/policy-registry.json
+```
+
+Human-readable policy documents reference stable rule ids, but cannot override the registry. Every mandatory, forbidden or approval-gated behavior must declare:
+
+```text
+typed observer or decision-model signals
+required provenance
+deterministic applicability and assertion predicates
+severity and weight
+hard-gate behavior
+missing-evidence behavior
+stable fail and unknown reason codes
+rule and registry versions
+```
+
+The evaluator uses five distinct outcomes:
+
+| Status | Result | Meaning |
+|---|---:|---|
+| `PASS` | `true` | The applicable rule is proven satisfied. |
+| `FAIL` | `false` | The applicable rule is proven violated. |
+| `UNKNOWN` | `null` | Required evidence is absent or invalid. |
+| `NOT_APPLICABLE` | `null` | The rule definitively does not apply. |
+| `ERROR` | `null` | Registry or evaluator execution is invalid. |
+
+Missing evidence never becomes `PASS`.
+
+Aggregate scoring is deterministic:
+
+```text
+violationScore = weighted FAIL / weighted (PASS + FAIL)
+complianceScore = 1 - violationScore
+coverage = weighted (PASS + FAIL) / weighted (PASS + FAIL + UNKNOWN)
+```
+
+The registry configures `warnAt`, `escalateAt`, `blockAt` and `minimumCoverage`. Critical hard-gate failures can block immediately; critical unknowns can escalate even before an aggregate threshold is reached.
+
+A decision model remains upstream of the policy engine. It may emit a probability, classification or confidence as a versioned signal, but it does not decide whether to warn, escalate or block. This keeps enforcement reproducible across observer-only and enforcer deployments.
+
+Requirements that cannot yet be expressed as observable predicates are recorded as policy-design gaps rather than being presented as enforceable rules.
 
 ## MCP Discovery & Planning
 

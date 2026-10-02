@@ -70,6 +70,8 @@ Use:
 .agents/context/self-verification-policy.md
 ```
 
+Policy-evaluation history may support improvement proposals, but must not silently change rules or thresholds. Retrospective findings should identify the affected rule ids, observed false positives or false negatives, coverage gaps and a versioned proposed change for later approval through `/harness-update`.
+
 Verify:
 
 ```text

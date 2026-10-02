@@ -20,9 +20,14 @@ opencode.jsonc
 .agents/interview/role-catalog.md
 .agents/interview/topics/
 .agents/scripts/interview-ranker.py
+.agents/policies/policy-contract.md
+.agents/policies/policy-registry.schema.json
+.agents/policies/task-evidence.schema.json
+.agents/policies/evaluation-result.schema.json
+.agents/scripts/policy-evaluator.py
 ```
 
-The installer copies only the bootstrap allowlist: commands, interview resources, the entropy helper, bootstrap `AGENTS.md`, OpenCode configuration, and the context-loading and self-verification policies. Project-specific roles, integrations, policies, playbooks and run structures are deferred to `/harness-init`.
+The installer copies only the bootstrap allowlist: commands, interview resources, entropy and policy evaluators, policy schemas, bootstrap `AGENTS.md`, OpenCode configuration, and the context-loading and self-verification policies. Project-specific roles, integrations, policy rules, playbooks and run structures are deferred to `/harness-init`.
 
 If the target already contains `AGENTS.md`, the installer preserves it. During initialization it is treated as project evidence and reconciled through the approval summary instead of being overwritten silently.
 
@@ -86,3 +91,15 @@ Self-verification policy:
 ```text
 .agents/context/self-verification-policy.md
 ```
+
+Machine-evaluable policy resources:
+
+```text
+.agents/policies/policy-contract.md
+.agents/policies/policy-registry.schema.json
+.agents/policies/task-evidence.schema.json
+.agents/policies/evaluation-result.schema.json
+.agents/scripts/policy-evaluator.py
+```
+
+`/harness-init` generates the project-specific `.agents/policies/policy-registry.json`; it is not copied from the toolkit.

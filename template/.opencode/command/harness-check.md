@@ -128,6 +128,30 @@ Verify that initialization produced a project-specific structure rather than a c
 
 Treat stale bootstrap instructions, an all-role dump or references to absent files as active findings.
 
+## Policy evaluability checks
+
+Verify that policies can be scored by an observer and deterministic policy engine:
+
+```text
+- .agents/policies/policy-registry.json exists and passes policy-evaluator.py validate
+- policy registry, task evidence and evaluation result schemas are present and valid JSON
+- registry and rule versions are present
+- every signal has a type, source and required provenance
+- every rule has deterministic applicability and assertion predicates
+- every rule defines severity, weight, unknown handling and reason codes
+- warnAt <= escalateAt <= blockAt and minimumCoverage is explicit
+- PASS, FAIL, UNKNOWN and NOT_APPLICABLE remain distinct
+- missing or invalid evidence never becomes PASS
+- hard-gate behavior is explicit
+- decision-model outputs are typed input signals rather than enforcement decisions
+- normative Markdown statements reference matching registry rule ids
+- unobservable or ambiguous requirements are tracked as policy-design gaps
+```
+
+Search normative prose for terms such as `appropriate`, `reasonable`, `sufficient`, `adequate`, `best effort` and `when necessary`. Flag each occurrence unless the text references a finite measurable rubric or explicitly marks the item as non-normative guidance.
+
+Treat schema errors, undeclared signals, missing-evidence-as-pass behavior and ambiguous critical rules as high-severity findings.
+
 ## Context Loading Policy checks
 
 Check whether the harness uses the smallest useful context set.

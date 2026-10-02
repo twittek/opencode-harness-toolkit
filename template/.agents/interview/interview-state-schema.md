@@ -66,6 +66,19 @@ This is a conceptual schema for the LLM-driven engine. Implementations may persi
     "selected": [],
     "retainedCustomRoles": []
   },
+  "policyEvaluation": {
+    "status": "unknown|partial|confirmed",
+    "enforcementMode": "observe|advise|enforce",
+    "thresholds": {
+      "warnAt": null,
+      "escalateAt": null,
+      "blockAt": null,
+      "minimumCoverage": null
+    },
+    "ruleCandidates": [],
+    "declaredSignals": [],
+    "unobservableRequirements": []
+  },
   "candidateQuestions": [
     {
       "id": "topic.question-id",
@@ -88,6 +101,7 @@ This is a conceptual schema for the LLM-driven engine. Implementations may persi
     "runtimeContext": "missing|partial|sufficient",
     "agentResponsibilities": "missing|partial|sufficient",
     "roleSelection": "missing|partial|sufficient",
+    "policyEvaluability": "missing|partial|sufficient",
     "autonomyBoundary": "missing|partial|sufficient",
     "qualityExpectations": "missing|partial|sufficient",
     "integrationAccess": "missing|partial|sufficient",
@@ -142,6 +156,7 @@ Evidence classification is evaluated before precedence. A highly detailed harnes
 criticalUnknowns is empty
 discoverySubject coverage is sufficient
 roleSelection coverage is sufficient
+policyEvaluability coverage is sufficient
 required coverage is sufficient
 remaining assumptions have safe defaults
 bestRemainingQuestionValue is below the configured stop threshold

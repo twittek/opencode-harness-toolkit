@@ -54,6 +54,19 @@ Then ask in German:
 
 Do not edit harness files without explicit approval.
 
+When an approved update changes normative behavior:
+
+```text
+- update the canonical rule in .agents/policies/policy-registry.json
+- increment the changed rule version and registry version
+- update human-readable policy views to reference the rule id
+- validate the registry with .agents/scripts/policy-evaluator.py validate
+- preserve explicit UNKNOWN and threshold behavior
+- record the policy change in the harness changelog
+```
+
+Do not change enforcement thresholds, hard gates or missing-evidence behavior through prose-only edits.
+
 ## Versioning
 
 Use semantic versioning:
