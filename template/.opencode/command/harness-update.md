@@ -67,6 +67,21 @@ When an approved update changes normative behavior:
 
 Do not change enforcement thresholds, hard gates or missing-evidence behavior through prose-only edits.
 
+When an approved finding changes the agent runtime image:
+
+```text
+- update image-plan.json, Dockerfile, tektona-deployment.json and their human-readable views together
+- update Tektona process definitions, compose.yaml and bootstrap-sandbox.sh when sandbox resources or capabilities change
+- increment planVersion
+- preserve evidence references for every added or retained layer
+- validate the plan, Dockerfile and Tektona deployment with image-plan-validator.py
+- invalidate or refresh image-lock.json instead of leaving a stale lock
+- rebuild locally only when the update approval explicitly includes it
+- preserve separate explicit approval for Tektona template builds, tag moves and sandbox creation
+- leave credential values and provenance to Tektona; keep only stable resource references in the plan
+- promote repeatedly observed runtime installations into evidence-backed image layers when approved
+```
+
 ## Versioning
 
 Use semantic versioning:

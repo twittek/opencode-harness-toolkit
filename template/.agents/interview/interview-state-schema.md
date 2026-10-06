@@ -79,6 +79,64 @@ This is a conceptual schema for the LLM-driven engine. Implementations may persi
     "declaredSignals": [],
     "unobservableRequirements": []
   },
+  "runtimeImage": {
+    "status": "unknown|inferred|confirmed",
+    "baseImage": "ubuntu:latest",
+    "basePolicy": "current-lts-with-lock|pinned-digest",
+    "platforms": ["linux/amd64"],
+    "opencode": {
+      "required": true,
+      "version": "latest|repository-or-policy-version"
+    },
+    "layers": [],
+    "services": [],
+    "sandbox": {
+      "autonomyGoal": "self-contained-product-development",
+      "networkAccess": "allowed|restricted|denied",
+      "dynamicInstallMode": "disabled|user-local|sandbox-root",
+      "privilegeEscalationApproved": false,
+      "containerRuntimeMode": "platform-daemon|rootless-in-microvm|none",
+      "containerRuntimeEvidenceRefs": [],
+      "composeRequired": false
+    },
+    "buildMode": "sandbox|local|both",
+    "localBuildApproved": false,
+    "unresolved": []
+  },
+  "tektonaDeployment": {
+    "status": "unknown|inferred|confirmed",
+    "organization": null,
+    "project": null,
+    "templateScope": "project|organization",
+    "templateName": null,
+    "templateTag": "default",
+    "buildStrategy": "native-manifest|external-oci-image",
+    "baseImage": null,
+    "resultImageRef": null,
+    "repositoryRef": null,
+    "gitCredentialRef": null,
+    "containerRegistryRef": null,
+    "egressNetworkPolicyRef": null,
+    "egressProxyProfileRef": null,
+    "secretRefs": [],
+    "resources": {
+      "cpu": null,
+      "memoryMiB": null,
+      "diskGiB": null,
+      "location": null
+    },
+    "lifecycle": {
+      "autoPauseMinutes": null,
+      "autoDeleteHours": null
+    },
+    "processes": [],
+    "deploymentMode": "plan|build-template|build-and-create-sandbox",
+    "deploymentApproved": false,
+    "adapter": "unresolved|cli|sdk|api",
+    "verifiedAgainst": null,
+    "interfaceEvidenceRefs": [],
+    "unresolved": []
+  },
   "candidateQuestions": [
     {
       "id": "topic.question-id",
@@ -102,6 +160,8 @@ This is a conceptual schema for the LLM-driven engine. Implementations may persi
     "agentResponsibilities": "missing|partial|sufficient",
     "roleSelection": "missing|partial|sufficient",
     "policyEvaluability": "missing|partial|sufficient",
+    "runtimeImagePlan": "missing|partial|sufficient",
+    "tektonaDeploymentPlan": "missing|partial|sufficient",
     "autonomyBoundary": "missing|partial|sufficient",
     "qualityExpectations": "missing|partial|sufficient",
     "integrationAccess": "missing|partial|sufficient",
@@ -157,6 +217,8 @@ criticalUnknowns is empty
 discoverySubject coverage is sufficient
 roleSelection coverage is sufficient
 policyEvaluability coverage is sufficient
+runtimeImagePlan coverage is sufficient
+tektonaDeploymentPlan coverage is sufficient
 required coverage is sufficient
 remaining assumptions have safe defaults
 bestRemainingQuestionValue is below the configured stop threshold

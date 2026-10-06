@@ -30,6 +30,10 @@ Read these files before starting discovery:
 .agents/interview/topic-catalog.md
 .agents/interview/role-catalog.md
 .agents/policies/policy-contract.md
+.agents/runtime/image-contract.md
+.agents/runtime/image-plan.schema.json
+.agents/runtime/tektona-contract.md
+.agents/runtime/tektona-deployment.schema.json
 .agents/interview/question-bank.md
 .agents/interview/inference-rules.md
 .agents/interview/scenario-taxonomy.md
@@ -153,6 +157,7 @@ autonomy and approval boundaries
 quality expectations
 integration access
 risk profile
+runtime image and build plan
 ```
 
 ## Phase 3: Generate candidates
@@ -259,6 +264,13 @@ whether production or sensitive data is relevant
 which checks and self-verification are required
 which typed observer or decision-model signals prove each normative rule
 how missing evidence, low coverage and violation thresholds map to escalation
+which toolchains belong in the agent image and which development resources the agent must orchestrate inside its sandbox
+whether the MicroVM supplies a container daemon or supports a rootless engine
+which Tektona organization, project and template scope receive the image plan
+which repository, egress, proxy, registry and secret resource names are referenced without values
+which Tektona sandbox resources, lifecycle and process definitions are required
+which network destinations and runtime-installation privileges are available inside the sandbox
+which target platforms are required and whether a local build was explicitly approved
 ```
 
 An inherited organization or project policy may answer these questions without user interaction.
@@ -327,6 +339,22 @@ Quality Gates und Definition of Done
 
 Integrationen und Zugriffsklassen
 - ...
+
+OCI-Agentenimage
+- Ubuntu-Basis und Update-/Digest-Policy
+- OpenCode-Version und Installationsmethode
+- aus Evidenz abgeleitete Tool-Schichten
+- innerhalb der Sandbox orchestrierte, plattformverwaltete oder ausdrücklich eingebettete Services
+- Container-Runtime, Netzwerkzugriff und dynamische Installationsrechte
+- Zielplattformen sowie Sandbox-/lokaler Build-Modus
+
+Tektona-Bereitstellung
+- Organisation, Projekt, Template-Scope, Name und Tag
+- Repository-, Registry-, Egress-, Proxy- und Secret-Referenzen ohne Werte
+- Sandbox-Ressourcen, Lifecycle und Tektona-Prozesse
+- Plan-, Template-Build- oder Build-und-Sandbox-Modus
+- verifizierter CLI-/SDK-/API-Adapter oder explizit ungelöster Adapter
+- separate Freigabe für externe Schreiboperationen
 
 Zu erzeugende oder anzupassende Dateien
 - ...
@@ -399,6 +427,66 @@ Decision-model output is an input signal, not a policy decision. Declare the mod
 If a requirement cannot be expressed without ambiguous interpretation, do not disguise it as an enforceable rule. Add it to `unobservableRequirements`, explain the missing telemetry or rubric in the final summary and resolve it through another interview question when it is safety-critical.
 
 Generate configurable registry thresholds for warning, escalation, blocking and minimum evidence coverage. Record whether the control plane operates in `observe`, `advise` or `enforce` mode; the evaluation result stays identical across modes.
+
+## Runtime image generation
+
+Use `.agents/runtime/image-contract.md`, `.agents/runtime/image-plan.schema.json`, `.agents/runtime/tektona-contract.md` and `.agents/runtime/tektona-deployment.schema.json` to generate the agent runtime after the user approves the complete harness summary.
+
+Always generate:
+
+```text
+Dockerfile
+.dockerignore
+.agents/runtime/image-plan.json
+.agents/runtime/build-image.sh
+.agents/runtime/bootstrap-sandbox.sh
+.agents/runtime/tektona-deployment.json
+.agents/runtime/sandbox.template.tektona.yaml
+.agents/runtime/deploy-tektona.sh
+.agents/context/runtime-image.md
+.agents/context/tektona-deployment.md
+```
+
+Generate `.agents/runtime/compose.yaml` only when the product needs a database, queue, cache, emulator or other development resource and the selected Tektona base/template has proven container-runtime capability. Otherwise install the service in a dedicated `sandbox-service` layer and manage it as a Tektona background or autostart process.
+
+The generated image must:
+
+```text
+use the official Ubuntu current-LTS tag through ARG UBUNTU_BASE_IMAGE=ubuntu:latest
+contain OpenCode as a mandatory, versioned and verified runtime component
+contain only toolchain, build, client and project-utility layers supported by evidence
+contain container and Compose tooling when sandbox resources are Compose-managed
+mark each optional Dockerfile layer with # harness-layer: <layer-id>
+run as a non-root user whose passwd home, HOME and working directory are /workspace
+exclude the project source and every secret from the build context and image
+make opencode available on PATH and start it through Tektona process management rather than an interactive boot CMD
+```
+
+Classify stateful development dependencies such as databases, queues and caches as `tektona-process` services by default when their server packages can be installed reproducibly. Install the server in a distinct `sandbox-service` layer, install useful client/diagnostic tooling, and generate Tektona process plus health-check definitions. Use Compose only with recorded proof of daemon/rootless capability. Use a platform-managed service only when explicitly selected. Add a server as an `embedded-service` sharing the OpenCode lifecycle only after explicit confirmation.
+
+Do not treat Docker or Podman CLI availability as proof that Compose can run. Record whether the target MicroVM provides a dedicated daemon/socket or supports a rootless engine, install the matching clients or runtime layer and verify the complete path during bootstrap.
+
+Always include `tektona` in `image-plan.json.deploymentTargets`. Generate `tektona-deployment.json` as the normalized Tektona handoff and `sandbox.template.tektona.yaml` as an `apiVersion: tektona.ai/v1`, `kind: SandboxTemplate` manifest. Default to a project template, `deployment.mode = plan`, `deployment.approved = false`, `deployment.adapter = unresolved` and no automatic sandbox creation unless repository evidence or the user resolves them differently.
+
+Prefer the Tektona-native manifest strategy. Use a verified version of `ghcr.io/tektona-ai/sandbox-base` for headless agent work or `ghcr.io/tektona-ai/desktop-x11` only when browser/computer-use evidence requires it. These official images already provide the current Ubuntu LTS, systemd, OpenCode and common developer tooling; generate named build steps only for missing project layers and still verify OpenCode. Do not copy a documentation example version without verifying that it is the intended release. Select the external-OCI-image strategy only when the committed Dockerfile must be authoritative, the image is reused outside Tektona or CI already publishes it; then require a fully qualified result image and a project registry reference for private pulls.
+
+Reference Tektona repositories, Git credentials, registries, egress network policies, egress proxy profiles and secrets by resource name only. Never read or serialize credential values. Do not install a VNC server; Tektona provides desktop access independently of the image.
+
+Represent bootstrap, development services and OpenCode as Tektona process definitions where appropriate. A process command may reference the cloned repository but may not contain secrets. Tektona owns process lifecycle, logs, signals and persisted autostart; the Dockerfile `CMD` remains only the portable default.
+
+Generate `deploy-tektona.sh` with `validate`, `preview` and `apply` modes. The documented apply workflow is `tektona ctx show`, then `tektona template build run --file .agents/runtime/sandbox.template.tektona.yaml --tag <tag>`, followed—only in build-and-create-sandbox mode—by `tektona sandbox create <template-reference>:<tag> --name <sandbox-name>`. Before apply, inspect installed CLI help and version to verify those exact commands and flags, and record interface evidence in the plan. Never invent a command, SDK call, request body or additional flag. When the interface cannot be verified, the script must fail closed for `apply` with a clear adapter-required message.
+
+Harness-generation approval does not authorize Tektona writes. Creating/updating a template, starting its asynchronous build, moving a tag, creating a sandbox or changing platform resources requires explicit approval for the resolved organization/project target. A mutating deployment must wait for a terminal successful build before tagging or sandbox creation and must record the build and template-version identifiers.
+
+Model network access and dynamic installation as sandbox capabilities. Preinstall all known recurring toolchains and system tools. After the repository is cloned, let the sandbox bootstrap install project dependencies from authoritative lockfiles when network policy permits. If the agent needs an unforeseen tool, permit only the approved runtime-installation mode, require source and integrity evidence, record every installation and propose repeatedly installed tools as future image layers. Do not persist downloaded credentials or secrets.
+
+The image plan is the machine-readable source for the sandbox builder. Every optional layer must include evidence references, an approved installation strategy and verification commands. The human-readable `runtime-image.md` explains the same plan without becoming a second normative source.
+
+When image requirements are represented in the policy registry, use typed build/observer signals and deterministic rules for layer parity, OpenCode verification, non-root execution, secret-scan findings, digest resolution and local-build approval. Missing build evidence is `UNKNOWN`, never `PASS`.
+
+Generate the local build script in all cases. Execute it only when the approved summary explicitly permits a local build and Docker, Podman or another compatible engine is available. A local build may pull images and packages and alter the local container cache, so availability alone is not approval. On success, verify OpenCode and all layer commands and record `.agents/runtime/image-lock.json` when digest data is available. Never claim a build succeeded when it was only planned.
+
+Tektona builds the native manifest directly, or consumes a previously published OCI image when the external-image strategy is selected. It resolves an immutable template version and publishes the requested tag only after a successful build. The underlying API operation is asynchronous and must not be reported as deployed until it reaches a successful terminal state; the documented CLI build command streams and waits. Platform credentials and runtime secret/egress injection remain outside both build definitions.
 
 ## Integration generation
 
@@ -577,6 +665,8 @@ Generate or update the relevant subset of these stable artifacts:
 ```text
 AGENTS.md
 opencode.jsonc
+Dockerfile
+.dockerignore
 .opencode/command/harness-init.md
 .opencode/command/harness-check.md
 .opencode/command/harness-update.md
@@ -596,6 +686,15 @@ opencode.jsonc
 .agents/context/role-activation-policy.md
 .agents/context/compliance-policy.md
 .agents/policies/policy-registry.json
+.agents/runtime/image-plan.json
+.agents/runtime/build-image.sh
+.agents/runtime/bootstrap-sandbox.sh
+.agents/runtime/tektona-deployment.json
+.agents/runtime/sandbox.template.tektona.yaml
+.agents/runtime/deploy-tektona.sh
+.agents/runtime/compose.yaml (only with proven container-runtime capability)
+.agents/context/runtime-image.md
+.agents/context/tektona-deployment.md
 .agents/roles/<each-confirmed-role>.md
 .agents/playbooks/harness-update.md
 .agents/runs/.gitkeep
@@ -627,6 +726,17 @@ policy-registry.json passes `.agents/scripts/policy-evaluator.py validate`
 every normative Markdown requirement maps to a stable registry rule id
 UNKNOWN and NOT_APPLICABLE are not treated as PASS
 threshold ordering and minimum coverage are explicit
+image-plan.json is valid JSON and satisfies the runtime image schema and semantic validator
+Dockerfile uses the declared Ubuntu base argument and installs and verifies OpenCode
+Dockerfile layer markers exactly match the image plan and every layer has repository or interview evidence
+stateful development services have matching Tektona processes by default or proven Compose/platform provisioning
+every Compose service has an image, health check and matching container-runtime capability
+Tektona deployment plan and native manifest pass validate-tektona and contain no credential values
+deploy-tektona.sh refuses external writes without separate approval and a verified CLI interface
+bootstrap-sandbox.sh is idempotent, verifies the runtime and waits for service health
+network and dynamic-installation permissions are explicit and runtime installations are auditable
+the final image runs as non-root, does not copy the project and contains no secret material
+build-image.sh passes shell syntax validation and was not executed without approval
 ```
 
 Check the config for forbidden patterns and inspect every match rather than assuming all text matches are errors.
@@ -658,6 +768,8 @@ which evidence sources were used
 how many questions were needed
 why the interview stopped
 what was generated or updated
+which OCI layers and external services were planned and whether a local build was executed
+which Tektona strategy, template reference and deployment mode were generated and whether any external write ran
 which assumptions and safe defaults remain
 current harness version
 whether post-generation checks passed

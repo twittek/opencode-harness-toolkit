@@ -17,6 +17,7 @@ The harness exists to make an AI agent reliable, controlled, repeatable, and pro
 /harness-check   = audit current harness version and write findings
 /harness-update  = apply active findings for current version, update changelog, increment version
 /harness-retro   = collect usage feedback and write retro findings
+/harness-mcp     = inventory, evaluate and plan MCP configuration with approval gates
 ```
 
 ## Versioning
@@ -39,9 +40,9 @@ All harness changes must be documented in:
 - Prefer focused playbooks over huge prompts.
 - Use `.agents/runs/<task-id>/` for reports and handoffs.
 - Do not post long Markdown inline into shell commands.
-- If GitLab is used, read `.agents/skills/gitlab-glab.md` first.
-- If GitLab is used, do not invent `glab` commands or flags.
-- If GitLab is used, comments must be written to Markdown files first and posted via `.agents/scripts/gitlab-issue-comment.sh`.
+- If GitLab is used, load `.agents/integrations/gitlab.md` and the generated integration policy when present.
+- If GitLab is used, do not invent `glab` commands or flags; use a reviewed wrapper when one covers the operation.
+- If GitLab issue-comment posting is enabled, write comments to Markdown files first and use `.agents/scripts/gitlab-issue-comment.sh`.
 - After completing a task, explicitly verify the result against the requirements.
 
 ## OpenCode Config Safety
@@ -60,6 +61,8 @@ When generating or editing `opencode.jsonc`:
 ## MCP discovery command
 
 Use `/harness-mcp` for controlled MCP discovery, recommendations, risk review and installation planning.
+
+The bootstrap config currently contains an enabled local `chrome-devtools` MCP entry. Treat it as existing configuration to inventory and reconcile; do not assume it is appropriate for every initialized project.
 
 Rules:
 
@@ -141,6 +144,25 @@ Use `.agents/policies/policy-contract.md` when `/harness-init` generates policie
 Normative prose is not sufficient. Every mandatory, forbidden or approval-gated behavior must map to a versioned rule in `.agents/policies/policy-registry.json` with typed signals, deterministic predicates, explicit unknown handling and reason codes.
 
 Missing evidence is `UNKNOWN`, never compliant by default. Decision-model output may be a declared signal, but the policy evaluator and configured thresholds determine the result and recommended action.
+
+## Agent runtime image
+
+`/harness-init` must generate the OCI runtime artifacts defined by:
+
+```text
+.agents/runtime/image-contract.md
+.agents/runtime/image-plan.schema.json
+.agents/runtime/tektona-contract.md
+.agents/runtime/tektona-deployment.schema.json
+```
+
+OpenCode is a mandatory image component. Add project toolchains, client utilities and sandbox-service layers only when repository or interview evidence supports them. Use Tektona processes for stateful development resources by default. Generate Compose resources only when capability evidence proves a usable daemon or supported rootless engine.
+
+Known recurring tools belong in the image. Internet-backed runtime installation is an auditable fallback governed by the image plan; repeated installations should become proposed image layers.
+
+Generate `.agents/runtime/build-image.sh`, but do not execute a local Docker or Podman build without explicit approval. Never bake project source, credentials or runtime secrets into the image.
+
+Generate the Tektona deployment handoff in plan mode by default. Reference repositories, credentials, registries, egress policies, proxy profiles and secrets by name only. Do not build a template, move a tag or create a sandbox without separate approval and an adapter verified against the exact Tektona interface.
 
 ## Interactive question tool policy
 

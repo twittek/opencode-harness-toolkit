@@ -72,6 +72,8 @@ Use:
 
 Policy-evaluation history may support improvement proposals, but must not silently change rules or thresholds. Retrospective findings should identify the affected rule ids, observed false positives or false negatives, coverage gaps and a versioned proposed change for later approval through `/harness-update`.
 
+Runtime-image feedback may include missing tools, repeated runtime installations, unnecessary layers, excessive image size, build failures, architecture mismatches, slow startup, stale Tektona resource references, failed Tektona processes, unavailable container daemons, failed Compose health checks or service-placement problems. Record the affected layer, service or Tektona resource id and concrete build/task evidence; do not directly rewrite, rebuild or redeploy the image during the retrospective.
+
 Verify:
 
 ```text

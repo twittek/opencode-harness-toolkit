@@ -1,0 +1,182 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://opencode-harness.local/schemas/image-plan.schema.json",
+  "title": "OpenCode Harness Agent Runtime Image Plan",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schemaVersion", "planVersion", "subject", "deploymentTargets", "base", "agent", "layers", "services", "sandbox", "security", "build"],
+  "properties": {
+    "schemaVersion": { "const": "1.2" },
+    "planVersion": { "type": "integer", "minimum": 1 },
+    "subject": { "type": "string", "minLength": 1 },
+    "deploymentTargets": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "contains": { "const": "tektona" },
+      "items": { "enum": ["tektona", "portable-oci"] }
+    },
+    "base": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["reference", "updatePolicy", "resolvedDigest"],
+      "properties": {
+        "reference": { "type": "string", "pattern": "^ubuntu:[A-Za-z0-9._-]+(@sha256:[a-f0-9]{64})?$" },
+        "updatePolicy": { "enum": ["current-lts-with-lock", "pinned-digest"] },
+        "resolvedDigest": { "type": ["string", "null"], "pattern": "^sha256:[a-f0-9]{64}$" }
+      }
+    },
+    "agent": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["name", "required", "distribution", "version", "installMethod", "verifyCommand"],
+      "properties": {
+        "name": { "const": "opencode" },
+        "required": { "const": true },
+        "distribution": { "enum": ["@opencode/cli", "official-opencode-binary"] },
+        "version": { "type": "string", "minLength": 1 },
+        "installMethod": { "enum": ["npm", "verified-binary"] },
+        "verifyCommand": { "const": "opencode --version" }
+      },
+      "allOf": [
+        {
+          "if": { "properties": { "installMethod": { "const": "npm" } }, "required": ["installMethod"] },
+          "then": { "properties": { "distribution": { "const": "@opencode/cli" } } }
+        },
+        {
+          "if": { "properties": { "installMethod": { "const": "verified-binary" } }, "required": ["installMethod"] },
+          "then": { "properties": { "distribution": { "const": "official-opencode-binary" } } }
+        }
+      ]
+    },
+    "layers": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/layer" }
+    },
+    "services": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/service" }
+    },
+    "sandbox": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["autonomyGoal", "networkAccess", "dynamicInstall", "containerRuntime"],
+      "properties": {
+        "autonomyGoal": { "const": "self-contained-product-development" },
+        "networkAccess": { "enum": ["allowed", "restricted", "denied"] },
+        "dynamicInstall": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["mode", "allowedSources", "requireIntegrityEvidence", "recordChanges", "privilegeEscalationApproved"],
+          "properties": {
+            "mode": { "enum": ["disabled", "user-local", "sandbox-root"] },
+            "allowedSources": { "type": "array", "uniqueItems": true, "items": { "type": "string", "minLength": 1 } },
+            "requireIntegrityEvidence": { "const": true },
+            "recordChanges": { "const": true },
+            "privilegeEscalationApproved": { "type": "boolean" }
+          }
+        },
+        "containerRuntime": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["required", "mode", "compose", "verifyCommand", "capabilityEvidenceRefs"],
+          "properties": {
+            "required": { "type": "boolean" },
+            "mode": { "enum": ["platform-daemon", "rootless-in-microvm", "none"] },
+            "compose": { "type": "boolean" },
+            "verifyCommand": { "type": ["string", "null"] },
+            "capabilityEvidenceRefs": {
+              "type": "array",
+              "uniqueItems": true,
+              "items": { "type": "string", "minLength": 1 }
+            }
+          }
+        }
+      }
+    },
+    "security": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["runAsNonRoot", "copyProjectIntoImage", "allowBuildSecrets"],
+      "properties": {
+        "runAsNonRoot": { "const": true },
+        "copyProjectIntoImage": { "const": false },
+        "allowBuildSecrets": { "const": false }
+      }
+    },
+    "build": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["mode", "engine", "context", "dockerfile", "imageRef", "pull", "platforms", "localBuildApproved"],
+      "properties": {
+        "mode": { "enum": ["sandbox", "local", "both"] },
+        "engine": { "enum": ["auto", "docker", "podman", "buildkit"] },
+        "context": { "const": "." },
+        "dockerfile": { "const": "Dockerfile" },
+        "imageRef": { "type": "string", "minLength": 1 },
+        "pull": { "const": true },
+        "platforms": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": { "enum": ["linux/amd64", "linux/arm64"] }
+        },
+        "localBuildApproved": { "type": "boolean" }
+      }
+    }
+  },
+  "$defs": {
+    "layer": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "category", "reason", "evidenceRefs", "version", "install", "verifyCommands"],
+      "properties": {
+        "id": { "type": "string", "pattern": "^[a-z0-9][a-z0-9-]+$" },
+        "category": { "enum": ["baseline", "sandbox-runtime", "toolchain", "build-tool", "database-client", "integration-client", "project-utility", "sandbox-service", "embedded-service"] },
+        "reason": { "type": "string", "minLength": 1 },
+        "evidenceRefs": { "type": "array", "minItems": 1, "uniqueItems": true, "items": { "type": "string", "minLength": 1 } },
+        "version": { "type": "string", "minLength": 1 },
+        "install": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["strategy", "packages", "commands", "sources"],
+          "properties": {
+            "strategy": { "enum": ["apt", "signed-repository", "verified-archive", "language-manager", "custom-approved"] },
+            "packages": { "type": "array", "items": { "type": "string", "minLength": 1 } },
+            "commands": { "type": "array", "items": { "type": "string", "minLength": 1 } },
+            "sources": { "type": "array", "items": { "$ref": "#/$defs/source" } }
+          }
+        },
+        "verifyCommands": { "type": "array", "minItems": 1, "items": { "type": "string", "minLength": 1 } }
+      }
+    },
+    "source": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["url", "integrity"],
+      "properties": {
+        "url": { "type": "string", "format": "uri" },
+        "integrity": { "type": "string", "minLength": 1 }
+      }
+    },
+    "service": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "kind", "mode", "image", "reason", "clientLayerId", "runtimeLayerId", "composeFile", "serviceName", "processName", "healthCheck", "agentEndpoint"],
+      "properties": {
+        "id": { "type": "string", "pattern": "^[a-z0-9][a-z0-9-]+$" },
+        "kind": { "enum": ["database", "cache", "queue", "search", "object-storage", "other"] },
+        "mode": { "enum": ["tektona-process", "sandbox-compose", "platform-service", "embedded"] },
+        "image": { "type": ["string", "null"] },
+        "reason": { "type": "string", "minLength": 1 },
+        "clientLayerId": { "type": ["string", "null"] },
+        "runtimeLayerId": { "type": ["string", "null"] },
+        "composeFile": { "type": ["string", "null"] },
+        "serviceName": { "type": ["string", "null"] },
+        "processName": { "type": ["string", "null"] },
+        "healthCheck": { "type": ["string", "null"] },
+        "agentEndpoint": { "type": ["string", "null"] }
+      }
+    }
+  }
+}
