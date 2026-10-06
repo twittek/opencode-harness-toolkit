@@ -217,6 +217,7 @@ required completion checks
 forbidden or irreversible actions
 the project-specific role set
 machine-evaluable policy rules and their required evidence
+the OCI runtime image, required tool layers and service placement
 ```
 
 A safety fact may come from an inherited organization policy, repository policy or user answer. Do not ask again when an authoritative source already supplies it.
@@ -298,6 +299,7 @@ Stop asking questions when all of the following are true:
 ```text
 no blocking safety unknown remains
 the project-specific role set is confirmed
+the runtime image plan is sufficient to render and verify
 required harness outputs can be generated
 remaining uncertainty has a safe documented default
 the best remaining candidate has low expected information gain
@@ -311,6 +313,7 @@ ready = criticalUnknowns is empty
         AND discoverySubject is sufficient
         AND roleSelection is sufficient
         AND policyEvaluability is sufficient
+        AND runtimeImagePlan is sufficient
         AND requiredOutputCoverage is complete
         AND maxRemainingQuestionValue < stopThreshold
 ```

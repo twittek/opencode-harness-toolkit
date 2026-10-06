@@ -1,4 +1,4 @@
-# OpenCode Harness Toolkit 
+# OpenCode Harness Toolkit
 
 This toolkit creates a small **OpenCode harness toolbox** for project-specific AI-agent workflows.
 
@@ -11,6 +11,19 @@ It is designed for teams or individual developers who want to make an AI coding 
 - maintainable over time
 
 The harness is not just a prompt collection. It is a lightweight operating model for AI-assisted software development.
+
+The current toolkit combines:
+
+```text
+adaptive evidence-driven discovery
+selective project-specific roles
+machine-evaluable policy and compliance rules
+observer/decision-model-ready evidence contracts
+OCI agent-runtime generation
+native Tektona template and sandbox deployment planning
+controlled MCP discovery
+versioned checks, updates and retrospectives
+```
 
 ---
 
@@ -26,10 +39,12 @@ After running the toolkit script, your project gets an OpenCode command set:
 /harness-mcp     → discover and plan MCP usage with approval gates
 ```
 
-This gives you a full lifecycle:
+This gives you a full lifecycle with optional capability and runtime branches:
 
 ```text
 Initialize → Check → Update → Retro → Check again
+     ├────→ MCP discovery and approved configuration
+     └────→ OCI/Tektona plan → separately approved build or sandbox
 ```
 
 MCP discovery is an optional approval-first branch of this lifecycle.
@@ -56,6 +71,8 @@ harness-toolkit.html
 
 Open it directly in a browser. No build step is required.
 
+The page documents the same current lifecycle, policy, OCI and Tektona behavior as this README.
+
 ## Quick start
 
 Copy the ZIP file into the root directory of your project, unzip it there, and run the install script.
@@ -76,6 +93,8 @@ After installation, start OpenCode from the project root:
 ```bash
 opencode
 ```
+
+Review the installed `opencode.jsonc` before starting. The distributed bootstrap currently contains a local `chrome-devtools` MCP entry backed by `npx`; `/harness-mcp` governs project-specific MCP additions, removals and permission changes.
 
 Then run:
 
@@ -117,7 +136,7 @@ opencode-harness-toolkit/
     │       ├── harness-check.md
     │       ├── harness-update.md
     │       ├── harness-mcp.md
-    │       ├── harness-retro.md
+    │       └── harness-retro.md
     └── .agents/
         ├── context/
         ├── interview/
@@ -127,11 +146,15 @@ opencode-harness-toolkit/
         │   └── topics/
         ├── playbooks/
         ├── roles/
+        ├── policies/
+        ├── runtime/
         ├── scripts/
-        ├── skills/
-        ├── templates/
+        ├── integrations/
+        ├── mcp/
         └── runs/
 ```
+
+Many files below `template/.agents/` are maintenance references or optional generation sources. The installer uses an explicit bootstrap allowlist; it does not copy the complete tree into a target project.
 
 ## OpenCode Config Safety
 
@@ -184,7 +207,7 @@ Run the standard-library test suite from the toolkit directory:
 PYTHONDONTWRITEBYTECODE=1 python3 -m unittest discover -s tests -v
 ```
 
-The tests verify the entropy ranker, deterministic policy evaluator, safety restrictions, modular topic contract, lifecycle-command registration and absence of the former fixed interview flow.
+The tests verify the entropy ranker, deterministic policy evaluator, OCI/Tektona plan validator, approval and secret-safety restrictions, modular topic contract, selective generation rules, lifecycle-command registration, documentation coverage and absence of the former fixed interview flow.
 
 ## Customizing the bootstrap
 
@@ -231,6 +254,11 @@ opencode.jsonc
 .agents/policies/task-evidence.schema.json
 .agents/policies/evaluation-result.schema.json
 .agents/scripts/policy-evaluator.py
+.agents/runtime/image-contract.md
+.agents/runtime/image-plan.schema.json
+.agents/runtime/tektona-contract.md
+.agents/runtime/tektona-deployment.schema.json
+.agents/scripts/image-plan-validator.py
 .agents/context/context-loading-policy.md
 .agents/context/self-verification-policy.md
 ```
@@ -247,6 +275,8 @@ The installer deliberately does not populate `.agents/roles/`, integrations, pro
 .agents/context/risk-profile.md
 .agents/context/context-safety-policy.md
 .agents/context/compliance-policy.md
+.agents/context/harness-version.json
+.agents/context/harness-changelog.md
 .agents/policies/policy-registry.json
 .agents/playbooks/refinement.md
 .agents/playbooks/architecture.md
@@ -255,6 +285,17 @@ The installer deliberately does not populate `.agents/roles/`, integrations, pro
 .agents/playbooks/review.md
 .agents/scripts/quality-gates.sh
 .agents/scripts/load-issue.sh
+Dockerfile
+.dockerignore
+.agents/context/runtime-image.md
+.agents/runtime/image-plan.json
+.agents/runtime/build-image.sh
+.agents/runtime/bootstrap-sandbox.sh
+.agents/runtime/tektona-deployment.json
+.agents/runtime/sandbox.template.tektona.yaml
+.agents/runtime/deploy-tektona.sh
+.agents/runtime/compose.yaml                   (only with proven container-runtime capability)
+.agents/context/tektona-deployment.md
 ```
 
 Depending on the project, `/harness-init` may also create optional files for GitLab, GitHub, monorepos, security, APIs, documentation, or dependency policies.
@@ -289,6 +330,10 @@ authentication and permissions
 external integrations
 agent responsibilities and autonomy
 quality gates and documentation
+selected expert roles
+policy observability and deterministic escalation
+agent runtime image and development services
+Tektona template, resources and deployment mode
 ```
 
 Repository evidence may resolve dimensions before the first question. A detected framework, CI pipeline or deployment manifest is recorded with its source and confidence instead of being asked again.
@@ -322,7 +367,7 @@ The optional `.agents/scripts/interview-ranker.py` helper performs this entropy 
 
 The engine asks the eligible question with maximum value. Safety-critical unknowns constrain which candidates are eligible.
 
-This is not generic curiosity optimization. A question is valuable only when different answers change generated policies, roles, permissions, playbooks, quality gates or other harness artifacts.
+This is not generic curiosity optimization. A question is valuable only when different answers change generated policies, roles, permissions, playbooks, quality gates, runtime layers, Tektona resources or other harness artifacts.
 
 ### Modular topic packs
 
@@ -346,6 +391,8 @@ delivery and operations
 quality and verification
 agent governance
 documentation
+compliance observability
+agent runtime image
 ```
 
 Topic packs provide activation signals, uncertainty dimensions, evidence sources, candidate-question patterns, completion conditions and safe defaults. They are not interview blocks and define no global order.
@@ -449,10 +496,11 @@ When external systems are relevant, the harness can generate or update:
 .agents/integrations/confluence.md
 .agents/integrations/figma.md
 .agents/integrations/sonarqube.md
-.agents/mcp/mcp-policy.md
 ```
 
-It can also provide safe wrapper scripts:
+`/harness-init` records MCP capability needs but does not install project-specific MCP servers. Stable MCP registry and approval files are created or updated through `/harness-mcp` when that workflow is selected.
+
+When supported by the selected system and approved access model, it can also generate focused wrapper scripts such as:
 
 ```text
 .agents/scripts/gitlab-issue-comment.sh
@@ -672,6 +720,113 @@ A decision model remains upstream of the policy engine. It may emit a probabilit
 
 Requirements that cannot yet be expressed as observable predicates are recorded as policy-design gaps rather than being presented as enforceable rules.
 
+## Adaptive OCI Agent Image
+
+After the approved interview, `/harness-init` now produces a portable OCI build contract in addition to the project harness:
+
+```text
+Dockerfile                         → executable image definition
+.dockerignore                      → excludes source, secrets and local state
+.agents/runtime/image-plan.json    → machine-readable layers, evidence and services
+.agents/runtime/build-image.sh     → optional local Docker/Podman validation
+.agents/runtime/bootstrap-sandbox.sh → starts and verifies sandbox resources
+.agents/runtime/tektona-deployment.json → validated template/sandbox handoff
+.agents/runtime/sandbox.template.tektona.yaml → recommended native Tektona build
+.agents/runtime/deploy-tektona.sh  → validates, previews and uses a verified adapter
+.agents/runtime/compose.yaml       → optional, only with proven container capability
+.agents/context/runtime-image.md   → human-readable explanation
+.agents/context/tektona-deployment.md → Tektona scope, references and approval state
+```
+
+The portable image starts from the official current Ubuntu LTS tag, installs OpenCode as a mandatory component and then adds only the tool layers supported by repository or interview evidence. The Tektona-native rendering starts from a verified release of `ghcr.io/tektona-ai/sandbox-base`, which itself tracks the current Ubuntu LTS and already contains OpenCode, then adds only missing project layers.
+
+```text
+Cargo.toml or rust-toolchain.toml
+→ Rust compiler, Cargo and required native build tools in the agent image
+
+MongoDB driver or configuration
+→ MongoDB client/diagnostic tooling in the agent image
+→ MongoDB server in a distinct sandbox-service layer
+→ lifecycle through a Tektona background/autostart process
+```
+
+The autonomy goal is a self-contained development sandbox. For required databases, queues, caches and emulators, the Tektona default is a dedicated service layer plus a health-checked Tektona process. Compose remains available only when the chosen Tektona template provides documented daemon/socket or rootless-runtime capability. A daemon is never assumed merely because a CLI is installed; the plan must record capability evidence.
+
+Known recurring tools are preinstalled. When sandbox internet access is permitted, the agent may install an unforeseen tool in user-local or explicitly approved sandbox-root mode. The source, version, integrity evidence, task and installed path are recorded. Repeated downloads become drift evidence and should be promoted into the next image version.
+
+The repository is attached through the Tektona project and cloned at sandbox startup. The bootstrap then installs project dependencies from its lockfiles and verifies Tektona-managed or Compose-managed resources. This keeps source code and fast-changing dependency trees out of the reusable base image without reducing agent autonomy.
+
+Stateful servers are installed directly into the OpenCode image only after explicit confirmation. The image runs as a non-root user, does not contain a copy of the project repository and must not contain credentials. Every optional Dockerfile layer has a stable `# harness-layer` marker that is checked against the evidence-bearing image plan.
+
+Tektona can build the native `SandboxTemplate` manifest directly (recommended) or consume an OCI image published from the Dockerfile when the same image must run outside Tektona. A build publishes an immutable version and moves a requested tag only after success. The deployment plan references repositories, Git credentials, registries, egress policies, proxy profiles and secrets by name—never by value—and captures sandbox resources, lifecycle and processes. Applying it requires separate approval and verification of the installed Tektona CLI command surface. The same Dockerfile can be built locally with Docker or Podman after explicit approval, but local success does not create a Tektona template or sandbox.
+
+### What can happen directly after `/harness-init`
+
+`/harness-init` always generates and validates the build and deployment artifacts. What it executes afterward is an explicit interview outcome:
+
+| Mode | Result | Prerequisites | External effect |
+|---|---|---|---|
+| `plan` | Dockerfile, native Tektona manifest, image plan, deployment plan and scripts | Approved harness generation | None |
+| Local OCI build | A tagged OCI image in the local Docker, Podman or BuildKit cache | Available engine and explicit local-build approval | Pulls packages/images and changes the local container cache |
+| `build-template` | A new immutable Tektona template version; the requested tag moves only after success | Resolved org/project context, authenticated and verified Tektona CLI, template-admin permission and separate deployment approval | Writes a template version and tag in Tektona |
+| `build-and-create-sandbox` | Successful template build followed by a new Tektona sandbox | All template-build prerequisites plus a resolved sandbox name, resources, lifecycle and sandbox-creation approval | Writes a template version/tag and creates a sandbox |
+
+No external write is implied by approving harness generation. The default is `plan`, with `deployment.approved = false`. Local build, Tektona template build and sandbox creation are separately visible and approval-gated actions.
+
+The generated scripts expose the intended control points:
+
+```bash
+# Build and verify a conventional local OCI image, when approved.
+.agents/runtime/build-image.sh
+
+# Validate the Tektona handoff without writing to the platform.
+.agents/runtime/deploy-tektona.sh validate
+
+# Show the resolved scope, template, tag, resources and pending actions.
+.agents/runtime/deploy-tektona.sh preview
+
+# Build the template and optionally create the sandbox, only when the
+# approved deployment plan and verified CLI adapter permit it.
+.agents/runtime/deploy-tektona.sh apply
+```
+
+### Two Tektona delivery paths
+
+The deployment plan chooses one of two strategies:
+
+```text
+native-manifest (recommended)
+→ sandbox.template.tektona.yaml
+→ verified ghcr.io/tektona-ai/sandbox-base:<version>
+→ Tektona installs only the missing project tools
+→ no separate OCI registry publication is required
+
+external-oci-image
+→ build Dockerfile locally or in CI
+→ publish the fully qualified image to a registry
+→ reference a project registry credential when the image is private
+→ Tektona builds the template from that published image
+```
+
+A local OCI build and a Tektona template build are therefore different outcomes. A local build proves portable image construction; only a successful Tektona template build creates the immutable version from which Tektona can start a sandbox.
+
+### Direct Tektona sandbox flow
+
+When `build-and-create-sandbox` is selected and separately approved, the generated deployment script performs the guarded sequence:
+
+```text
+validate image plan + Dockerfile + Tektona manifest + deployment plan
+→ verify `tektona` CLI version and required command surface
+→ verify active organization/project context
+→ start the template build and stream/wait for completion
+→ stop on failed or incomplete build; publish no success claim
+→ use the requested tag only after the version was published successfully
+→ create the named sandbox from <template-reference>:<tag>
+→ record build id, template-version id and sandbox result
+```
+
+Repository, Git credential, registry, secret, egress-policy and proxy-profile fields contain Tektona resource references only. Credential values never enter the Dockerfile, manifest, deployment JSON or build logs.
+
 ## MCP Discovery & Planning
 
 Harness Toolkit includes a dedicated MCP command:
@@ -680,9 +835,11 @@ Harness Toolkit includes a dedicated MCP command:
 /harness-mcp
 ```
 
-This command performs controlled MCP discovery, recommendation and installation planning.
+This command performs controlled MCP inventory, discovery, recommendation and installation planning.
 
-It does **not** blindly install MCP servers.
+It does **not** blindly install additional MCP servers or mutate MCP configuration.
+
+The distributed bootstrap `opencode.jsonc` currently contains one explicit default: the local `chrome-devtools` MCP server invoked through `npx`. Treat it as existing configuration during discovery. Review or remove it before first use when browser tooling or runtime package download is not acceptable for the target project.
 
 ### Why MCP discovery is separate
 
@@ -700,7 +857,7 @@ Therefore MCP handling is intentionally separated from `/harness-init`.
 
 `/harness-init` may document MCP needs.
 
-`/harness-mcp` evaluates MCP candidates and creates a plan.
+`/harness-mcp` inventories existing entries, evaluates new or changed candidates and creates a plan.
 
 Configuration changes happen only after explicit approval.
 
@@ -804,7 +961,10 @@ What it does:
 - creates English harness files
 - confirms a project-specific role set and creates only those roles
 - replaces the bootstrap AGENTS.md with a concise project-specific routing document
-- creates only relevant context files, playbooks, templates and scripts
+- generates a deterministic policy registry with typed evidence and explicit unknown handling
+- creates only relevant context files, playbooks, integrations and scripts
+- generates the evidence-backed OCI runtime and Tektona deployment contract
+- can separately build a local OCI image, a Tektona template or a Tektona template plus sandbox after explicit approval
 - sets up harness versioning
 - writes the initial changelog
 - applies safe defaults
@@ -828,6 +988,9 @@ The interview focuses on:
 - Git hosting and issue workflow
 - safety rules
 - Definition of Done
+- observer signals, policy thresholds and enforcement mode
+- required agent-image toolchains and sandbox services
+- Tektona scope, template strategy, resource references and deployment mode
 
 Use cases:
 
@@ -845,7 +1008,7 @@ GitLab project with issues and MRs
 → run /harness-init
 → choose GitLab
 → provide host, project path, project ID if known
-→ GitLab/glab skill and scripts are generated
+→ a GitLab integration policy and only the required reviewed wrappers are generated
 ```
 
 ### Guided `/harness-init` Interview
@@ -863,6 +1026,7 @@ GitLab project with issues and MRs
 - no file generation during the interview
 - final summary before generation
 - explicit approval required before files are written
+- separate approval required before a local image build or Tektona write
 ```
 
 The first question depends on available evidence. For an empty project it may be:
@@ -900,6 +1064,11 @@ What it checks:
 - bloated global instructions
 - poor 128K context strategy
 - versioning and changelog hygiene
+- stale bootstrap instructions, unconfirmed roles or references to absent role files
+- policy-registry schema, predicate, signal, threshold and missing-evidence errors
+- Dockerfile/image-plan layer drift and unverified OpenCode installation
+- Tektona manifest/deployment-plan drift, unsafe credential material and unapproved write modes
+- broken Tektona-process or capability-unproven Compose service definitions
 
 Output location:
 
@@ -939,6 +1108,10 @@ You suspect the harness has grown messy
 Before a bigger cleanup
 → run /harness-check
 → let it create structured findings for /harness-update
+
+After changing toolchains, services or Tektona settings
+→ run /harness-check
+→ verify image-plan, manifest, deployment references and runtime capabilities
 ```
 
 Important:
@@ -981,6 +1154,8 @@ What it does:
 6. updates `harness-version.json`
 7. appends a detailed changelog entry
 8. writes a post-update check
+
+For approved policy changes, it keeps the JSON registry, typed signals, thresholds and human-readable rule references synchronized. For runtime changes, it updates the image plan, Dockerfile, Tektona manifest/deployment plan and related scripts together, invalidates stale locks and preserves separate build/deployment approvals.
 
 Output location:
 
@@ -1047,6 +1222,8 @@ Collect usage-based feedback and convert it into active findings for the current
 
 This is not a technical audit. It is a satisfaction and practice-oriented retrospective.
 
+It may also capture evidence-backed runtime feedback such as missing tools, repeated dynamic installations, slow image startup, failed Tektona processes, stale platform references or unnecessary image layers. It records findings only; it does not rebuild or redeploy the runtime.
+
 It asks in German:
 
 ```text
@@ -1088,7 +1265,7 @@ The agent changes too much at once
 The GitLab workflow still feels clumsy
 → run /harness-retro
 → capture concrete examples
-→ /harness-update improves the GitLab skill/scripts
+→ /harness-update improves the integration policy or reviewed wrappers
 
 The initial harness is technically valid but not pleasant to use
 → run /harness-retro
@@ -1102,6 +1279,14 @@ Important:
 ```
 
 It creates findings. Use `/harness-update` to apply them.
+
+---
+
+### `/harness-mcp`
+
+Use this to inventory existing MCP configuration, identify capability gaps, assess candidate risk and prepare an approval-gated configuration change.
+
+It writes discovery, recommendation, risk-review and installation-plan artifacts under `.agents/runs/harness-mcp/<date>/`. Existing MCP entries are documented; new installations, enablement, permission changes and `opencode.jsonc` edits occur only after explicit approval. Secret values never belong in the plan or configuration.
 
 ---
 
@@ -1200,30 +1385,29 @@ This avoids accidentally applying outdated recommendations after the harness has
 
 ## GitLab support
 
-If GitLab is selected during `/harness-init`, the harness should create:
+If GitLab is relevant and confirmed during `/harness-init`, the generated project harness should contain the relevant subset of:
 
 ```text
-.agents/skills/gitlab-glab.md
-.agents/scripts/gitlab-issue-load.sh
+.agents/context/integration-policy.md
+.agents/integrations/external-systems.md
+.agents/integrations/gitlab.md
 .agents/scripts/gitlab-issue-comment.sh
-.agents/scripts/gitlab-mr-create-draft.sh
-.agents/scripts/gitlab-mr-comment.sh
-.agents/scripts/gitlab-api.sh
-.agents/config/gitlab.env.example
+additional focused wrappers only when the approved workflow needs them
 ```
 
-The GitLab skill must enforce:
+The integration guidance and wrappers must enforce:
 
 ```text
 - do not invent glab flags
 - do not manually build GitLab API URLs
-- prefer wrapper scripts
+- use an existing reviewed wrapper when one covers the operation
 - use GITLAB_REPO for high-level glab issue / glab mr commands
 - use GITLAB_PROJECT_ID for glab api when known
 - never post long Markdown inline via glab issue note -m "..."
 - always write comments to Markdown files first
 - publish issue comments via .agents/scripts/gitlab-issue-comment.sh
-- do not merge, close issues, delete branches or change labels without approval
+- classify reads and writes explicitly
+- require approval for posting, merge, close, label, branch deletion and other external mutations unless the generated policy grants a narrower action
 ```
 
 Recommended environment variables:
@@ -1234,7 +1418,7 @@ export GITLAB_PROJECT_ID="12345678"
 export GITLAB_ACCESS_TOKEN="..."
 ```
 
-The project ID is preferred for API calls because it avoids URL-encoding mistakes.
+The project ID is preferred for API calls because it avoids URL-encoding mistakes. These environment-variable names are references only; values must not be committed to the harness.
 
 ---
 
@@ -1262,7 +1446,7 @@ These defaults are intentionally conservative. The harness can later be tuned th
 
 The toolkit includes a self-verification policy so agents do not report completion prematurely.
 
-Generated policy file:
+Bootstrap policy file, retained or tailored by initialization:
 
 ```text
 .agents/context/self-verification-policy.md
@@ -1311,7 +1495,7 @@ The harness is a structured knowledge space, not one giant prompt.
 Use the smallest useful context set.
 ```
 
-Generated policy file:
+Bootstrap policy file, retained or tailored by initialization:
 
 ```text
 .agents/context/context-loading-policy.md
@@ -1340,78 +1524,38 @@ Generated policy file:
 
 `/harness-check` should detect context drift, such as generated folders being included or AGENTS.md encouraging loading everything.
 
-## Model recommendations
+## Model selection guidance
 
-Recommended model strength:
+Model names and relative rankings age quickly, so the toolkit documents capability requirements rather than a permanent vendor/model benchmark.
 
 | Command | Recommended strength | Reason |
 |---|---|---|
-| `/harness-init` | very strong model recommended | Requires evidence extraction, adaptive belief updates, candidate ranking, tool/question usage and coherent harness generation. |
-| `/harness-check` | medium to strong model | Requires consistency checks, drift detection and policy reasoning. |
-| `/harness-update` | strong model recommended | Edits governance files and must avoid contradictions across the harness. |
-| `/harness-retro` | medium model for interview, strong model for consolidation | The interview itself is simpler; converting feedback into clean findings benefits from stronger reasoning. |
-| `/harness-mcp` | strong model recommended | Requires risk classification, approval-first planning and safe OpenCode config handling. |
+| `/harness-init` | highest available reasoning quality | Requires repository interpretation, multidimensional belief updates, candidate comparison, policy operationalization, role selection and coherent OCI/Tektona generation. |
+| `/harness-check` | medium to high reasoning quality | Requires consistency, schema, drift, safety and evidence analysis without changing the harness. |
+| `/harness-update` | high reasoning quality | Changes governance and runtime contracts while preserving rule, schema and version consistency. |
+| `/harness-retro` | medium for interview; higher for consolidation | Collecting feedback is simple; turning it into non-duplicated, evidence-backed findings is harder. |
+| `/harness-mcp` | high reasoning quality | Requires inventory, capability matching, risk classification and safe configuration planning. |
 
-### Initial benchmark observation
+The distributed `opencode.jsonc` currently names `litellm-local/qwen36-27b-mtp-128k` as its bootstrap default. Treat this as an editable local configuration choice, not a quality guarantee or a requirement. `/harness-init` preserves a known working model/provider unless the user chooses a change.
 
-Two initial harness generations were compared using the same input:
-
-| Variant | Model | Result quality | Strengths | Weaknesses | Recommendation |
-|---|---|---:|---|---|---|
-| Model A | Qwen 3.6 27B | 5.5 / 10 | Compact, readable, usable as a minimal scaffold, good for local iteration and lower-cost experiments. | Less project-specific, weaker specialist role usage, shallower lifecycle handling, weaker drift/update readiness. | Useful for lightweight or iterative local work, but should be reviewed or upgraded for important harness initialization. |
-| Model B | Opus 4.7 | 8.4 / 10 | Strong project understanding, better risk modeling, better role activation, stronger lifecycle behavior, more practical agent guidance. | More verbose and potentially heavier in context usage. | Preferred for `/harness-init` and important harness design work. |
-
-Conclusion:
+Evaluate a candidate model against the actual contracts:
 
 ```text
-For initial harness generation, use the strongest available model.
-```
-
-The observed quality difference was significant. Opus 4.7 produced the more complete and operationally useful harness. Qwen 3.6 27B remains valuable for local iteration, implementation support and follow-up refinement, but the initial bootstrap benefits strongly from higher reasoning quality.
-
-### Practical recommendation
-
-Use a strong cloud model for the first harness bootstrap when possible:
-
-```text
-Opus 4.7 or comparable
-→ preferred for /harness-init
-→ preferred for major harness design changes
-→ preferred for evaluating generated harness quality
-```
-
-Use local models for fast iteration and controlled follow-up work:
-
-```text
-Qwen 3.6 27B Dense
-→ good for local implementation support
-→ useful for lightweight harness updates
-→ good when privacy, cost or local execution is more important than maximum initial synthesis quality
-
-Qwen 3.6 35B A3B MoE
-→ useful for fast analysis, summaries, retro interviews and lightweight checks
+can it inspect repository evidence before asking questions?
+can it compare candidate questions instead of following a fixed list?
+can it preserve JSON/YAML/schema and OpenCode config correctness?
+can it generate deterministic policies without ambiguous normative prose?
+can it keep approval boundaries and Tektona resource references intact?
+can it run and interpret the provided validators and tests?
 ```
 
 Optional validation pattern:
 
 ```text
-1. Generate initial harness with a strong model.
-2. Let a local model run /harness-check.
-3. Let a strong model review important findings.
-4. Apply approved updates with /harness-update.
-```
-
-For local setups:
-
-```text
-qwen36-27b-mtp-128k
-→ implementation, local iteration, lightweight harness updates
-
-qwen36-35b-a3b-mtp-128k
-→ fast analysis, summaries, retro interview, lightweight checks
-
-Opus 4.7 / Sonnet-class or stronger
-→ initial harness generation, major harness changes, benchmark judging and critical reviews
+1. Generate a representative harness.
+2. Run /harness-check and the repository test suite.
+3. Compare missing questions, false assumptions, policy ambiguity and runtime-plan validity.
+4. Use stronger review for critical findings or major harness updates.
 ```
 
 ---
@@ -1424,9 +1568,10 @@ Opus 4.7 / Sonnet-class or stronger
 1. Run toolkit script
 2. Start OpenCode
 3. Run /harness-init
-4. Review generated files
-5. Run /harness-check
-6. If findings exist, run /harness-update
+4. Review the approved harness, policy and runtime/Tektona plans
+5. Optionally run a separately approved local OCI or Tektona deployment action
+6. Run /harness-check
+7. If findings exist, run /harness-update
 ```
 
 ### Existing project without harness
@@ -1465,8 +1610,28 @@ Opus 4.7 / Sonnet-class or stronger
 1. Run /harness-check
 2. Look for GitLab/glab findings
 3. Run /harness-update
-4. Ensure GitLab skill/scripts are corrected
+4. Ensure the GitLab integration policy and reviewed wrappers are corrected
 5. Run /harness-check again
+```
+
+### A new MCP capability is needed
+
+```text
+1. Run /harness-mcp
+2. Inventory the existing MCP configuration
+3. Review candidate value, permissions, secrets and rollback
+4. Approve only the selected configuration change
+5. Run /harness-check after configuration changes
+```
+
+### Build the agent runtime or create a Tektona sandbox
+
+```text
+1. Run /harness-init or /harness-check to resolve the current runtime plan
+2. Preview the generated local-build or Tektona deployment action
+3. Approve the exact local or platform write separately
+4. Build the OCI image, Tektona template, or template plus sandbox
+5. Record outputs and run /harness-check for drift
 ```
 
 ---
@@ -1483,6 +1648,9 @@ Opus 4.7 / Sonnet-class or stronger
 | You want to clean up duplicates/drift | `/harness-check` then `/harness-update` |
 | You want to improve autonomy rules | `/harness-retro` then `/harness-update` |
 | You want to verify a previous update | `/harness-check` |
+| You need or want to review MCP capabilities | `/harness-mcp` |
+| Toolchains, services or Tektona settings changed | `/harness-check`, then `/harness-update` if findings are approved |
+| You want an OCI image or Tektona sandbox | `/harness-init` runtime plan, then the separately approved generated script |
 
 ---
 
@@ -1503,6 +1671,12 @@ Before applying changes:
 
 After /harness-update:
 → run /harness-check again
+
+After an OCI/Tektona build or sandbox change:
+→ record build/version evidence and run /harness-check
+
+Before adding or changing MCP configuration:
+→ run /harness-mcp
 ```
 
 For active projects:

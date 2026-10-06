@@ -30,7 +30,7 @@ copy_file() {
   fi
 
   case "$rel" in
-    AGENTS.md|opencode.jsonc|.opencode/command/*.md|.agents/interview/*.md|.agents/interview/topics/*.md|.agents/policies/policy-contract.md|.agents/policies/policy-registry.schema.json|.agents/policies/task-evidence.schema.json|.agents/policies/evaluation-result.schema.json|.agents/context/context-loading-policy.md|.agents/context/self-verification-policy.md|.agents/scripts/interview-ranker.py|.agents/scripts/policy-evaluator.py)
+    AGENTS.md|opencode.jsonc|.opencode/command/*.md|.agents/interview/*.md|.agents/interview/topics/*.md|.agents/policies/policy-contract.md|.agents/policies/policy-registry.schema.json|.agents/policies/task-evidence.schema.json|.agents/policies/evaluation-result.schema.json|.agents/runtime/image-contract.md|.agents/runtime/image-plan.schema.json|.agents/runtime/tektona-contract.md|.agents/runtime/tektona-deployment.schema.json|.agents/context/context-loading-policy.md|.agents/context/self-verification-policy.md|.agents/scripts/interview-ranker.py|.agents/scripts/policy-evaluator.py|.agents/scripts/image-plan-validator.py)
       ;;
     *)
       echo "deferred:  $rel (generated selectively by /harness-init)"
@@ -65,7 +65,7 @@ fi
 
 echo
 echo "OpenCode harness toolkit installed."
-echo "OpenCode Harness Toolkit version: v42"
+echo "OpenCode Harness Toolkit version: v44"
 echo
 echo "Target:"
 echo "  $TARGET_DIR"

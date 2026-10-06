@@ -35,6 +35,17 @@ AGENTS.md
 .agents/mcp/mcp-policy.md
 .agents/policies/policy-registry.json
 .agents/policies/policy-contract.md
+.agents/context/runtime-image.md
+.agents/runtime/image-plan.json
+.agents/runtime/image-contract.md
+.agents/runtime/image-plan.schema.json
+.agents/context/tektona-deployment.md
+.agents/runtime/tektona-deployment.json
+.agents/runtime/sandbox.template.tektona.yaml
+.agents/runtime/tektona-contract.md
+.agents/runtime/tektona-deployment.schema.json
+.agents/runtime/compose.yaml
+.agents/runtime/bootstrap-sandbox.sh
 .agents/roles/*.md
 .agents/integrations/*.md
 .agents/interview/*.md

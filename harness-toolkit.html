@@ -4,7 +4,7 @@
  <meta charset="UTF-8" />
  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
  <title>Harness Toolkit — Make AI Agents Production-Ready</title>
- <meta name="description" content="A productized SaaS-style landing page for the Harness Toolkit: initialize, audit, update, and improve AI-agent harnesses with versioning and changelog discipline." />
+ <meta name="description" content="Adaptive OpenCode harness discovery with typed policies, selective roles, OCI agent runtimes, Tektona deployment planning, MCP governance and versioned improvement loops." />
  <style>
   :root {
    --bg: #051527;
@@ -576,7 +576,7 @@
 
   .command-grid {
    display: grid;
-   grid-template-columns: repeat(4, 1fr);
+   grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
    gap: 16px;
   }
 
@@ -795,6 +795,7 @@
         <a href="#integrations">Integrations</a>
         <a href="#roles">Roles</a>
         <a href="#policy-evaluation">Policy Evaluation</a>
+        <a href="#runtime-image">Runtime Image</a>
         <a href="#context-loading">Context Loading</a>
         <a href="#self-verification">Self-Verification</a>
         <a href="#mcp">MCP</a>
@@ -848,14 +849,17 @@
 <span class="-muted-code">→ apply findings + bump version</span>
 
 <span class="-prompt">$</span> <span class="-cmd">/harness-retro</span>
-<span class="-muted-code">→ collect practical feedback</span></div>
+<span class="-muted-code">→ collect practical feedback</span>
+
+<span class="-prompt">$</span> <span class="-cmd">/harness-mcp</span>
+<span class="-muted-code">→ govern MCP capability changes</span></div>
      </div>
 
      <div class="-chip-row">
-      <span class="-chip">Versioned findings</span>
-      <span class="-chip">Generate valid OpenCode config</span>
-      <span class="-chip">Changelog discipline</span>
-      <span class="-chip">128K-friendly structure</span>
+      <span class="-chip">Adaptive discovery</span>
+      <span class="-chip">Typed policy evaluation</span>
+      <span class="-chip">OCI + Tektona runtime</span>
+      <span class="-chip">Versioned improvement</span>
      </div>
     </aside>
    </div>
@@ -866,7 +870,7 @@
     <div class="box-section">
      <div class="section-head">
       <h2>First steps</h2>
-      <p>Copy the toolkit ZIP into your project folder, unzip it there, and run the install script. The executable flag is already set on the install script, so no <code>chmod +x</code> should be required.</p>
+      <p>Copy the toolkit ZIP into your project folder, unzip it there, and run the install script. Then review the installed <code>opencode.jsonc</code> before starting OpenCode. The executable flag is already set on the install script, so no <code>chmod +x</code> should be required.</p>
      </div>
      <div class="codebox">
       <pre><code>cd /path/to/your/project
@@ -877,6 +881,7 @@ unzip opencode-harness-toolkit.zip
 opencode
 /harness-init</code></pre>
      </div>
+     <p style="color:var(--muted);line-height:1.7;margin:18px 0 0;">The bootstrap configuration currently contains an editable default model and an enabled local <code>chrome-devtools</code> MCP entry launched through <code>npx</code>. They are distribution defaults, not project requirements. Review or remove them before use; manage further project MCP changes through <code>/harness-mcp</code>.</p>
     </div>
    </div>
   </section>
@@ -965,6 +970,24 @@ Compare questions across active topics.
 Ask one maximum-value question.
 Update entropy and generation readiness.</code></pre>
         </div>
+
+        <div class="cards" style="margin-top:18px;">
+          <div class="card">
+            <div class="icon">🎯</div>
+            <h3>Product boundary first</h3>
+            <p>The engine separates the product, service or module being built from toolkit files and harness-control evidence. It asks a target question only when that boundary is genuinely ambiguous.</p>
+          </div>
+          <div class="card">
+            <div class="icon">🗂️</div>
+            <h3>Modular topic packs</h3>
+            <p>Architecture, frontend, backend, security, integrations, roles, compliance observability and runtime topics contribute candidates without imposing interview blocks or a global order.</p>
+          </div>
+          <div class="card">
+            <div class="icon">🏁</div>
+            <h3>Readiness-based stop</h3>
+            <p>The interview stops when critical unknowns are resolved, outputs are generatable and the best remaining question has low value—not after a fixed question count.</p>
+          </div>
+        </div>
       </div>
     </div>
   </section>
@@ -990,7 +1013,7 @@ Update entropy and generation readiness.</code></pre>
      </div>
      <div class="flow-step">
       <div style="font-size:48px;font-weight:900;opacity:.28;">03</div>
-      <h3>Skills & Playbooks</h3>
+      <h3>Skills &amp; Playbooks</h3>
       <p style="color:var(--muted);line-height:1.7;">Capabilities and workflows are encapsulated for repeatability.</p>
      </div>
      <div class="flow-step">
@@ -1007,7 +1030,7 @@ Update entropy and generation readiness.</code></pre>
     <div class="container">
       <div class="box-section">
         <div class="section-head">
-          <h2>Integration & Tooling Discovery</h2>
+          <h2>Integration &amp; Tooling Discovery</h2>
           <p>The adaptive interview discovers external systems early, because integrations strongly shape what the agent may read, write, automate or avoid.</p>
         </div>
 
@@ -1106,7 +1129,7 @@ AGENTS.md → project-specific routing</code></pre>
         </div>
         <div class="cards">
           <div class="card"><div class="icon">📡</div><h3>Observable facts</h3><p>Observers and decision models emit typed values with task correlation, provenance, confidence and model version where applicable.</p></div>
-          <div class="card"><div class="icon">⚖️</div><h3>Explicit truth states</h3><p>Every rule evaluates to PASS, FAIL, UNKNOWN or NOT_APPLICABLE. Missing evidence never silently becomes compliant.</p></div>
+          <div class="card"><div class="icon">⚖️</div><h3>Explicit truth states</h3><p>Every rule evaluates to PASS, FAIL, UNKNOWN, NOT_APPLICABLE or ERROR. Missing evidence never silently becomes compliant.</p></div>
           <div class="card"><div class="icon">🚦</div><h3>Deterministic escalation</h3><p>Configurable violation and coverage thresholds map results to continue, warn, escalate or block.</p></div>
         </div>
         <div class="codebox" style="margin-top:18px;">
@@ -1115,6 +1138,87 @@ Policy Registry           → versioned predicates and thresholds
 Policy Evaluator          → score + coverage + reason codes
 Control Plane             → continue | warn | escalate | block</code></pre>
         </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="runtime-image" class="section">
+    <div class="container">
+      <div class="box-section">
+        <div class="section-head">
+          <h2>Adaptive OCI Agent Runtime</h2>
+          <p>The approved interview becomes a buildable, auditable Tektona template: Ubuntu, OpenCode, evidenced project toolchains and an explicit sandbox deployment plan.</p>
+        </div>
+        <div class="cards">
+          <div class="card"><div class="icon">📦</div><h3>Evidence-based layers</h3><p>Language manifests, lockfiles and CI configuration select toolchains. Every optional Dockerfile layer maps back to evidence in the image plan.</p></div>
+          <div class="card"><div class="icon">🧩</div><h3>Autonomous sandbox</h3><p>Clients and reproducible service binaries belong in the image. Tektona processes manage databases, queues and caches; Compose is used only with proven runtime capability.</p></div>
+          <div class="card"><div class="icon">🔒</div><h3>Tektona-native control</h3><p>The non-root image contains OpenCode but no repository copy or secrets. The plan references project resources, egress and credentials by name and keeps external writes approval-gated.</p></div>
+        </div>
+        <div class="codebox" style="margin-top:18px;">
+          <pre><code>Adaptive interview + repository evidence
+→ image-plan.json
+→ native SandboxTemplate on Tektona's Ubuntu/OpenCode base
+→ confirmed tool layers + process/resource references
+→ asynchronous template build through a version-verified adapter
+→ optional sandbox creation after explicit approval</code></pre>
+        </div>
+
+        <div class="section-head" style="margin-top:34px;">
+          <h3>What can happen directly after <code>/harness-init</code></h3>
+          <p>The interview produces one explicit execution mode. Harness generation never silently authorizes a local build or a Tektona write.</p>
+        </div>
+
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr><th>Mode</th><th>Outcome</th><th>Prerequisites</th><th>Side effect</th></tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><code>plan</code></td>
+                <td>Generates and validates the Dockerfile, image plan, native Tektona manifest, deployment plan and scripts.</td>
+                <td>Approved harness generation.</td>
+                <td>No external write.</td>
+              </tr>
+              <tr>
+                <td>Local OCI build</td>
+                <td>Builds and verifies a tagged image in the local Docker, Podman or BuildKit cache.</td>
+                <td>Available engine and explicit local-build approval.</td>
+                <td>Pulls artifacts and changes the local container cache.</td>
+              </tr>
+              <tr>
+                <td><code>build-template</code></td>
+                <td>Builds an immutable Tektona template version and moves the requested tag only after success.</td>
+                <td>Resolved context, authenticated and verified CLI, template-admin role and deployment approval.</td>
+                <td>Writes a template version and tag in Tektona.</td>
+              </tr>
+              <tr>
+                <td><code>build-and-create-sandbox</code></td>
+                <td>Waits for a successful template build, then creates a named sandbox from that version.</td>
+                <td>Template prerequisites plus sandbox name, resources, lifecycle and creation approval.</td>
+                <td>Writes the template version/tag and creates a sandbox.</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="cards" style="margin-top:22px;">
+          <div class="card"><div class="icon">⚡</div><h3>Native Tektona path</h3><p>The recommended <code>SandboxTemplate</code> builds directly on a verified <code>sandbox-base</code> release. No separate project-image publication is required.</p></div>
+          <div class="card"><div class="icon">🚢</div><h3>External OCI path</h3><p>When the Dockerfile is authoritative or shared outside Tektona, build and publish it first. Private images reference a Tektona project registry credential.</p></div>
+          <div class="card"><div class="icon">🛡️</div><h3>Fail-closed deployment</h3><p>The generated script validates and previews without writing. <code>apply</code> requires the approved target and a CLI interface verified against the installed version.</p></div>
+        </div>
+
+        <div class="codebox" style="margin-top:18px;">
+          <pre><code>deploy-tektona.sh validate  → local contract checks only
+deploy-tektona.sh preview   → resolved scope, template, tag and actions
+deploy-tektona.sh apply     → approved template build
+                            → wait for successful immutable version
+                            → optional named sandbox creation</code></pre>
+        </div>
+
+        <p style="color:var(--muted);line-height:1.7;margin:18px 2px 0;">
+          A local OCI build and a Tektona template build are different outcomes. Only the latter creates the immutable template version from which Tektona starts a sandbox. Repository, registry, Git credential, secret, egress-policy and proxy-profile values remain platform-managed references; credential values never enter generated build artifacts.
+        </p>
       </div>
     </div>
   </section>
@@ -1181,7 +1285,7 @@ Tier 4: never load node_modules, dist, build, coverage, template, backups or log
     <div class="container">
       <div class="box-section">
         <div class="section-head">
-          <h2>MCP Discovery & Planning</h2>
+          <h2>MCP Discovery &amp; Planning</h2>
           <p><code>/harness-mcp</code> discovers MCP opportunities, evaluates risk and creates approval-first installation plans.</p>
         </div>
 
@@ -1199,7 +1303,7 @@ Tier 4: never load node_modules, dist, build, coverage, template, backups or log
           <div class="card">
             <div class="icon">✅</div>
             <h3>Approval first</h3>
-            <p>No MCP server is installed or configured automatically. The command writes recommendations and asks before changing config.</p>
+            <p>The command inventories current configuration, writes recommendations and asks before adding, enabling or changing project MCP capabilities.</p>
           </div>
         </div>
 
@@ -1213,6 +1317,8 @@ Tier 4: never load node_modules, dist, build, coverage, template, backups or log
 5. Ask for approval
 6. Apply config only after approval</code></pre>
         </div>
+
+        <p style="color:var(--muted);line-height:1.7;margin:18px 0 0;"><strong style="color:var(--text);">Current bootstrap default:</strong> <code>opencode.jsonc</code> ships with an enabled local <code>chrome-devtools</code> MCP entry invoked through <code>npx</code>. <code>/harness-mcp</code> must treat it as existing configuration to review and reconcile; it is not automatically appropriate for every project.</p>
 
         <div class="cards" style="margin-top:18px;">
           <div class="card">
@@ -1240,7 +1346,7 @@ Tier 4: never load node_modules, dist, build, coverage, template, backups or log
     <div class="box-section">
      <div class="section-head">
       <h2>Everything you need to operate the harness</h2>
-      <p>A small lifecycle command set keeps responsibilities clean: initialize, inspect, update, and improve from experience.</p>
+      <p>Five focused commands keep responsibilities clean: initialize, inspect, update, improve from experience, and govern MCP capability changes.</p>
      </div>
 
      <div class="command-grid">
@@ -1249,7 +1355,7 @@ Tier 4: never load node_modules, dist, build, coverage, template, backups or log
        <div class="command-number">01</div>
        <div class="command-name">/harness-init</div>
        <h3>Generate the project harness</h3>
-       <p>Adaptive guided setup, one question at a time. It replaces the bootstrap instructions with a project-specific AGENTS.md and generates only confirmed roles and relevant policies.</p>
+       <p>Adaptive guided setup, one question at a time. It replaces the bootstrap instructions with a project-specific AGENTS.md, generates only confirmed roles and deterministic policies, and produces validated OCI and Tektona runtime contracts.</p>
       </div>
      </div>
 
@@ -1258,7 +1364,7 @@ Tier 4: never load node_modules, dist, build, coverage, template, backups or log
        <div class="command-number">02</div>
        <div class="command-name">/harness-check</div>
        <h3>Audit the current version</h3>
-       <p>Finds drift, contradictions, missing files, duplicate rules, unsafe shell patterns, and context bloat. Writes active findings.</p>
+       <p>Finds drift, contradictions, missing files, duplicate rules, unsafe shell patterns and context bloat. It also checks policy contracts, OCI layer evidence and Tektona deployment artifacts.</p>
       </div>
      </div>
 
@@ -1279,6 +1385,15 @@ Tier 4: never load node_modules, dist, build, coverage, template, backups or log
        <p>Captures satisfaction, pain points, start/stop/change feedback, and turns real experience into structured findings.</p>
       </div>
      </div>
+
+     <div class="card command">
+      <div>
+       <div class="command-number">05</div>
+       <div class="command-name">/harness-mcp</div>
+       <h3>Govern MCP capabilities</h3>
+       <p>Inventories existing MCP configuration, identifies capability gaps, classifies risk and prepares approval-gated recommendations and configuration changes.</p>
+      </div>
+     </div>
      </div>
     </div>
    </div>
@@ -1297,7 +1412,8 @@ Tier 4: never load node_modules, dist, build, coverage, template, backups or log
     <div class="usecase-list">
      <div class="usecase"><div class="check">✓</div><div><strong>New project kickoff</strong><br><span style="color:var(--muted);">Create an agent-readable project operating model from day one.</span></div></div>
      <div class="usecase"><div class="check">✓</div><div><strong>Existing project cleanup</strong><br><span style="color:var(--muted);">Make rules, playbooks, and workflows explicit and reviewable.</span></div></div>
-     <div class="usecase"><div class="check">✓</div><div><strong>GitLab workflow hardening</strong><br><span style="color:var(--muted);">Prevent broken <code>glab</code> usage with skills and wrapper scripts.</span></div></div>
+     <div class="usecase"><div class="check">✓</div><div><strong>GitLab workflow hardening</strong><br><span style="color:var(--muted);">Use a project-specific integration policy and reviewed wrappers instead of improvised <code>glab</code> commands.</span></div></div>
+     <div class="usecase"><div class="check">✓</div><div><strong>Autonomous Tektona sandbox</strong><br><span style="color:var(--muted);">Generate an evidence-based OCI runtime and an approval-gated native Tektona template or sandbox plan.</span></div></div>
      <div class="usecase"><div class="check">✓</div><div><strong>Harness drift control</strong><br><span style="color:var(--muted);">Detect duplicated rules, stale assumptions, and lifecycle inconsistencies.</span></div></div>
      <div class="usecase"><div class="check">✓</div><div><strong>Developer satisfaction tuning</strong><br><span style="color:var(--muted);">Adjust autonomy, verbosity, checkpoints, and quality gates from real experience.</span></div></div>
     </div>
@@ -1309,7 +1425,7 @@ Tier 4: never load node_modules, dist, build, coverage, template, backups or log
     <div class="box-section">
      <div class="section-head">
       <h2>Governance that does not get in the way</h2>
-      <p>The toolkit is intentionally lightweight: Markdown files, shell scripts, versioned findings, and explicit changelogs. No heavy platform required.</p>
+      <p>The core lifecycle remains lightweight and file-based: Markdown, JSON schemas, scripts, versioned findings and explicit changelogs. Tektona is an optional execution target, not a requirement for harness governance.</p>
      </div>
 
      <div class="cards">
@@ -1355,8 +1471,11 @@ Tier 4: never load node_modules, dist, build, coverage, template, backups or log
        <tr><td>Harness might be inconsistent</td><td><code>/harness-check</code></td><td>Writes audit reports and active findings.</td></tr>
        <tr><td>Findings exist for current version</td><td><code>/harness-update</code></td><td>Applies approved findings and bumps version.</td></tr>
        <tr><td>Agent behavior is frustrating</td><td><code>/harness-retro</code></td><td>Turns practical feedback into retro findings.</td></tr>
+       <tr><td>An MCP capability or config change is needed</td><td><code>/harness-mcp</code></td><td>Inventories, assesses and plans the change behind an approval gate.</td></tr>
        <tr><td>Manual harness edits were made</td><td><code>/harness-check</code></td><td>Detects drift and contradictions.</td></tr>
-       <tr><td>GitLab commands are unreliable</td><td><code>/harness-check</code> → <code>/harness-update</code></td><td>Improves skills and scripts safely.</td></tr>
+       <tr><td>Toolchain, service or Tektona assumptions changed</td><td><code>/harness-check</code> → <code>/harness-update</code></td><td>Reconciles image layers, capability evidence and deployment artifacts.</td></tr>
+       <tr><td>An OCI image or Tektona sandbox is required</td><td><code>/harness-init</code> runtime artifacts</td><td>Generates a plan; build and platform writes require separate approval.</td></tr>
+       <tr><td>GitLab commands are unreliable</td><td><code>/harness-check</code> → <code>/harness-update</code></td><td>Improves integration policy and reviewed wrappers safely.</td></tr>
       </tbody>
      </table>
     </div>

@@ -79,6 +79,10 @@ Inspect harness files:
 - `.agents/templates/*.md`
 - `.agents/skills/*.md`
 - `.agents/scripts/*.sh`
+- `.agents/scripts/*.py`
+- `.agents/runtime/*`
+- `Dockerfile`
+- `.dockerignore`
 
 Check:
 - missing lifecycle files
@@ -151,6 +155,41 @@ Verify that policies can be scored by an observer and deterministic policy engin
 Search normative prose for terms such as `appropriate`, `reasonable`, `sufficient`, `adequate`, `best effort` and `when necessary`. Flag each occurrence unless the text references a finite measurable rubric or explicitly marks the item as non-normative guidance.
 
 Treat schema errors, undeclared signals, missing-evidence-as-pass behavior and ambiguous critical rules as high-severity findings.
+
+## OCI runtime image checks
+
+Verify that the generated agent image is reproducible, evidence-based and safe:
+
+```text
+- Dockerfile, .dockerignore, runtime-image.md, image-plan.json, build-image.sh and bootstrap-sandbox.sh exist
+- tektona-deployment.json, deploy-tektona.sh and tektona-deployment.md exist
+- image-plan.json is valid JSON and passes image-plan-validator.py validate-plan
+- the Dockerfile passes image-plan-validator.py validate-dockerfile
+- tektona-deployment.json and sandbox.template.tektona.yaml pass image-plan-validator.py validate-tektona against image-plan.json
+- the base is the declared official Ubuntu reference and moving tags have a recorded digest after a build
+- OpenCode is installed through the declared method and opencode --version is executed
+- every # harness-layer marker has exactly one matching image-plan layer and vice versa
+- every optional layer has repository or approved interview evidence
+- service client layers point to declared layers
+- required databases, queues, caches and emulators have a matching tektona-process, proven sandbox-compose or explicitly selected platform provisioning
+- every tektona-process service points to a sandbox-service layer and matching Tektona process definition
+- every sandbox-compose service has a pinned/approved image, health check and matching compose.yaml entry
+- the declared platform daemon or rootless engine has recorded capability evidence sufficient to run Compose inside the MicroVM
+- known recurring tools are image layers rather than repeated runtime downloads
+- allowed runtime installations record source, version, integrity evidence, task and installed path
+- the image runs as non-root from /workspace and does not copy the project source
+- no credentials, secret values or environment-specific endpoints are present
+- build-image.sh passes shell syntax checking and honors the approved build mode
+- bootstrap-sandbox.sh passes shell syntax checking, is idempotent and has an explicit cleanup path
+- deploy-tektona.sh validates/previews in plan mode and refuses writes without approval plus a version-verified adapter
+- Tektona repository, credential, registry, egress, proxy and secret fields contain references only, never values
+- Tektona scope/reference, resource requests, lifecycle, asynchronous build wait and process definitions are internally consistent
+- every image-plan layer has one matching ordered marker/build step in the Tektona manifest and OpenCode is verified
+- compose.yaml passes container-engine Compose validation when an engine is available
+- image-lock.json, when present, matches base, OpenCode, layer versions and the last image digest
+```
+
+Compare current manifests, lockfiles, CI configuration, development-container files, Tektona target resources and recorded runtime installations with the image/deployment plans. Treat a newly required tool, a repeatedly downloaded tool, a removed dependency that remains installed, an unexplained layer, an unresolved moving base, a broken process/Compose resource, a stale Tektona reference or an unverified OpenCode installation as drift.
 
 ## Context Loading Policy checks
 
